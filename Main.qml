@@ -40,8 +40,9 @@ ApplicationWindow {
         id: platformSupport
         onPermissionStateFetchCompletion: {
             console.log("Permission check complete")
-            if (!mainWindow.askedAboutNotifications
-                    && platformSupport.requiresNotificationPermission) {
+            if (platformSupport.requiresNotificationPermission
+                    && (platformSupport.notificationsAllowed < 0
+                        || !askedAboutNotifications)) {
                 permissionDrawer.open()
             }
         }
@@ -51,7 +52,7 @@ ApplicationWindow {
         id: sysTray
         isActive: clipMonitor.active
         iconPath: ":/qt/qml/img_from_clip/appicon64.png"
-        notificationsAllowed: platformSupport.notificationsAllowed
+        notificationsAllowed: platformSupport.notificationsAllowed > 0
     }
 
     ClipMonitor {
@@ -224,9 +225,9 @@ ApplicationWindow {
                     Button {
                         text: qsTr("Request")
                         onClicked: {
-                            mainWindow.askedAboutNotifications = true
                             permissionDrawer.close()
                             platformSupport.requestNotifications()
+                            mainWindow.askedAboutNotifications = true
                         }
                     }
                     Button {

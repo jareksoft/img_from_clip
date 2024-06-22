@@ -1,6 +1,6 @@
 #include "platformsupport.h"
 
-bool PlatformSupport::notificationsAllowed() const
+int PlatformSupport::notificationsAllowed() const
 {
     return m_notificationsAllowed;
 }

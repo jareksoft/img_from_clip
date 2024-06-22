@@ -4,21 +4,22 @@
 #include <QObject>
 #include <QProperty>
 #include <QQmlEngine>
+#include <QTimer>
 
 class PlatformSupport : public QObject
 {
     Q_OBJECT
     QML_ELEMENT
     Q_PROPERTY(
-        bool notificationsAllowed READ notificationsAllowed BINDABLE notificationsAllowedBindable)
+        int notificationsAllowed READ notificationsAllowed BINDABLE notificationsAllowedBindable)
     Q_PROPERTY(bool requiresNotificationPermission READ requiresNotificationPermission CONSTANT)
 public:
     explicit PlatformSupport(QObject *parent = nullptr);
     ~PlatformSupport() override;
 
-    bool notificationsAllowed() const;
+    int notificationsAllowed() const;
 
-    QBindable<bool> notificationsAllowedBindable() { return {&m_notificationsAllowed}; }
+    QBindable<int> notificationsAllowedBindable() { return {&m_notificationsAllowed}; }
 
     bool requiresNotificationPermission() const;
 
@@ -32,7 +33,7 @@ private:
     void platformInit();
 
 private:
-    QProperty<bool> m_notificationsAllowed{true};
+    QProperty<int> m_notificationsAllowed{0};
 };
 
 #endif // PLATFORMSUPPORT_H
