@@ -36,7 +36,7 @@ ApplicationWindow {
     SysTray {
         id: sysTray
         isActive: clipMonitor.active
-        iconPath: Qt.resolvedUrl("appicon24.png")
+        iconPath: ":/qt/qml/img_from_clip/appicon24.png"
     }
 
     ClipMonitor {
@@ -70,7 +70,6 @@ ApplicationWindow {
                 id: mainRow
                 width: parent.width
                 spacing: 16
-
                 Label {
                     Layout.maximumWidth: parent.width
                     Layout.fillWidth: true
