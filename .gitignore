@@ -76,3 +76,6 @@ CMakeLists.txt.user*
 *.user
 build
 y
+
+# Snap
+*.snap

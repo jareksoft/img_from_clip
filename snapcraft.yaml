@@ -1,5 +1,5 @@
 name: img-from-clip
-adopt-info: img_from_clip
+adopt-info: appimg-from-clip
 grade: devel
 base: core22
 confinement: strict
