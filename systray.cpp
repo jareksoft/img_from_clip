@@ -26,7 +26,6 @@ SysTray::SysTray(QQuickItem *parent)
     m_icon->setContextMenu(trayIconMenu);
 
     m_toolTipChange = m_toolTip.addNotifier([&]() {
-        qDebug() << "TT = " << m_toolTip.value();
         m_icon->setToolTip(m_toolTip.value());
     });
 
@@ -41,8 +40,6 @@ void SysTray::notifyInfo(const QString &title, const QString &info)
 {
     if (m_notificationsAllowed.value()) {
         m_icon->showMessage(title, info, QSystemTrayIcon::Information, 5000);
-    } else {
-        qDebug() << "Notifications not allowed";
     }
 }
 
@@ -50,8 +47,6 @@ void SysTray::notifyError(const QString &title, const QString &error)
 {
     if (m_notificationsAllowed.value()) {
         m_icon->showMessage(title, error, QSystemTrayIcon::Warning, 5000);
-    } else {
-        qDebug() << "Notifications not allowed";
     }
 }
 

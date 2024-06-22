@@ -149,56 +149,39 @@ void ClipMonitor::clipboardDataChanged()
 
     // Throttle and ignore first signal
     if (m_lastCapture.secsTo(now) < 1) {
-        qDebug() << "Capture throttle";
         return;
     }
     m_lastCapture = now;
 
     auto newClip = getLastClipboard();
     if (newClip == m_lastClipboard) {
-        qDebug() << "Last clipboard is the same";
         return;
     }
 
     m_lastClipboard = newClip;
-    const auto mimeData = m_clipboard->mimeData();
 
-    qDebug() << "MIME is " << mimeData->formats();
-
-    // Try text first
-    QString textContents = mimeData->text();
-
-    // Check if we have SVG
-    if (!textContents.isEmpty()) {
-        qDebug() << "Text not empty";
-
-        if (textContents.contains(QStringLiteral("<svg"))) {
-            qDebug() << "Text is SVG";
-
-            switch (m_saveMode) {
-            case SaveMode::SVG:
-                saveRawSvg(textContents);
-                break;
-            case SaveMode::PNG:
-                renderSvgToPng(textContents);
-                break;
-            case SaveMode::JPG:
-                renderSvgToJpg(textContents);
-                break;
-            }
-        }
-    } else if (mimeData->hasImage()) {
-        qDebug() << "We have image";
-        QImage image = qvariant_cast<QImage>(mimeData->imageData());
+    if (std::holds_alternative<QImage>(m_lastClipboard)) {
         switch (m_saveMode) {
         case SaveMode::SVG:
-            saveSvg(image);
+            saveSvg(std::get<QImage>(m_lastClipboard));
             break;
         case SaveMode::PNG:
-            savePng(image);
+            savePng(std::get<QImage>(m_lastClipboard));
             break;
         case SaveMode::JPG:
-            saveJpg(image);
+            saveJpg(std::get<QImage>(m_lastClipboard));
+            break;
+        }
+    } else if (std::holds_alternative<QString>(m_lastClipboard)) {
+        switch (m_saveMode) {
+        case SaveMode::SVG:
+            saveRawSvg(std::get<QString>(m_lastClipboard));
+            break;
+        case SaveMode::PNG:
+            renderSvgToPng(std::get<QString>(m_lastClipboard));
+            break;
+        case SaveMode::JPG:
+            renderSvgToJpg(std::get<QString>(m_lastClipboard));
             break;
         }
     }
@@ -208,10 +191,10 @@ auto ClipMonitor::getLastClipboard() -> std::variant<std::monostate, QImage, QSt
 {
     const auto mimeData = m_clipboard->mimeData();
 
-    if (mimeData->hasText()) {
-        return mimeData->text();
-    } else if (mimeData->hasImage()) {
+    if (mimeData->hasImage()) {
         return qvariant_cast<QImage>(mimeData->imageData());
+    } else if (mimeData->hasText()) {
+        return mimeData->text();
     } else {
         return {};
     }
