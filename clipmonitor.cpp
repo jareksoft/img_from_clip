@@ -17,6 +17,20 @@ ClipMonitor::ClipMonitor(QObject *parent)
 {
     m_lastCapture = QDateTime::currentDateTimeUtc();
     connect(m_clipboard, &QClipboard::dataChanged, this, &ClipMonitor::clipboardDataChanged);
+    m_lastClipboard = getLastClipboard();
+
+    m_pollTimer = new QTimer(this);
+    m_pollTimer->setSingleShot(false);
+    m_pollTimer->setInterval(1000);
+
+    connect(m_pollTimer, &QTimer::timeout, this, &ClipMonitor::clipboardDataChanged);
+
+    m_timerBinding = m_activeBinding.addNotifier([&]() {
+        if (m_activeBinding.value())
+            m_pollTimer->start();
+        else
+            m_pollTimer->stop();
+    });
 }
 
 auto ClipMonitor::makeNewSavePath() -> QString
@@ -132,9 +146,18 @@ void ClipMonitor::clipboardDataChanged()
     auto now = QDateTime::currentDateTimeUtc();
 
     // Throttle and ignore first signal
-    if (m_lastCapture.secsTo(now) < 1)
+    if (m_lastCapture.secsTo(now) < 1) {
+        qDebug() << "Capture throttle";
         return;
+    }
 
+    auto newClip = getLastClipboard();
+    if (newClip == m_lastClipboard) {
+        qDebug() << "Last clipboard is the same";
+        return;
+    }
+
+    m_lastClipboard = newClip;
     m_lastCapture = now;
     const auto mimeData = m_clipboard->mimeData();
 
@@ -178,5 +201,18 @@ void ClipMonitor::clipboardDataChanged()
             saveJpg(image);
             break;
         }
+    }
+}
+
+auto ClipMonitor::getLastClipboard() -> std::variant<std::monostate, QImage, QString>
+{
+    const auto mimeData = m_clipboard->mimeData();
+
+    if (mimeData->hasText()) {
+        return mimeData->text();
+    } else if (mimeData->hasImage()) {
+        return qvariant_cast<QImage>(mimeData->imageData());
+    } else {
+        return {};
     }
 }

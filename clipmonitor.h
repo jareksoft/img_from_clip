@@ -3,9 +3,11 @@
 
 #include <QClipboard>
 #include <QDateTime>
+#include <QImage>
 #include <QObject>
 #include <QProperty>
 #include <QQmlEngine>
+#include <QTimer>
 
 class ClipMonitor : public QObject
 {
@@ -44,6 +46,7 @@ private:
 
 private:
     void clipboardDataChanged();
+    auto getLastClipboard() -> std::variant<std::monostate, QImage, QString>;
 
 private:
     QDateTime m_lastCapture;
@@ -52,6 +55,9 @@ private:
     QProperty<QString> m_savePattern;
     QProperty<SaveMode> m_saveMode{SaveMode::SVG};
     QClipboard *m_clipboard;
+    std::variant<std::monostate, QImage, QString> m_lastClipboard;
+    QTimer *m_pollTimer;
+    QPropertyNotifier m_timerBinding;
 };
 
 #endif // CLIPMONITOR_H
