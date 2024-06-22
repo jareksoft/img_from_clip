@@ -184,15 +184,18 @@ void ClipMonitor::clipboardDataChanged()
             renderSvgToJpg(std::get<QString>(m_lastClipboard));
             break;
         }
+    } else if (std::holds_alternative<Html>(m_lastClipboard)) {
     }
 }
 
-auto ClipMonitor::getLastClipboard() -> std::variant<std::monostate, QImage, QString>
+auto ClipMonitor::getLastClipboard() -> contents_t
 {
     const auto mimeData = m_clipboard->mimeData();
 
     if (mimeData->hasImage()) {
         return qvariant_cast<QImage>(mimeData->imageData());
+    } else if (mimeData->hasHtml()) {
+        return Html{mimeData->html()};
     } else if (mimeData->hasText()) {
         return mimeData->text();
     } else {

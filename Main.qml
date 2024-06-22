@@ -16,6 +16,7 @@ ApplicationWindow {
     minimumHeight: 100
 
     property bool askedAboutNotifications: false
+    property int renderSizeX: 800
 
     Settings {
         id: appSettings
@@ -24,6 +25,8 @@ ApplicationWindow {
         property string savePattern
         property int saveMode
         property alias askedAboutNotifications: mainWindow.askedAboutNotifications
+        property alias allowHtmlCheckBox: allowHtmlCheckBox.checked
+        property alias renderSizeX: mainWindow.renderSizeX
 
         Component.onCompleted: {
             if (defaultWritePath === "") {
@@ -186,6 +189,49 @@ ApplicationWindow {
                     }
                 }
 
+                GroupBox {
+                    Layout.maximumWidth: parent.width
+                    Layout.preferredWidth: parent.width
+                    title: qsTr("Render HTML")
+                    ColumnLayout {
+                        width: parent.width
+
+                        CheckBox {
+                            id: allowHtmlCheckBox
+                            text: qsTr("Enable HTML rendering")
+                        }
+
+                        RowLayout {
+                            Layout.maximumWidth: parent.width
+                            Layout.preferredWidth: parent.width
+                            spacing: 20
+
+                            Label {
+                                text: qsTr("Page width (pixels):")
+                            }
+
+                            TextField {
+                                Layout.fillWidth: true
+                                id: xSize
+                                text: mainWindow.renderSizeX
+                                validator: IntValidator {
+                                    bottom: 100
+                                    top: 8192
+                                }
+                                onAccepted: {
+                                    mainWindow.renderSizeX = text
+                                }
+                            }
+                        }
+
+                        Label {
+                            Layout.maximumWidth: parent.width
+                            wrapMode: Text.WordWrap
+                            text: qsTr("Note: This feature uses Qt rendering engine, so results may not be perfect")
+                        }
+                    }
+                }
+
                 Button {
                     id: activateButton
                     checkable: true
@@ -307,13 +353,13 @@ ApplicationWindow {
         }
 
         function notifyInfo(info) {
-            captureDrawer.lastCaptureName = qsTr("Captured ") + info
+            captureDrawer.lastCaptureName = info
             capImage.source = ""
             captureDrawer.open()
         }
 
         function notifyInfoAndImage(info, path) {
-            captureDrawer.lastCaptureName = qsTr("Captured ") + info
+            captureDrawer.lastCaptureName = info
             capImage.source = "file://" + path
             captureDrawer.open()
         }

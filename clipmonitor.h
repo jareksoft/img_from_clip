@@ -23,6 +23,16 @@ public:
     enum class SaveMode { SVG, PNG, JPG };
     Q_ENUM(SaveMode)
 
+    struct Html
+    {
+        QString html;
+        bool operator==(const Html &other) const { return html == other.html; }
+        bool operator!=(const Html &other) const { return html != other.html; }
+        bool operator<(const Html &other) const { return html < other.html; }
+    };
+
+    using contents_t = std::variant<std::monostate, QImage, QString, Html>;
+
     explicit ClipMonitor(QObject *parent = nullptr);
 
     auto activeBindable() -> QBindable<bool> { return {&m_activeBinding}; }
@@ -48,7 +58,7 @@ private:
 
 private:
     void clipboardDataChanged();
-    auto getLastClipboard() -> std::variant<std::monostate, QImage, QString>;
+    auto getLastClipboard() -> contents_t;
 
 private:
     QDateTime m_lastCapture;
@@ -57,7 +67,7 @@ private:
     QProperty<QString> m_savePattern;
     QProperty<SaveMode> m_saveMode{SaveMode::SVG};
     QClipboard *m_clipboard;
-    std::variant<std::monostate, QImage, QString> m_lastClipboard;
+    contents_t m_lastClipboard;
     QTimer *m_pollTimer;
     QPropertyNotifier m_timerBinding;
 };
