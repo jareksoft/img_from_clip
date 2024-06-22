@@ -16,6 +16,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_STANDARD 17)
 
 option(FLATPAK_DIST "Enable flatpak specific options" OFF)
+option(SNAP_DIST "Enable snap specific options" OFF)
 
 find_package(Qt6 6.5 REQUIRED COMPONENTS Quick Gui Widgets Svg)
 
