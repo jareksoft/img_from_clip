@@ -6,8 +6,9 @@ project(
   LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_STANDARD 17)
 
-find_package(Qt6 6.5 REQUIRED COMPONENTS Quick Gui Widgets)
+find_package(Qt6 6.5 REQUIRED COMPONENTS Quick Gui Widgets Svg)
 
 qt_standard_project_setup(REQUIRES 6.5)
 
@@ -22,7 +23,18 @@ qt_add_qml_module(
   VERSION
   1.0
   QML_FILES
-  Main.qml)
+  Main.qml
+  SOURCES
+  clipmonitor.h
+  clipmonitor.cpp
+  systray.h
+  systray.cpp
+  RESOURCES
+  appicon512.png
+  appicon256.png
+  appicon128.png
+  appicon64.png
+  appicon24.png)
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1. If
 # you are developing for iOS or macOS you should consider setting an explicit,
@@ -36,7 +48,8 @@ set_target_properties(
              MACOSX_BUNDLE TRUE
              WIN32_EXECUTABLE TRUE)
 
-target_link_libraries(appimg_from_clip PRIVATE Qt6::Quick Qt6::Gui Qt6::Widgets)
+target_link_libraries(appimg_from_clip PRIVATE Qt6::Quick Qt6::Gui Qt6::Widgets
+                                               Qt6::Svg)
 target_include_directories(appimg_from_clip PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
 
 include(GNUInstallDirs)

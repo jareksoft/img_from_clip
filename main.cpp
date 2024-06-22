@@ -2,7 +2,7 @@
 #include <QQmlApplicationEngine>
 #include "config.h"
 
-int main(int argc, char *argv[])
+auto main(int argc, char *argv[]) -> int
 {
     QApplication::setOrganizationDomain(QStringLiteral("com.jpelczar"));
     QApplication::setOrganizationName(QStringLiteral("jareksoft"));
