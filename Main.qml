@@ -121,18 +121,27 @@ ApplicationWindow {
                             Layout.maximumWidth: parent.width
                             checked: clipMonitor.saveMode == ClipMonitor.SVG
                             text: qsTr("SVG")
+                            onClicked: {
+                                appSettings.saveMode = ClipMonitor.SVG
+                            }
                         }
 
                         RadioButton {
                             Layout.maximumWidth: parent.width
                             checked: clipMonitor.saveMode == ClipMonitor.PNG
                             text: qsTr("PNG")
+                            onClicked: {
+                                appSettings.saveMode = ClipMonitor.PNG
+                            }
                         }
 
                         RadioButton {
                             Layout.maximumWidth: parent.width
                             checked: clipMonitor.saveMode == ClipMonitor.JPG
                             text: qsTr("JPG")
+                            onClicked: {
+                                appSettings.saveMode = ClipMonitor.JPG
+                            }
                         }
                     }
                 }
