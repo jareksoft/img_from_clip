@@ -3,7 +3,11 @@ cmake_minimum_required(VERSION 3.16)
 project(
   img_from_clip
   VERSION 0.1
-  LANGUAGES CXX OBJCXX)
+  LANGUAGES CXX)
+
+if(APPLE)
+  enable_language(OBJCXX)
+endif()
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_STANDARD 17)
@@ -49,7 +53,8 @@ qt_add_qml_module(
   ${PLATFORM_SOURCES})
 
 if(APPLE)
-  target_compile_options(appimg_from_clip PRIVATE $<$<COMPILE_LANGUAGE:OBJCXX>:-fobjc-arc>)
+  target_compile_options(appimg_from_clip
+                         PRIVATE $<$<COMPILE_LANGUAGE:OBJCXX>:-fobjc-arc>)
   target_link_libraries(appimg_from_clip PRIVATE "-framework UserNotifications")
   set_target_properties(appimg_from_clip
                         PROPERTIES XCODE_ATTRIBUTE_CLANG_ENABLE_OBJC_ARC YES)
