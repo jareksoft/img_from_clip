@@ -70,6 +70,11 @@ checkandaddoption(-Werror HAVE_WERROR)
 checkandaddoption(-Wextra HAVE_WEXTRA)
 checkandaddoption(-Wconversion HAVE_WCONVERSION)
 
+if(WIN32)
+  list(APPEND PLATFORM_SOURCES
+       ${CMAKE_CURRENT_SOURCE_DIR}/shared/windows/icon.rc)
+endif()
+
 qt_add_qml_module(
   ${APP_NAME}
   URI
