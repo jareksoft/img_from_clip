@@ -12,6 +12,13 @@ endif()
 include(CheckCXXCompilerFlag)
 
 set(APP_ID com.jpelczar.img_from_clip)
+
+if (APPLE OR WIN32)
+    set(APP_NAME ImgFromClip)
+else()
+    set(APP_NAME appimg_from_clip)
+endif()
+
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_OSX_DEPLOYMENT_TARGET 12)
@@ -23,7 +30,7 @@ option(OSX_BUNDLE "Use app bundle on macOS" ON)
 find_package(Qt6 6.5 REQUIRED COMPONENTS Quick Gui Widgets Svg LinguistTools)
 
 qt_standard_project_setup(REQUIRES 6.5)
-qt_add_executable(appimg_from_clip main.cpp)
+qt_add_executable(${APP_NAME} main.cpp)
 
 unset(PLATFORM_SOURCES)
 
@@ -64,7 +71,7 @@ checkandaddoption(-Wextra HAVE_WEXTRA)
 checkandaddoption(-Wconversion HAVE_WCONVERSION)
 
 qt_add_qml_module(
-  appimg_from_clip
+  ${APP_NAME}
   URI
   img_from_clip
   VERSION
@@ -88,23 +95,23 @@ qt_add_qml_module(
   ${PLATFORM_SOURCES})
 
 if(APPLE)
-  target_compile_options(appimg_from_clip
+  target_compile_options(${APP_NAME}
                          PRIVATE $<$<COMPILE_LANGUAGE:OBJCXX>:-fobjc-arc>)
-  target_link_libraries(appimg_from_clip PRIVATE "-framework UserNotifications")
-  set_target_properties(appimg_from_clip
+  target_link_libraries(${APP_NAME} PRIVATE "-framework UserNotifications")
+  set_target_properties(${APP_NAME}
                         PROPERTIES XCODE_ATTRIBUTE_CLANG_ENABLE_OBJC_ARC YES
                         MACOSX_BUNDLE_BUNDLE_NAME "ImgFromClip"
                         MACOSX_BUNDLE_BUNDLE_VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}"
                         MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}"
                         XCODE_ATTRIBUTE_STRIP_INSTALLED_PRODUCT YES
                         XCODE_ATTRIBUTE_STRIP_STYLE YES
-                        MACOSX_BUNDLE_ICON_FILE appimg_from_clip)
+                        MACOSX_BUNDLE_ICON_FILE ${APP_NAME})
     if (NOT IOS)
         find_program(SIPS sips REQUIRED)
         find_program(ICONUTIL iconutil REQUIRED)
 
-        file(REMOVE_RECURSE ${CMAKE_CURRENT_BINARY_DIR}/appimg_from_clip.iconset)
-        file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/appimg_from_clip.iconset)
+        file(REMOVE_RECURSE ${CMAKE_CURRENT_BINARY_DIR}/${APP_NAME}.iconset)
+        file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${APP_NAME}.iconset)
 
         foreach(img_size 16 32 64 128 256 512)
             math(EXPR size_2 "${img_size}*2")
@@ -113,23 +120,23 @@ if(APPLE)
             execute_process(
                 COMMAND
                     ${SIPS} -z ${img_size} ${img_size} ${CMAKE_CURRENT_SOURCE_DIR}/appicon512.png -s format
-                    png --out ${CMAKE_CURRENT_BINARY_DIR}/appimg_from_clip.iconset/icon_${img_size}x${img_size}.png
+                    png --out ${CMAKE_CURRENT_BINARY_DIR}/${APP_NAME}.iconset/icon_${img_size}x${img_size}.png
                     COMMAND_ERROR_IS_FATAL ANY)
 
             execute_process(
                 COMMAND
                     ${SIPS} -z ${size_2} ${size_2} ${CMAKE_CURRENT_SOURCE_DIR}/appicon512.png -s format png
-                    --out ${CMAKE_CURRENT_BINARY_DIR}/appimg_from_clip.iconset/icon_${size_2}x${size_2}@2x.png
+                    --out ${CMAKE_CURRENT_BINARY_DIR}/${APP_NAME}.iconset/icon_${size_2}x${size_2}@2x.png
                     COMMAND_ERROR_IS_FATAL ANY)
            endforeach()
 
-           execute_process(COMMAND ${ICONUTIL} -c icns appimg_from_clip.iconset WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+           execute_process(COMMAND ${ICONUTIL} -c icns ${APP_NAME}.iconset WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
                            COMMAND_ERROR_IS_FATAL ANY)
 
-          target_sources(appimg_from_clip PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/appimg_from_clip.icns)
-          set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/appimg_from_clip.icns PROPERTIES MACOSX_PACKAGE_LOCATION
+          target_sources(${APP_NAME} PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/${APP_NAME}.icns)
+          set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/${APP_NAME}.icns PROPERTIES MACOSX_PACKAGE_LOCATION
                                                                                               "Resources")
-          set_target_properties(appimg_from_clip PROPERTIES INSTALL_RPATH "@executable_path/../Frameworks")
+          set_target_properties(${APP_NAME} PROPERTIES INSTALL_RPATH "@executable_path/../Frameworks")
 
           set(CMAKE_MACOSX_RPATH TRUE)
     ENDIF()
@@ -139,25 +146,25 @@ endif()
 # you are developing for iOS or macOS you should consider setting an explicit,
 # fixed bundle identifier manually though.
 set_target_properties(
-  appimg_from_clip
+  ${APP_NAME}
   PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER ${APP_ID}
              MACOSX_BUNDLE TRUE
              WIN32_EXECUTABLE TRUE)
 
-target_link_libraries(appimg_from_clip PRIVATE Qt6::Quick Qt6::Gui Qt6::Widgets
+target_link_libraries(${APP_NAME} PRIVATE Qt6::Quick Qt6::Gui Qt6::Widgets
                                                Qt6::Svg compile_options_if)
 
 if(USE_DBUS_BACKEND)
-  target_link_libraries(appimg_from_clip PRIVATE Qt6::DBus)
+  target_link_libraries(${APP_NAME} PRIVATE Qt6::DBus)
 endif()
 
-target_include_directories(appimg_from_clip PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
+target_include_directories(${APP_NAME} PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
 
 IF(CMAKE_GENERATOR MATCHES "Xcode")
-    target_link_options(appimg_from_clip PRIVATE -s)
+    target_link_options(${APP_NAME} PRIVATE -s)
 ENDIF()
 
-qt_add_translations(appimg_from_clip TS_FILES appimg_from_clip_en.ts
+qt_add_translations(${APP_NAME} TS_FILES appimg_from_clip_en.ts
                     appimg_from_clip_pl.ts)
 
 include(GNUInstallDirs)
@@ -165,7 +172,7 @@ include(GNUInstallDirs)
 add_subdirectory(shared)
 
 install(
-  TARGETS appimg_from_clip
+  TARGETS ${APP_NAME}
   BUNDLE DESTINATION .
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
@@ -176,6 +183,6 @@ if (APPLE AND OSX_BUNDLE AND NOT IOS)
     set(CPACK_DMG_VOLUME_NAME "ImgFromClip")
     set(CPACK_SYSTEM_NAME "OSX")
     set(CPACK_STRIP_FILES ON)
-    set(CPACK_PACKAGE_FILE_NAME "ImgFromClip-${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}")
+    set(CPACK_PACKAGE_FILE_NAME "${APP_NAME}-${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}")
     include(CPack)
 endif()
