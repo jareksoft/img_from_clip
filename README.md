@@ -6,6 +6,8 @@ the application will render the image into a document of specified
 width. Rendering is done using Qt's HTML engine, so results may not
 be perfect.
 
+![Screenshot](shared/linux/screenshot.png)
+
 ### Attributions
 
 App icon:
