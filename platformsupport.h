@@ -3,56 +3,57 @@
 #ifndef PLATFORMSUPPORT_H
 #define PLATFORMSUPPORT_H
 
+#include "config.h"
 #include <QObject>
 #include <QProperty>
 #include <QQmlEngine>
 #include <QTimer>
-#include "config.h"
 
 #ifdef USE_DBUS_BACKEND
 #include <QDBusInterface>
 #endif
 
-class PlatformSupport : public QObject
-{
-    Q_OBJECT
-    QML_ELEMENT
-    Q_PROPERTY(
-        int notificationsAllowed READ notificationsAllowed BINDABLE notificationsAllowedBindable)
-    Q_PROPERTY(bool requiresNotificationPermission READ requiresNotificationPermission CONSTANT)
+class PlatformSupport : public QObject {
+  Q_OBJECT
+  QML_ELEMENT
+  Q_PROPERTY(int notificationsAllowed READ notificationsAllowed BINDABLE
+                 notificationsAllowedBindable)
+  Q_PROPERTY(bool requiresNotificationPermission READ
+                 requiresNotificationPermission CONSTANT)
 public:
-    enum class NotifyClass { Error, Info };
-    Q_ENUMS(NotifyClass)
+  enum class NotifyClass { Error, Info };
+  Q_ENUMS(NotifyClass)
 
-    explicit PlatformSupport(QObject *parent = nullptr);
-    ~PlatformSupport() override;
+  explicit PlatformSupport(QObject *parent = nullptr);
+  ~PlatformSupport() override;
 
-    int notificationsAllowed() const;
+  int notificationsAllowed() const;
 
-    QBindable<int> notificationsAllowedBindable() { return {&m_notificationsAllowed}; }
+  QBindable<int> notificationsAllowedBindable() {
+    return {&m_notificationsAllowed};
+  }
 
-    bool requiresNotificationPermission() const;
+  bool requiresNotificationPermission() const;
 
 signals:
-    void permissionStateFetchCompletion();
-    void genericNotifyInfo(const QString &, const QString &);
-    void genericNotifyError(const QString &, const QString &);
+  void permissionStateFetchCompletion();
+  void genericNotifyInfo(const QString &, const QString &);
+  void genericNotifyError(const QString &, const QString &);
 
 public slots:
-    void requestNotifications();
-    void notify(NotifyClass type, const QString &title, const QString &description);
-    void notifyWithImage(NotifyClass type,
-                         const QString &title,
-                         const QString &description,
-                         const QString &imagePath);
+  void requestNotifications();
+  void notify(NotifyClass type, const QString &title,
+              const QString &description);
+  void notifyWithImage(NotifyClass type, const QString &title,
+                       const QString &description, const QString &imagePath);
 
 private:
-    void platformInit();
+  void platformInit();
 
 private:
-    QProperty<int> m_notificationsAllowed{0};
+  QProperty<int> m_notificationsAllowed{0};
 #ifdef USE_DBUS_BACKEND
-    QDBusInterface *m_notificationIf = nullptr;
+  QDBusInterface *m_notificationIf = nullptr;
 #endif
 };
 
