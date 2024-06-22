@@ -14,12 +14,15 @@ ApplicationWindow {
     minimumWidth: 180
     minimumHeight: 100
 
+    property bool askedAboutNotifications: false
+
     Settings {
         id: appSettings
         property string defaultWritePath
         property bool activeOnStart: false
         property string savePattern
         property int saveMode
+        property alias askedAboutNotifications: mainWindow.askedAboutNotifications
 
         Component.onCompleted: {
             if (defaultWritePath === "") {
@@ -33,10 +36,22 @@ ApplicationWindow {
         }
     }
 
+    PlatformSupport {
+        id: platformSupport
+        onPermissionStateFetchCompletion: {
+            console.log("Permission check complete")
+            if (!mainWindow.askedAboutNotifications
+                    && platformSupport.requiresNotificationPermission) {
+                permissionDrawer.open()
+            }
+        }
+    }
+
     SysTray {
         id: sysTray
         isActive: clipMonitor.active
         iconPath: ":/qt/qml/img_from_clip/appicon64.png"
+        notificationsAllowed: platformSupport.notificationsAllowed
     }
 
     ClipMonitor {
@@ -61,6 +76,10 @@ ApplicationWindow {
         }
     }
 
+    MessageDialog {
+        id: notificationMessageDialog
+    }
+
     ScrollView {
         anchors.fill: parent
         ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
@@ -76,6 +95,12 @@ ApplicationWindow {
                 id: mainRow
                 width: parent.width
                 spacing: 16
+
+                ColumnLayout {
+                    Layout.maximumWidth: parent.width
+                    Layout.preferredWidth: parent.width
+                }
+
                 Label {
                     Layout.maximumWidth: parent.width
                     Layout.fillWidth: true
@@ -157,6 +182,59 @@ ApplicationWindow {
 
                     Component.onCompleted: {
                         checked = appSettings.activeOnStart
+                    }
+                }
+            }
+        }
+    }
+
+    Drawer {
+        id: permissionDrawer
+        width: mainWindow.width
+        x: (mainWindow.width - permissionDrawer.width) / 2
+        edge: Qt.TopEdge
+        modal: false
+
+        Pane {
+            horizontalPadding: 32
+            verticalPadding: 32
+            id: drawerPane
+            width: parent.width
+            ColumnLayout {
+                width: parent.width
+                spacing: 16
+                RowLayout {
+                    Layout.maximumWidth: parent.width
+                    spacing: 16
+
+                    Image {
+                        source: Qt.resolvedUrl("appicon64.png")
+                        Layout.alignment: Qt.AlignVCenter
+                    }
+
+                    Label {
+                        Layout.fillWidth: true
+                        wrapMode: Text.WordWrap
+                        text: qsTr("Application uses notifications to display information about captured screenshots")
+                        Layout.alignment: Qt.AlignTop
+                    }
+                }
+                RowLayout {
+                    Layout.maximumWidth: parent.width
+                    Button {
+                        text: qsTr("Request")
+                        onClicked: {
+                            mainWindow.askedAboutNotifications = true
+                            permissionDrawer.close()
+                            platformSupport.requestNotifications()
+                        }
+                    }
+                    Button {
+                        text: qsTr("Don't ask")
+                        onClicked: {
+                            permissionDrawer.close()
+                            mainWindow.askedAboutNotifications = true
+                        }
                     }
                 }
             }

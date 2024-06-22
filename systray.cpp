@@ -37,12 +37,16 @@ SysTray::SysTray(QQuickItem *parent)
 
 void SysTray::notifyInfo(const QString &info)
 {
-    m_icon->showMessage(tr("Image Captured"), info, QSystemTrayIcon::Information, 1000);
+    if (m_notificationsAllowed.value()) {
+        m_icon->showMessage(tr("Image Captured"), info, QSystemTrayIcon::Information, 1000);
+    }
 }
 
 void SysTray::notifyError(const QString &error)
 {
-    m_icon->showMessage(tr("Capture error"), error, QSystemTrayIcon::Warning, 1000);
+    if (m_notificationsAllowed.value()) {
+        m_icon->showMessage(tr("Capture error"), error, QSystemTrayIcon::Warning, 1000);
+    }
 }
 
 QString SysTray::iconPath() const

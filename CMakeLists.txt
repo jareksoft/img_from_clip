@@ -16,6 +16,14 @@ qt_add_executable(appimg_from_clip main.cpp)
 
 configure_file(config.h.in config.h)
 
+unset(PLATFORM_SOURCES)
+
+if(APPLE)
+  list(APPEND PLATFORM_SOURCES platformsupport_apple.mm)
+else()
+  list(APPEND PLATFORM_SOURCES platformsupport_generic.cpp)
+endif()
+
 qt_add_qml_module(
   appimg_from_clip
   URI
@@ -34,7 +42,17 @@ qt_add_qml_module(
   appicon256.png
   appicon128.png
   appicon64.png
-  appicon24.png)
+  appicon24.png
+  SOURCES
+  platformsupport.h
+  platformsupport.cpp
+  ${PLATFORM_SOURCES})
+
+if(APPLE)
+  target_link_libraries(appimg_from_clip PRIVATE "-framework UserNotifications")
+  set_target_properties(appimg_from_clip
+                        PROPERTIES XCODE_ATTRIBUTE_CLANG_ENABLE_OBJC_ARC YES)
+endif()
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1. If
 # you are developing for iOS or macOS you should consider setting an explicit,
