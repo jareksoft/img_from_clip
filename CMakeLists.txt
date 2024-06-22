@@ -91,7 +91,45 @@ if(APPLE)
                          PRIVATE $<$<COMPILE_LANGUAGE:OBJCXX>:-fobjc-arc>)
   target_link_libraries(appimg_from_clip PRIVATE "-framework UserNotifications")
   set_target_properties(appimg_from_clip
-                        PROPERTIES XCODE_ATTRIBUTE_CLANG_ENABLE_OBJC_ARC YES)
+                        PROPERTIES XCODE_ATTRIBUTE_CLANG_ENABLE_OBJC_ARC YES
+                        MACOSX_BUNDLE_BUNDLE_NAME "ImgFromClip"
+                        MACOSX_BUNDLE_BUNDLE_VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}"
+                        MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}"
+                        XCODE_ATTRIBUTE_STRIP_INSTALLED_PRODUCT YES
+                        XCODE_ATTRIBUTE_STRIP_STYLE YES
+                        MACOSX_BUNDLE_ICON_FILE appimg_from_clip)
+    if (NOT IOS)
+        find_program(SIPS sips REQUIRED)
+        find_program(ICONUTIL iconutil REQUIRED)
+
+        file(REMOVE_RECURSE ${CMAKE_CURRENT_BINARY_DIR}/appimg_from_clip.iconset)
+        file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/appimg_from_clip.iconset)
+
+        foreach(img_size 16 32 64 128 256 512)
+            math(EXPR size_2 "${img_size}*2")
+
+
+            execute_process(
+                COMMAND
+                    ${SIPS} -z ${img_size} ${img_size} ${CMAKE_CURRENT_SOURCE_DIR}/appicon512.png -s format
+                    png --out ${CMAKE_CURRENT_BINARY_DIR}/appimg_from_clip.iconset/icon_${img_size}x${img_size}.png
+                    COMMAND_ERROR_IS_FATAL ANY)
+
+            execute_process(
+                COMMAND
+                    ${SIPS} -z ${size_2} ${size_2} ${CMAKE_CURRENT_SOURCE_DIR}/appicon512.png -s format png
+                    --out ${CMAKE_CURRENT_BINARY_DIR}/appimg_from_clip.iconset/icon_${size_2}x${size_2}@2x.png
+                    COMMAND_ERROR_IS_FATAL ANY)
+           endforeach()
+
+           execute_process(COMMAND ${ICONUTIL} -c icns appimg_from_clip.iconset WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+                           COMMAND_ERROR_IS_FATAL ANY)
+
+          target_sources(appimg_from_clip PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/appimg_from_clip.icns)
+          set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/appimg_from_clip.icns PROPERTIES MACOSX_PACKAGE_LOCATION
+                                                                                              "Resources")
+          set_target_properties(appimg_from_clip PROPERTIES INSTALL_RPATH "@executable_path/../Frameworks")
+    ENDIF()
 endif()
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1. If
@@ -99,10 +137,7 @@ endif()
 # fixed bundle identifier manually though.
 set_target_properties(
   appimg_from_clip
-  PROPERTIES # MACOSX_BUNDLE_GUI_IDENTIFIER com.example.appimg_from_clip
-             MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
-             MACOSX_BUNDLE_SHORT_VERSION_STRING
-             ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
+  PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER ${APP_ID}
              MACOSX_BUNDLE TRUE
              WIN32_EXECUTABLE TRUE)
 
@@ -114,6 +149,10 @@ if(USE_DBUS_BACKEND)
 endif()
 
 target_include_directories(appimg_from_clip PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
+
+IF(CMAKE_GENERATOR MATCHES "Xcode")
+    target_link_options(appimg_from_clip PRIVATE -s)
+ENDIF()
 
 qt_add_translations(appimg_from_clip TS_FILES appimg_from_clip_en.ts
                     appimg_from_clip_pl.ts)
