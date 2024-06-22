@@ -4,6 +4,7 @@
 #include <QApplication>
 #include <QDebug>
 #include <QMenu>
+#include <QMessageBox>
 
 SysTray::SysTray(QQuickItem *parent)
     : QQuickItem(parent)
@@ -25,9 +26,7 @@ SysTray::SysTray(QQuickItem *parent)
 
     m_icon->setContextMenu(trayIconMenu);
 
-    m_toolTipChange = m_toolTip.addNotifier([&]() {
-        m_icon->setToolTip(m_toolTip.value());
-    });
+    m_toolTipChange = m_toolTip.addNotifier([&]() { m_icon->setToolTip(m_toolTip.value()); });
 
     m_toolTip.setBinding([&]() -> QString {
         if (m_isActive.value())
@@ -48,6 +47,14 @@ void SysTray::notifyError(const QString &title, const QString &error)
     if (m_notificationsAllowed.value()) {
         m_icon->showMessage(title, error, QSystemTrayIcon::Warning, 5000);
     }
+}
+
+void SysTray::aboutApp(){
+    QMessageBox::about(nullptr,
+                       tr("ImgFromClip"),
+                       tr("ImgFromClip allows user to capture image or SVG copied into clipboard "
+                          "and capture it into specific location on disk automatically.<br/>Application icon:<br/>"
+                          "<a href=\"https://www.flaticon.com/free-icons/screenshot\" title=\"screenshot icons\">Screenshot icons created by icon_small - Flaticon</a>"));
 }
 
 QString SysTray::iconPath() const

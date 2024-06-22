@@ -5,6 +5,7 @@ import QtQuick.Layouts
 import QtQuick.Dialogs
 import QtCore
 import img_from_clip
+import Qt.labs.platform as Labs
 
 ApplicationWindow {
     id: mainWindow
@@ -18,6 +19,22 @@ ApplicationWindow {
     property bool askedAboutNotifications: false
     property bool htmlAllowed: false
     property real htmlRenderWidth: 800
+
+    Labs.MenuBar {
+        id: menuBar
+
+        Labs.Menu {
+            id: fileMenu
+            title: qsTr("File")
+
+            Labs.MenuItem {
+                text: qsTr("&About")
+                onTriggered: {
+                    sysTray.aboutApp()
+                }
+            }
+        }
+    }
 
     Settings {
         id: appSettings
