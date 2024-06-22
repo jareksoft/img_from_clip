@@ -150,6 +150,7 @@ void ClipMonitor::clipboardDataChanged()
         qDebug() << "Capture throttle";
         return;
     }
+    m_lastCapture = now;
 
     auto newClip = getLastClipboard();
     if (newClip == m_lastClipboard) {
@@ -158,7 +159,6 @@ void ClipMonitor::clipboardDataChanged()
     }
 
     m_lastClipboard = newClip;
-    m_lastCapture = now;
     const auto mimeData = m_clipboard->mimeData();
 
     qDebug() << "MIME is " << mimeData->formats();

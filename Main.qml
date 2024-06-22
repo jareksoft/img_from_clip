@@ -66,6 +66,7 @@ ApplicationWindow {
         }
         onNotifyCapture: function (reason) {
             sysTray.notifyInfo(qsTr("Image saved at %1").arg(reason))
+            captureDrawer.notifyInfo(reason)
         }
     }
 
@@ -239,6 +240,55 @@ ApplicationWindow {
                     }
                 }
             }
+        }
+    }
+
+    Drawer {
+        id: captureDrawer
+        width: mainWindow.width * 0.9
+        x: (mainWindow.width - captureDrawer.width) / 2
+        edge: Qt.BottomEdge
+        modal: false
+
+        property string lastCaptureName
+
+        contentWidth: captureDrawerPane.implicitWidth
+        contentHeight: captureDrawerPane.implicitHeight
+
+        Pane {
+            id: captureDrawerPane
+            horizontalPadding: 32
+            verticalPadding: 32
+            width: parent.width
+            ColumnLayout {
+                width: parent.width
+                spacing: 8
+
+                Label {
+                    text: captureDrawer.lastCaptureName
+                    wrapMode: Text.WordWrap
+                    Layout.fillWidth: true
+                }
+            }
+        }
+
+        MouseArea {
+            id: theMouse
+            anchors.fill: parent
+            hoverEnabled: true
+        }
+
+        Timer {
+            id: captureTimer
+            running: captureDrawer.visible && !theMouse.containsMouse
+            onTriggered: captureDrawer.close()
+            interval: 5000
+            repeat: false
+        }
+
+        function notifyInfo(info) {
+            lastCaptureName = qsTr("Captured ") + info
+            captureDrawer.open()
         }
     }
 }
