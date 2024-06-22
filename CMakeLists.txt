@@ -24,14 +24,25 @@ qt_standard_project_setup(REQUIRES 6.5)
 
 qt_add_executable(appimg_from_clip main.cpp)
 
-configure_file(config.h.in config.h)
-
 unset(PLATFORM_SOURCES)
 
 if(APPLE)
   list(APPEND PLATFORM_SOURCES platformsupport_apple.mm)
 else()
-  list(APPEND PLATFORM_SOURCES platformsupport_generic.cpp)
+  if(UNIX
+     AND NOT APPLE
+     AND NOT ANDROID)
+    find_package(Qt6 COMPONENTS DBus)
+    if(TARGET Qt6::DBus)
+      set(USE_DBUS_BACKEND ON)
+    endif()
+  endif()
+
+  if(USE_DBUS_BACKEND)
+    list(APPEND PLATFORM_SOURCES platformsupport_dbus.cpp)
+  else()
+    list(APPEND PLATFORM_SOURCES platformsupport_generic.cpp)
+  endif()
 endif()
 
 macro(CheckAndAddOption Flag Var)
@@ -43,6 +54,8 @@ macro(CheckAndAddOption Flag Var)
 endmacro()
 
 add_library(compile_options_if INTERFACE)
+
+configure_file(config.h.in config.h)
 
 checkandaddoption(-Wall HAVE_WALL)
 checkandaddoption(-Werror HAVE_WERROR)
@@ -95,6 +108,11 @@ set_target_properties(
 
 target_link_libraries(appimg_from_clip PRIVATE Qt6::Quick Qt6::Gui Qt6::Widgets
                                                Qt6::Svg compile_options_if)
+
+if(USE_DBUS_BACKEND)
+  target_link_libraries(appimg_from_clip PRIVATE Qt6::DBus)
+endif()
+
 target_include_directories(appimg_from_clip PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
 
 include(GNUInstallDirs)

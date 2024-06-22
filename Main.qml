@@ -63,11 +63,17 @@ ApplicationWindow {
         savePattern: appSettings.savePattern
         saveMode: appSettings.saveMode
         onSaveFailed: function (reason) {
-            sysTray.notifyError(reason)
+            platformSupport.notify(PlatformSupport.Error,
+                                   qsTr("Capture failed"), reason)
+            captureDrawer.notifyInfo(qsTr("Could not capture image"))
         }
-        onNotifyCapture: function (reason) {
-            sysTray.notifyInfo(qsTr("Image saved at %1").arg(reason))
-            captureDrawer.notifyInfo(reason)
+        onNotifyCapture: function (lastPath) {
+            platformSupport.notifyWithImage(PlatformSupport.Info,
+                                            qsTr("Image captured"),
+                                            qsTr("Saved file %1").arg(
+                                                lastPath), lastPath)
+            captureDrawer.notifyInfoAndImage(qsTr("Saved file %1").arg(
+                                                 lastPath), lastPath)
         }
     }
 
@@ -261,9 +267,16 @@ ApplicationWindow {
             horizontalPadding: 32
             verticalPadding: 32
             width: parent.width
-            ColumnLayout {
+            RowLayout {
                 width: parent.width
                 spacing: 8
+
+                Image {
+                    id: capImage
+                    fillMode: Image.PreserveAspectFit
+                    Layout.maximumWidth: 80
+                    Layout.maximumHeight: 80
+                }
 
                 Label {
                     text: captureDrawer.lastCaptureName
@@ -288,7 +301,14 @@ ApplicationWindow {
         }
 
         function notifyInfo(info) {
-            lastCaptureName = qsTr("Captured ") + info
+            captureDrawer.lastCaptureName = qsTr("Captured ") + info
+            capImage.source = ""
+            captureDrawer.open()
+        }
+
+        function notifyInfoAndImage(info, path) {
+            captureDrawer.lastCaptureName = qsTr("Captured ") + info
+            capImage.source = "file://" + path
             captureDrawer.open()
         }
     }

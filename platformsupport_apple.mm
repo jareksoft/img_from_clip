@@ -71,3 +71,28 @@ bool PlatformSupport::requiresNotificationPermission() const
 {
     return true;
 }
+
+void PlatformSupport::notifyWithImage(NotifyClass type,
+                                      const QString &title,
+                                      const QString &description,
+                                      const QString &)
+{
+    UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
+    content.title = title.toNSString();
+    content.body = description.toNSString();
+    content.sound = [UNNotificationSound defaultSound];
+    content.relevanceScore = 0.75;
+    UNTimeIntervalNotificationTrigger *trigger = [UNTimeIntervalNotificationTrigger
+        triggerWithTimeInterval:1
+                        repeats:NO];
+    UNNotificationRequest *request = [UNNotificationRequest
+        requestWithIdentifier:@"grab-plat-notify"
+                      content:content
+                      trigger:trigger];
+    // Schedule the notification.
+    UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+    [center addNotificationRequest:request
+             withCompletionHandler:^(NSError *err) {
+                 Q_UNUSED(err);
+             }];
+}

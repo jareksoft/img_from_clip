@@ -4,3 +4,5 @@
 
 // clang-format off
 #define APP_VERSION_STRING "@PROJECT_VERSION@"
+
+#cmakedefine USE_DBUS_BACKEND 1

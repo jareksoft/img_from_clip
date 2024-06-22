@@ -20,3 +20,6 @@ bool PlatformSupport::requiresNotificationPermission() const
 {
     return false;
 }
+
+void PlatformSupport::notifyWithImage(NotifyClass, const QString &, const QString &, const QString &)
+{}

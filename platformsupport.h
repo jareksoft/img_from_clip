@@ -7,6 +7,11 @@
 #include <QProperty>
 #include <QQmlEngine>
 #include <QTimer>
+#include "config.h"
+
+#ifdef USE_DBUS_BACKEND
+#include <QDBusInterface>
+#endif
 
 class PlatformSupport : public QObject
 {
@@ -16,6 +21,9 @@ class PlatformSupport : public QObject
         int notificationsAllowed READ notificationsAllowed BINDABLE notificationsAllowedBindable)
     Q_PROPERTY(bool requiresNotificationPermission READ requiresNotificationPermission CONSTANT)
 public:
+    enum class NotifyClass { Error, Info };
+    Q_ENUMS(NotifyClass)
+
     explicit PlatformSupport(QObject *parent = nullptr);
     ~PlatformSupport() override;
 
@@ -30,12 +38,20 @@ signals:
 
 public slots:
     void requestNotifications();
+    void notify(NotifyClass type, const QString &title, const QString &description);
+    void notifyWithImage(NotifyClass type,
+                         const QString &title,
+                         const QString &description,
+                         const QString &imagePath);
 
 private:
     void platformInit();
 
 private:
     QProperty<int> m_notificationsAllowed{0};
+#ifdef USE_DBUS_BACKEND
+    QDBusInterface *m_notificationIf = nullptr;
+#endif
 };
 
 #endif // PLATFORMSUPPORT_H
