@@ -9,6 +9,8 @@ if(APPLE)
   enable_language(OBJCXX)
 endif()
 
+include(CheckCXXCompilerFlag)
+
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_STANDARD 17)
 
@@ -27,6 +29,21 @@ if(APPLE)
 else()
   list(APPEND PLATFORM_SOURCES platformsupport_generic.cpp)
 endif()
+
+macro(CheckAndAddOption Flag Var)
+  check_cxx_compiler_flag(${Flag} ${Var})
+  if(${Var})
+    target_compile_options(compile_options_if
+                           INTERFACE $<$<COMPILE_LANGUAGE:CXX>:${Flag}>)
+  endif()
+endmacro()
+
+add_library(compile_options_if INTERFACE)
+
+checkandaddoption(-Wall HAVE_WALL)
+checkandaddoption(-Werror HAVE_WERROR)
+checkandaddoption(-Wextra HAVE_WEXTRA)
+checkandaddoption(-Wconversion HAVE_WCONVERSION)
 
 qt_add_qml_module(
   appimg_from_clip
@@ -73,7 +90,7 @@ set_target_properties(
              WIN32_EXECUTABLE TRUE)
 
 target_link_libraries(appimg_from_clip PRIVATE Qt6::Quick Qt6::Gui Qt6::Widgets
-                                               Qt6::Svg)
+                                               Qt6::Svg compile_options_if)
 target_include_directories(appimg_from_clip PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
 
 include(GNUInstallDirs)
