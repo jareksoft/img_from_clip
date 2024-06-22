@@ -47,6 +47,12 @@ ApplicationWindow {
                 permissionDrawer.open()
             }
         }
+        onGenericNotifyError: (title, body) => {
+                                  sysTray.notifyError(title, body)
+                              }
+        onGenericNotifyInfo: (title, body) => {
+                                 sysTray.notifyInfo(title, body)
+                             }
     }
 
     SysTray {

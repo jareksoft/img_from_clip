@@ -21,5 +21,17 @@ bool PlatformSupport::requiresNotificationPermission() const
     return false;
 }
 
-void PlatformSupport::notifyWithImage(NotifyClass, const QString &, const QString &, const QString &)
-{}
+void PlatformSupport::notifyWithImage(NotifyClass type,
+                                      const QString &title,
+                                      const QString &description,
+                                      const QString &)
+{
+    switch (type) {
+    case NotifyClass::Error:
+        emit genericNotifyError(title, description);
+        break;
+    case NotifyClass::Info:
+        emit genericNotifyInfo(title, description);
+        break;
+    }
+}

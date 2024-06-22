@@ -25,8 +25,8 @@ public:
     void setIconPath(const QString &newIconPath);
 
 public slots:
-    void notifyInfo(const QString &);
-    void notifyError(const QString &);
+    void notifyInfo(const QString &, const QString &);
+    void notifyError(const QString &, const QString &);
 
 signals:
     void iconPathChanged(QString iconPath);

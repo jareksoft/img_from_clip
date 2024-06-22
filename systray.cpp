@@ -37,21 +37,19 @@ SysTray::SysTray(QQuickItem *parent)
     });
 }
 
-void SysTray::notifyInfo(const QString &info)
+void SysTray::notifyInfo(const QString &title, const QString &info)
 {
     if (m_notificationsAllowed.value()) {
-        qDebug() << "Info" << info;
-        m_icon->showMessage(tr("Image Captured"), info, QSystemTrayIcon::Information, 5000);
+        m_icon->showMessage(title, info, QSystemTrayIcon::Information, 5000);
     } else {
         qDebug() << "Notifications not allowed";
     }
 }
 
-void SysTray::notifyError(const QString &error)
+void SysTray::notifyError(const QString &title, const QString &error)
 {
     if (m_notificationsAllowed.value()) {
-        qDebug() << "Error" << error;
-        m_icon->showMessage(tr("Capture error"), error, QSystemTrayIcon::Warning, 5000);
+        m_icon->showMessage(title, error, QSystemTrayIcon::Warning, 5000);
     } else {
         qDebug() << "Notifications not allowed";
     }

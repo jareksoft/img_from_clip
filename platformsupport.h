@@ -35,6 +35,8 @@ public:
 
 signals:
     void permissionStateFetchCompletion();
+    void genericNotifyInfo(const QString &, const QString &);
+    void genericNotifyError(const QString &, const QString &);
 
 public slots:
     void requestNotifications();
