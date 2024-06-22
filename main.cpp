@@ -2,6 +2,7 @@
 
 #include <QApplication>
 #include <QQmlApplicationEngine>
+#include <QTranslator>
 #include "config.h"
 
 auto main(int argc, char *argv[]) -> int
@@ -12,6 +13,13 @@ auto main(int argc, char *argv[]) -> int
     QApplication::setApplicationVersion(APP_VERSION_STRING);
 
     QApplication app(argc, argv);
+
+    QTranslator translator;
+    if (translator.load(QLocale(),
+                        QStringLiteral("appimg_from_clip"),
+                        QStringLiteral("_"),
+                        QStringLiteral(":/i18n")))
+        QCoreApplication::installTranslator(&translator);
 
     QQmlApplicationEngine engine;
     QObject::connect(
