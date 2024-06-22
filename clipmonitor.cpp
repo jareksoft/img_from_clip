@@ -166,8 +166,6 @@ void ClipMonitor::clipboardDataChanged()
     // Try text first
     QString textContents = mimeData->text();
 
-    QString capturePattern = m_savePattern.value();
-
     // Check if we have SVG
     if (!textContents.isEmpty()) {
         qDebug() << "Text not empty";
