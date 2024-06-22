@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.21)
 
 project(
   img_from_clip
@@ -18,10 +18,9 @@ set(CMAKE_CXX_STANDARD 17)
 option(FLATPAK_DIST "Enable flatpak specific options" OFF)
 option(SNAP_DIST "Enable snap specific options" OFF)
 
-find_package(Qt6 6.5 REQUIRED COMPONENTS Quick Gui Widgets Svg)
+find_package(Qt6 6.5 REQUIRED COMPONENTS Quick Gui Widgets Svg LinguistTools)
 
 qt_standard_project_setup(REQUIRES 6.5)
-
 qt_add_executable(appimg_from_clip main.cpp)
 
 unset(PLATFORM_SOURCES)
@@ -114,6 +113,9 @@ if(USE_DBUS_BACKEND)
 endif()
 
 target_include_directories(appimg_from_clip PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
+
+qt_add_translations(appimg_from_clip TS_FILES appimg_from_clip_en.ts
+                    appimg_from_clip_pl.ts)
 
 include(GNUInstallDirs)
 
