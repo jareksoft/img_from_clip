@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+    <id>com.jpelczar.img_from_clip.desktop</id>
+    <name>ImgFromClip</name>
+    <metadata_license>CC-BY-3.0</metadata_license>
+    <project_license>BSD-2-Clause</project_license>
+    <summary>Simple tool which captures images from clipboard automatically</summary>
+    <developer_name></developer_name>
+    <description>
+        <p>
+			ImgFromClip allows user to capture image or SVG copied into clipboard
+			and capture it into specific location on disk automatically.
+        </p>
+    </description>
+    <launchable type="desktop-id">com.jpelczar.img_from_clip.desktop</launchable>
+    <url type="homepage">https://github.com/jareksoft/img_from_clip</url>
+    <url type="bugtracker">https://github.com/jareksoft/img_from_clip/issues</url>
+    <url type="faq">https://github.com/jareksoft/img_from_clip/blob/master/README.md</url>
+    <url type="help">https://github.com/jareksoft/img_from_clip/blob/master/README.md</url>
+    <url type="vcs-browser">https://github.com/jareksoft/img_from_clip</url>
+    <url type="contribute">https://github.com/jareksoft/img_from_clip</url>
+    <screenshots>
+        <screenshot type="default">
+            <image>https://raw.githubusercontent.com/jareksoft/img_from_clip/master/shared/linux/screenshot.png</image>
+            <caption>Main application window</caption>
+        </screenshot>
+    </screenshots>
+
+    <releases>
+        <release version="0.1" date="2024-06-22">
+            <description>
+                <ul>
+                    <li>Initial version of the application</li>
+                </ul>
+            </description>
+        </release>
+    </releases>
+    <content_rating type="oars-1.0" />
+</component>

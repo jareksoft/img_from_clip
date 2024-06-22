@@ -1,0 +1,15 @@
+[Desktop Entry]
+Name=ImgFromClip
+GenericName=Image From Clipboard
+Comment=Simple tool which captures images from clipboard automatically
+Exec=appimg_from_clip
+TryExec=appimg_from_clip
+Icon=appimg_from_clip
+StartupWMClass=appimg_from_clip
+StartupNotify=false
+Terminal=false
+Type=Application
+Version=@PROJECT_VERSION@
+Categories=Utility;
+SingleMainWindow=true
+X-GNOME-SingleWindow=true
