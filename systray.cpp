@@ -38,14 +38,20 @@ SysTray::SysTray(QQuickItem *parent)
 void SysTray::notifyInfo(const QString &info)
 {
     if (m_notificationsAllowed.value()) {
-        m_icon->showMessage(tr("Image Captured"), info, QSystemTrayIcon::Information, 1000);
+        qDebug() << "Info" << info;
+        m_icon->showMessage(tr("Image Captured"), info, QSystemTrayIcon::Information, 5000);
+    } else {
+        qDebug() << "Notifications not allowed";
     }
 }
 
 void SysTray::notifyError(const QString &error)
 {
     if (m_notificationsAllowed.value()) {
-        m_icon->showMessage(tr("Capture error"), error, QSystemTrayIcon::Warning, 1000);
+        qDebug() << "Error" << error;
+        m_icon->showMessage(tr("Capture error"), error, QSystemTrayIcon::Warning, 5000);
+    } else {
+        qDebug() << "Notifications not allowed";
     }
 }
 
