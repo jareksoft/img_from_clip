@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: BSD-2-Clause
+
 #ifndef CLIPMONITOR_H
 #define CLIPMONITOR_H
 

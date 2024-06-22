@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include "systray.h"
 #include <QApplication>
 #include <QDebug>

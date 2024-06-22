@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: BSD-2-Clause
+
 #if defined(Q_OS_IOS)
 #include <UIKit/UIKit.h>
 #else

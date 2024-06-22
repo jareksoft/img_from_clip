@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: BSD-2-Clause
+
 #ifndef SYSTRAY_H
 #define SYSTRAY_H
 

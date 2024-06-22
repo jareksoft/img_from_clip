@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: BSD-2-Clause
+
 #include "clipmonitor.h"
 #include <QApplication>
 #include <QBuffer>

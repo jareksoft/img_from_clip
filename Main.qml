@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: BSD-2-Clause
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
