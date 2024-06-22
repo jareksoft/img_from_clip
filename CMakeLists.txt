@@ -11,8 +11,11 @@ endif()
 
 include(CheckCXXCompilerFlag)
 
+set(APP_ID com.jpelczar.img_from_clip)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_STANDARD 17)
+
+option(FLATPAK_DIST "Enable flatpak specific options" OFF)
 
 find_package(Qt6 6.5 REQUIRED COMPONENTS Quick Gui Widgets Svg)
 
@@ -94,6 +97,9 @@ target_link_libraries(appimg_from_clip PRIVATE Qt6::Quick Qt6::Gui Qt6::Widgets
 target_include_directories(appimg_from_clip PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
 
 include(GNUInstallDirs)
+
+add_subdirectory(shared)
+
 install(
   TARGETS appimg_from_clip
   BUNDLE DESTINATION .

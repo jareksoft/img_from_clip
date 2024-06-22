@@ -1,0 +1,26 @@
+name: img_from_clip
+adopt-info: img_from_clip
+grade: development
+base: core22
+confinement: strict
+compression: lzo
+
+apps:
+  appimg_from_clip:
+    command: usr/bin/appimg_from_clip
+    common-id: com.jpelczar.img_from_clip.desktop
+    extensions: [kde-neon]
+    plugs: [home, unity7]
+
+parts:
+  appimg_from_clip:
+    source: .
+    plugin: cmake
+    parse-info: [usr/share/metainfo/com.jpelczar.img_from_clip.appdata.xml]
+    cmake-parameters:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_INSTALL_PREFIX=/usr
+    build-packages:
+      - g++
+    stage-packages:
+      - dbus
