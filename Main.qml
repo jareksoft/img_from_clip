@@ -20,17 +20,41 @@ ApplicationWindow {
     property bool htmlAllowed: false
     property real htmlRenderWidth: 800
 
-    Labs.MenuBar {
-        id: menuBar
+    Component {
+        id: labsMenuBar
 
-        Labs.Menu {
-            id: fileMenu
-            title: qsTr("File")
+        Labs.MenuBar {
+            id: menuBar
 
-            Labs.MenuItem {
-                text: qsTr("&About")
-                onTriggered: {
-                    sysTray.aboutApp()
+            Labs.Menu {
+                id: fileMenu
+                title: qsTr("File")
+
+                Labs.MenuItem {
+                    text: qsTr("&About")
+                    onTriggered: {
+                        Qt.callLater(function () {
+                            sysTray.aboutApp()
+                        })
+                    }
+                }
+            }
+        }
+    }
+
+    Component {
+        id: qmlMenuBar
+        MenuBar {
+            Menu {
+                title: qsTr("File")
+
+                MenuItem {
+                    text: qsTr("&About")
+                    onTriggered: {
+                        Qt.callLater(function () {
+                            sysTray.aboutApp()
+                        })
+                    }
                 }
             }
         }
@@ -382,6 +406,14 @@ ApplicationWindow {
             captureDrawer.lastCaptureName = info
             capImage.source = "file://" + path
             captureDrawer.open()
+        }
+    }
+
+    Component.onCompleted: {
+        if (Qt.platform.os === "osx") {
+            labsMenuBar.createObject(mainWindow)
+        } else {
+            menuBar = qmlMenuBar.createObject(mainWindow)
         }
     }
 }
