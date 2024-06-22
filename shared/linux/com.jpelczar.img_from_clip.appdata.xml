@@ -5,11 +5,27 @@
     <metadata_license>CC-BY-3.0</metadata_license>
     <project_license>BSD-2-Clause</project_license>
     <summary>Simple tool which captures images from clipboard automatically</summary>
+    <summary xml:lang="pl">Proste narzędzie do automatycznego zapisu obrazków ze schowka</summary>
     <developer_name></developer_name>
     <description>
         <p>
 			ImgFromClip allows user to capture image or SVG copied into clipboard
 			and capture it into specific location on disk automatically.
+
+                        Images stored in the clipboard are converted to the target format.
+                        If user copies raw SVG text (e.g. from various UI design tools,
+                        which support "copy as SVG", the image will be stored as-is
+                        if SVG conversion is used).
+        </p>
+        <p xml:lang="pl">
+                        ImgFromClip umożliwia użytkownikowi przechwycenie obrazu lub pliku SVG
+                        skopiowanego do schowka i automatyczny zapis go na dysku.
+
+                        Obrazki zapisane w schowku są konwertowane do formatu docelowego.
+                        Jeśli użytkownik skopiuje surowy kod SVG (np. z różnych narzędzi
+                        do projektowania UI, obsługującego opcję "skopiuj jako SVG", obraz
+                        zostanie zapisany w niezmienionej postaci, jeśli docelowa konwersja
+                        to SVG)
         </p>
     </description>
     <launchable type="desktop-id">com.jpelczar.img_from_clip.desktop</launchable>

@@ -2,6 +2,7 @@
 Name=ImgFromClip
 GenericName=Image From Clipboard
 Comment=Simple tool which captures images from clipboard automatically
+Comment[pl]=Proste narzędzie do automatycznego zapisu obrazków ze schowka
 Exec=appimg_from_clip
 TryExec=appimg_from_clip
 Icon=appimg_from_clip
