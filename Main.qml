@@ -36,7 +36,7 @@ ApplicationWindow {
     SysTray {
         id: sysTray
         isActive: clipMonitor.active
-        iconPath: ":/qt/qml/img_from_clip/appicon24.png"
+        iconPath: ":/qt/qml/img_from_clip/appicon64.png"
     }
 
     ClipMonitor {
