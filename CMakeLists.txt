@@ -18,6 +18,7 @@ set(CMAKE_OSX_DEPLOYMENT_TARGET 12)
 
 option(FLATPAK_DIST "Enable flatpak specific options" OFF)
 option(SNAP_DIST "Enable snap specific options" OFF)
+option(OSX_BUNDLE "Use app bundle on macOS" ON)
 
 find_package(Qt6 6.5 REQUIRED COMPONENTS Quick Gui Widgets Svg LinguistTools)
 
@@ -129,6 +130,8 @@ if(APPLE)
           set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/appimg_from_clip.icns PROPERTIES MACOSX_PACKAGE_LOCATION
                                                                                               "Resources")
           set_target_properties(appimg_from_clip PROPERTIES INSTALL_RPATH "@executable_path/../Frameworks")
+
+          set(CMAKE_MACOSX_RPATH TRUE)
     ENDIF()
 endif()
 
@@ -166,3 +169,13 @@ install(
   BUNDLE DESTINATION .
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+
+if (APPLE AND OSX_BUNDLE AND NOT IOS)
+    set(CPACK_GENERATOR "DragNDrop")
+    set(CPACK_DMG_FORMAT "UDBZ")
+    set(CPACK_DMG_VOLUME_NAME "ImgFromClip")
+    set(CPACK_SYSTEM_NAME "OSX")
+    set(CPACK_STRIP_FILES ON)
+    set(CPACK_PACKAGE_FILE_NAME "ImgFromClip-${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}")
+    include(CPack)
+endif()
