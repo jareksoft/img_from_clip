@@ -19,6 +19,8 @@ class ClipMonitor : public QObject
     Q_PROPERTY(QUrl savePath READ default WRITE default BINDABLE savePathBindable)
     Q_PROPERTY(QString savePattern READ default WRITE default BINDABLE savePatternBindable)
     Q_PROPERTY(SaveMode saveMode READ default WRITE default BINDABLE saveModeBindable)
+    Q_PROPERTY(bool htmlAllowed READ default WRITE default BINDABLE htmlAllowedBindable)
+    Q_PROPERTY(qreal renderWidth READ default WRITE default BINDABLE renderWidthBindable)
 public:
     enum class SaveMode { SVG, PNG, JPG };
     Q_ENUM(SaveMode)
@@ -39,6 +41,8 @@ public:
     auto savePathBindable() -> QBindable<QUrl> { return {&m_savePath}; }
     auto savePatternBindable() -> QBindable<QString> { return {&m_savePattern}; }
     auto saveModeBindable() -> QBindable<SaveMode> { return {&m_saveMode}; }
+    auto htmlAllowedBindable() -> QBindable<bool> { return {&m_htmlAllowed}; }
+    auto renderWidthBindable() -> QBindable<qreal> { return {&m_renderWidth}; }
 
     // Can't use trailing return type because of MOC
     Q_INVOKABLE QString makeNewSavePath();
@@ -70,6 +74,8 @@ private:
     contents_t m_lastClipboard;
     QTimer *m_pollTimer;
     QPropertyNotifier m_timerBinding;
+    QProperty<bool> m_htmlAllowed{false};
+    QProperty<qreal> m_renderWidth{800.0};
 };
 
 #endif // CLIPMONITOR_H

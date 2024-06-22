@@ -9,14 +9,15 @@ import img_from_clip
 ApplicationWindow {
     id: mainWindow
     width: 360
-    height: 480
+    height: 500
     visible: true
     title: qsTr("Image from Clipboard")
     minimumWidth: 180
     minimumHeight: 100
 
     property bool askedAboutNotifications: false
-    property int renderSizeX: 800
+    property bool htmlAllowed: false
+    property real htmlRenderWidth: 800
 
     Settings {
         id: appSettings
@@ -25,8 +26,8 @@ ApplicationWindow {
         property string savePattern
         property int saveMode
         property alias askedAboutNotifications: mainWindow.askedAboutNotifications
-        property alias allowHtmlCheckBox: allowHtmlCheckBox.checked
-        property alias renderSizeX: mainWindow.renderSizeX
+        property alias allowHtml: mainWindow.htmlAllowed
+        property alias htmlRenderWidth: mainWindow.htmlRenderWidth
 
         Component.onCompleted: {
             if (defaultWritePath === "") {
@@ -71,6 +72,8 @@ ApplicationWindow {
         active: appSettings.activeOnStart
         savePattern: appSettings.savePattern
         saveMode: appSettings.saveMode
+        htmlAllowed: appSettings.allowHtml
+        renderWidth: appSettings.htmlRenderWidth
         onSaveFailed: function (reason) {
             platformSupport.notify(PlatformSupport.Error,
                                    qsTr("Capture failed"), reason)
@@ -199,27 +202,27 @@ ApplicationWindow {
                         CheckBox {
                             id: allowHtmlCheckBox
                             text: qsTr("Enable HTML rendering")
+                            checked: appSettings.allowHtml
+                            onCheckedChanged: {
+                                appSettings.allowHtml = checked
+                            }
                         }
 
                         RowLayout {
+                            Layout.fillWidth: true
                             Layout.maximumWidth: parent.width
-                            Layout.preferredWidth: parent.width
-                            spacing: 20
-
+                            spacing: 16
                             Label {
-                                text: qsTr("Page width (pixels):")
+                                text: qsTr("Page width:")
                             }
-
                             TextField {
-                                Layout.fillWidth: true
-                                id: xSize
-                                text: mainWindow.renderSizeX
+                                text: mainWindow.htmlRenderWidth
                                 validator: IntValidator {
                                     bottom: 100
                                     top: 8192
                                 }
                                 onAccepted: {
-                                    mainWindow.renderSizeX = text
+                                    mainWindow.htmlRenderWidth = text
                                 }
                             }
                         }
