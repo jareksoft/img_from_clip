@@ -9,7 +9,7 @@ apps:
   appimg-from-clip:
     command: usr/bin/appimg_from_clip
     common-id: com.jpelczar.img_from_clip.desktop
-    extensions: [kde-neon]
+    extensions: [kde-neon-6]
     plugs: [home, unity7]
 
 parts:
