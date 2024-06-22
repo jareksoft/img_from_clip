@@ -59,7 +59,7 @@ void PlatformSupport::requestNotifications()
     __block QPointer<PlatformSupport> selfRef(this);
     [[UNUserNotificationCenter currentNotificationCenter]
         requestAuthorizationWithOptions:(UNAuthorizationOptionAlert)
-                      completionHandler:^(BOOL granted, NSError *_Nullable error) {
+                      completionHandler:^(BOOL granted, NSError *_Nullable) {
                           if (auto self = selfRef.get()) {
                               qDebug() << "Granted =" << granted;
                               self->m_notificationsAllowed = (granted != NO) ? 1 : 0;
@@ -72,7 +72,7 @@ bool PlatformSupport::requiresNotificationPermission() const
     return true;
 }
 
-void PlatformSupport::notifyWithImage(NotifyClass type,
+void PlatformSupport::notifyWithImage(NotifyClass,
                                       const QString &title,
                                       const QString &description,
                                       const QString &)

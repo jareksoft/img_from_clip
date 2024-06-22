@@ -14,6 +14,7 @@ include(CheckCXXCompilerFlag)
 set(APP_ID com.jpelczar.img_from_clip)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_OSX_DEPLOYMENT_TARGET 12)
 
 option(FLATPAK_DIST "Enable flatpak specific options" OFF)
 option(SNAP_DIST "Enable snap specific options" OFF)
