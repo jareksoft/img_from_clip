@@ -45,6 +45,12 @@ ApplicationWindow {
         active: appSettings.activeOnStart
         savePattern: appSettings.savePattern
         saveMode: appSettings.saveMode
+        onSaveFailed: function (reason) {
+            sysTray.notifyError(reason)
+        }
+        onNotifyCapture: function (reason) {
+            sysTray.notifyInfo(qsTr("Image saved at %1").arg(reason))
+        }
     }
 
     FolderDialog {

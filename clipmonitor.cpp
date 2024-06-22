@@ -111,6 +111,8 @@ void ClipMonitor::createSave(std::function<void(QIODevice *)> callback)
         return;
     }
 
+    qDebug() << "Saving " << file.fileName();
+
     callback(&file);
 
     if (file.error()) {
@@ -145,7 +147,11 @@ void ClipMonitor::clipboardDataChanged()
 
     // Check if we have SVG
     if (!textContents.isEmpty()) {
+        qDebug() << "Text not empty";
+
         if (textContents.contains(QStringLiteral("<svg"))) {
+            qDebug() << "Text is SVG";
+
             switch (m_saveMode) {
             case SaveMode::SVG:
                 saveRawSvg(textContents);
@@ -157,6 +163,20 @@ void ClipMonitor::clipboardDataChanged()
                 renderSvgToJpg(textContents);
                 break;
             }
+        }
+    } else if (mimeData->hasImage()) {
+        qDebug() << "We have image";
+        QImage image = qvariant_cast<QImage>(mimeData->imageData());
+        switch (m_saveMode) {
+        case SaveMode::SVG:
+            saveSvg(image);
+            break;
+        case SaveMode::PNG:
+            savePng(image);
+            break;
+        case SaveMode::JPG:
+            saveJpg(image);
+            break;
         }
     }
 }
