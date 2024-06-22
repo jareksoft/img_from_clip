@@ -1,0 +1,4 @@
+#pragma once
+
+// clang-format off
+#define APP_VERSION_STRING "@PROJECT_VERSION@"
