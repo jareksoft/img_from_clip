@@ -6,6 +6,9 @@ the application will render the image into a document of specified
 width. Rendering is done using QTextDocument engine, so results may not
 be perfect.
 
+### Languages: ENG, KOR, POL
+
+
 ![Screenshot](shared/linux/screenshot.png)
 
 ### Attributions
