@@ -9,6 +9,7 @@
 #include <QObject>
 #include <QProperty>
 #include <QQmlEngine>
+#include <QRandomGenerator>
 #include <QTimer>
 
 class ClipMonitor : public QObject {
@@ -47,7 +48,7 @@ public:
   auto renderWidthBindable() -> QBindable<qreal> { return {&m_renderWidth}; }
 
   // Can't use trailing return type because of MOC
-  Q_INVOKABLE QString makeNewSavePath();
+  Q_INVOKABLE QString makeNewSavePath(QString pattern);
 
 signals:
   void notifyCapture(QString lastPath);
@@ -78,6 +79,7 @@ private:
   QPropertyNotifier m_timerBinding;
   QProperty<bool> m_htmlAllowed{false};
   QProperty<qreal> m_renderWidth{800.0};
+  QRandomGenerator m_rng;
 };
 
 #endif // CLIPMONITOR_H

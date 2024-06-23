@@ -9,8 +9,8 @@ import Qt.labs.platform as Labs
 
 ApplicationWindow {
     id: mainWindow
-    width: 360
-    height: 550
+    width: 400
+    height: 500
     visible: true
     title: qsTr("Image from Clipboard")
     minimumWidth: 180
@@ -69,11 +69,12 @@ ApplicationWindow {
         id: appSettings
         property string defaultWritePath
         property bool activeOnStart: false
-        property string savePattern
+        property alias savePattern: formatLabel.text
         property int saveMode
         property alias askedAboutNotifications: mainWindow.askedAboutNotifications
         property alias allowHtml: mainWindow.htmlAllowed
         property alias htmlRenderWidth: mainWindow.htmlRenderWidth
+        property alias seqIndex: mainWindow.seqIndex
 
         Component.onCompleted: {
             if (defaultWritePath === "") {
@@ -169,6 +170,7 @@ ApplicationWindow {
                 width: parent.width
                 leftMargin: 20
                 rightMargin: 20
+                bottomMargin: 32
                 contentHeight: mainRow.implicitHeight
 
                 ColumnLayout {
@@ -293,6 +295,7 @@ ApplicationWindow {
                 width: parent.width
                 leftMargin: 20
                 rightMargin: 20
+                bottomMargin: 32
                 contentHeight: advancedRow.implicitHeight
 
                 ColumnLayout {
@@ -339,6 +342,58 @@ ApplicationWindow {
                                 Layout.maximumWidth: parent.width
                                 wrapMode: Text.WordWrap
                                 text: qsTr("Note: This feature uses QTextDocument rendering engine, so results may not be perfect")
+                            }
+                        }
+                    }
+
+                    GroupBox {
+                        Layout.maximumWidth: parent.width
+                        Layout.preferredWidth: parent.width
+                        title: qsTr("Name formatting")
+
+                        ColumnLayout {
+                            width: parent.width
+                            spacing: 16
+
+                            Label {
+                                Layout.fillWidth: true
+                                Layout.maximumWidth: parent.width
+                                wrapMode: Text.WordWrap
+                                textFormat: Text.RichText
+                                text: qsTr(`Please specify how the file name is formatted
+                                           Use the following definitions:
+                                           <ul>
+                                           <li>{timestamp} - Current POSIX timestamp</li>
+                                           <li>{date} - Current date</li>
+                                           <li>{time} - Current time</li>
+                                           <li>{cpu} - CPU architecture</li>
+                                           <li>{hostname} - Name of the host</li>
+                                           <li>{rand} - Random number</li>
+                                           <li>{seq} - Sequence index</li>
+                                           </ul>
+                                           `)
+                            }
+
+                            TextField {
+                                id: formatLabel
+                                placeholderText: "{timestamp}"
+                                Layout.fillWidth: true
+                                Layout.maximumWidth: parent.width
+                            }
+
+                            Label {
+                                Layout.fillWidth: true
+                                Layout.maximumWidth: parent.width
+                                wrapMode: Text.WordWrap
+                                text: qsTr("Current format example:")
+                            }
+
+                            Label {
+                                Layout.fillWidth: true
+                                Layout.maximumWidth: parent.width
+                                wrapMode: Text.WordWrap
+                                text: clipMonitor.makeNewSavePath(
+                                          formatLabel.text)
                             }
                         }
                     }

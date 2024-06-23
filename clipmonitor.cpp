@@ -10,7 +10,9 @@
 #include <QImage>
 #include <QMimeData>
 #include <QPainter>
+#include <QRandomGenerator>
 #include <QSvgGenerator>
+#include <QSysInfo>
 #include <QTextDocument>
 #include <QTextStream>
 
@@ -34,15 +36,30 @@ ClipMonitor::ClipMonitor(QObject *parent)
     else
       m_pollTimer->stop();
   });
+
+  m_rng.seed(static_cast<uint32_t>(QDateTime::currentMSecsSinceEpoch()));
 }
 
-auto ClipMonitor::makeNewSavePath() -> QString {
-  QString pattern = m_savePattern.value();
-  if (pattern.isEmpty())
+auto ClipMonitor::makeNewSavePath(QString pattern) -> QString {
+  if (pattern.isEmpty()) {
     pattern = QStringLiteral("{timestamp}");
+  }
 
   pattern.replace(QStringLiteral("{timestamp}"),
                   QString::number(QDateTime::currentSecsSinceEpoch()));
+  pattern.replace(QStringLiteral("{date}"),
+                  QDate::currentDate().toString(Qt::DateFormat::ISODate));
+  pattern.replace(QStringLiteral("{time}"),
+                  QTime::currentTime().toString(Qt::DateFormat::ISODate));
+  pattern.replace(QStringLiteral("{cpu}"), QSysInfo::currentCpuArchitecture());
+  pattern.replace(QStringLiteral("{hostname}"), QSysInfo::machineHostName());
+  pattern.replace(QStringLiteral("{rand}"), QString::number(m_rng()));
+
+  pattern.replace(QChar('/'), QChar('_'));
+  pattern.replace(QChar('\\'), QChar('_'));
+  pattern.replace(QChar(':'), QChar('_'));
+  pattern.replace(QChar(';'), QChar('_'));
+  pattern.replace(QStringLiteral(".."), QStringLiteral("_"));
 
   switch (m_saveMode.value()) {
   case SaveMode::SVG:
@@ -112,7 +129,7 @@ void ClipMonitor::createSave(std::function<void(QIODevice *)> callback) {
     return;
   }
 
-  auto path = dir.absoluteFilePath(makeNewSavePath());
+  auto path = dir.absoluteFilePath(makeNewSavePath(m_savePattern.value()));
 
   QFile file(path);
   if (!file.open(QIODevice::WriteOnly | QIODevice::NewOnly)) {
