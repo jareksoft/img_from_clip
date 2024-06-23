@@ -21,8 +21,7 @@
             "-Wno-deprecated-declarations -fstack-protector-strong -D_FORTIFY_SOURCE=2",
         "cxxflags":
             "-Wno-deprecated-declarations -fstack-protector-strong -D_FORTIFY_SOURCE=2",
-        "ldflags": "-fstack-protector-strong -Wl,-z,relro,-z,now",
-        "strip": true
+        "ldflags": "-fstack-protector-strong -Wl,-z,relro,-z,now"
     },
     "modules": [
         {
