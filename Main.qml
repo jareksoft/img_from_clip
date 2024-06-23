@@ -56,6 +56,11 @@ ApplicationWindow {
                         })
                     }
                 }
+
+                MenuItem {
+                    text: qsTr("&Quit")
+                    onTriggered: Qt.quit()
+                }
             }
         }
     }
@@ -138,154 +143,204 @@ ApplicationWindow {
         }
     }
 
-    ScrollView {
-        id: mainView
+    header: TabBar {
+        id: mainTabBar
+        width: parent.width
+        TabButton {
+            text: qsTr("Main")
+        }
+        TabButton {
+            text: qsTr("Advanced")
+        }
+    }
+
+    StackLayout {
         anchors.fill: parent
-        ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
-        ScrollBar.vertical.policy: ScrollBar.AlwaysOn
-        implicitHeight: 500
+        anchors.topMargin: 20
+        currentIndex: mainTabBar.currentIndex
 
-        Flickable {
-            id: mainFlickable
-            width: parent.width
-            leftMargin: 20
-            rightMargin: 20
-            contentHeight: mainRow.implicitHeight
+        ScrollView {
+            id: mainView
+            ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+            ScrollBar.vertical.policy: ScrollBar.AsNeeded
 
-            ColumnLayout {
-                id: mainRow
+            Flickable {
+                id: mainFlickable
                 width: parent.width
-                spacing: 16
+                leftMargin: 20
+                rightMargin: 20
+                contentHeight: mainRow.implicitHeight
 
                 ColumnLayout {
-                    Layout.maximumWidth: parent.width
-                    Layout.preferredWidth: parent.width
-                }
-
-                Label {
-                    Layout.maximumWidth: parent.width
-                    Layout.fillWidth: true
-                    wrapMode: Text.WordWrap
-                    text: qsTr("Simple tool which automatically captures contents of clipboard and saves it as image")
-                }
-
-                GroupBox {
-                    Layout.maximumWidth: parent.width
-                    Layout.preferredWidth: parent.width
-                    title: qsTr("Save location")
+                    id: mainRow
+                    width: parent.width
+                    spacing: 16
 
                     RowLayout {
-                        width: parent.width
-                        spacing: 16
+                        Layout.maximumWidth: parent.width
 
-                        TextField {
-                            id: savePath
-                            Layout.fillWidth: true
-                            Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
-                            text: appSettings.defaultWritePath
-                        }
-
-                        Button {
-                            text: qsTr("...")
-                            Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-                            onClicked: {
-                                pathBrowser.open()
-                            }
-                        }
-                    }
-                }
-
-                GroupBox {
-                    Layout.maximumWidth: parent.width
-                    Layout.preferredWidth: parent.width
-                    title: qsTr("Save mode")
-
-                    ColumnLayout {
-                        width: parent.width
-
-                        RadioButton {
-                            Layout.maximumWidth: parent.width
-                            checked: clipMonitor.saveMode == ClipMonitor.SVG
-                            text: qsTr("SVG")
-                            onClicked: {
-                                appSettings.saveMode = ClipMonitor.SVG
-                            }
-                        }
-
-                        RadioButton {
-                            Layout.maximumWidth: parent.width
-                            checked: clipMonitor.saveMode == ClipMonitor.PNG
-                            text: qsTr("PNG")
-                            onClicked: {
-                                appSettings.saveMode = ClipMonitor.PNG
-                            }
-                        }
-
-                        RadioButton {
-                            Layout.maximumWidth: parent.width
-                            checked: clipMonitor.saveMode == ClipMonitor.JPG
-                            text: qsTr("JPG")
-                            onClicked: {
-                                appSettings.saveMode = ClipMonitor.JPG
-                            }
-                        }
-                    }
-                }
-
-                GroupBox {
-                    Layout.maximumWidth: parent.width
-                    Layout.preferredWidth: parent.width
-                    title: qsTr("Render HTML")
-                    ColumnLayout {
-                        width: parent.width
-
-                        CheckBox {
-                            id: allowHtmlCheckBox
-                            text: qsTr("Enable HTML rendering")
-                            checked: appSettings.allowHtml
-                            onCheckedChanged: {
-                                appSettings.allowHtml = checked
-                            }
-                        }
-
-                        RowLayout {
-                            Layout.fillWidth: true
-                            Layout.maximumWidth: parent.width
-                            spacing: 16
-                            Label {
-                                text: qsTr("Page width:")
-                            }
-                            TextField {
-                                text: mainWindow.htmlRenderWidth
-                                validator: IntValidator {
-                                    bottom: 100
-                                    top: 8192
-                                }
-                                onAccepted: {
-                                    mainWindow.htmlRenderWidth = text
-                                }
-                            }
+                        Rectangle {
+                            Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+                            width: 16
+                            height: width
+                            radius: width / 2
+                            color: clipMonitor.active ? "green" : "red"
                         }
 
                         Label {
-                            Layout.maximumWidth: parent.width
+                            Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+                            Layout.fillWidth: true
                             wrapMode: Text.WordWrap
-                            text: qsTr("Note: This feature uses QTextDocument rendering engine, so results may not be perfect")
+                            text: clipMonitor.active ? qsTr("Capture running") : qsTr(
+                                                           "Capture not running")
+                        }
+                    }
+
+                    Label {
+                        Layout.maximumWidth: parent.width
+                        Layout.fillWidth: true
+                        wrapMode: Text.WordWrap
+                        text: qsTr("Simple tool which automatically captures contents of clipboard and saves it as image")
+                    }
+
+                    GroupBox {
+                        Layout.maximumWidth: parent.width
+                        Layout.preferredWidth: parent.width
+                        title: qsTr("Save location")
+
+                        RowLayout {
+                            width: parent.width
+                            spacing: 16
+
+                            TextField {
+                                id: savePath
+                                Layout.fillWidth: true
+                                Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+                                text: appSettings.defaultWritePath
+                            }
+
+                            Button {
+                                text: qsTr("...")
+                                Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                                onClicked: {
+                                    pathBrowser.open()
+                                }
+                            }
+                        }
+                    }
+
+                    GroupBox {
+                        Layout.maximumWidth: parent.width
+                        Layout.preferredWidth: parent.width
+                        title: qsTr("Save mode")
+
+                        ColumnLayout {
+                            width: parent.width
+
+                            RadioButton {
+                                Layout.maximumWidth: parent.width
+                                checked: clipMonitor.saveMode == ClipMonitor.SVG
+                                text: qsTr("SVG")
+                                onClicked: {
+                                    appSettings.saveMode = ClipMonitor.SVG
+                                }
+                            }
+
+                            RadioButton {
+                                Layout.maximumWidth: parent.width
+                                checked: clipMonitor.saveMode == ClipMonitor.PNG
+                                text: qsTr("PNG")
+                                onClicked: {
+                                    appSettings.saveMode = ClipMonitor.PNG
+                                }
+                            }
+
+                            RadioButton {
+                                Layout.maximumWidth: parent.width
+                                checked: clipMonitor.saveMode == ClipMonitor.JPG
+                                text: qsTr("JPG")
+                                onClicked: {
+                                    appSettings.saveMode = ClipMonitor.JPG
+                                }
+                            }
+                        }
+                    }
+
+                    Button {
+                        id: activateButton
+                        checkable: true
+                        text: checked ? qsTr("Deactivate") : qsTr("Activate")
+
+                        Binding {
+                            appSettings.activeOnStart: activateButton.checked
+                        }
+
+                        Component.onCompleted: {
+                            checked = appSettings.activeOnStart
                         }
                     }
                 }
+            }
+        }
 
-                Button {
-                    id: activateButton
-                    checkable: true
-                    text: checked ? qsTr("Deactivate") : qsTr("Activate")
+        ScrollView {
+            id: advancedView
+            ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+            ScrollBar.vertical.policy: ScrollBar.AsNeeded
 
-                    Binding {
-                        appSettings.activeOnStart: activateButton.checked
-                    }
+            Flickable {
+                id: advancedFlickable
+                width: parent.width
+                leftMargin: 20
+                rightMargin: 20
+                contentHeight: advancedRow.implicitHeight
 
-                    Component.onCompleted: {
-                        checked = appSettings.activeOnStart
+                ColumnLayout {
+                    id: advancedRow
+                    width: parent.width
+                    spacing: 16
+
+                    GroupBox {
+                        Layout.maximumWidth: parent.width
+                        Layout.preferredWidth: parent.width
+                        title: qsTr("Render HTML")
+                        ColumnLayout {
+                            width: parent.width
+
+                            CheckBox {
+                                id: allowHtmlCheckBox
+                                text: qsTr("Enable HTML rendering")
+                                checked: appSettings.allowHtml
+                                onCheckedChanged: {
+                                    appSettings.allowHtml = checked
+                                }
+                            }
+
+                            RowLayout {
+                                Layout.fillWidth: true
+                                Layout.maximumWidth: parent.width
+                                spacing: 16
+                                Label {
+                                    text: qsTr("Page width:")
+                                }
+                                TextField {
+                                    text: mainWindow.htmlRenderWidth
+                                    validator: IntValidator {
+                                        bottom: 100
+                                        top: 8192
+                                    }
+                                    onAccepted: {
+                                        mainWindow.htmlRenderWidth = text
+                                    }
+                                }
+                            }
+
+                            Label {
+                                Layout.maximumWidth: parent.width
+                                wrapMode: Text.WordWrap
+                                text: qsTr("Note: This feature uses QTextDocument rendering engine, so results may not be perfect")
+                            }
+                        }
                     }
                 }
             }
