@@ -3,7 +3,7 @@ and save it as file to specific directory automatically.
 
 HTML rendering is also supported. If user copies HTML into clipboard,
 the application will render the image into a document of specified
-width. Rendering is done using Qt's HTML engine, so results may not
+width. Rendering is done using QTextDocument engine, so results may not
 be perfect.
 
 ![Screenshot](shared/linux/screenshot.png)

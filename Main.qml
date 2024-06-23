@@ -271,7 +271,7 @@ ApplicationWindow {
                         Label {
                             Layout.maximumWidth: parent.width
                             wrapMode: Text.WordWrap
-                            text: qsTr("Note: This feature uses Qt rendering engine, so results may not be perfect")
+                            text: qsTr("Note: This feature uses QTextDocument rendering engine, so results may not be perfect")
                         }
                     }
                 }
