@@ -31,7 +31,7 @@
         <location filename="Main.qml" line="+15"/>
         <location/>
         <source>Image from Clipboard</source>
-        <translation type="unfinished">저장된 이미지</translation>
+        <translation type="unfinished">ImgFromClip</translation>
     </message>
     <message>
         <location line="+17"/>
@@ -82,7 +82,7 @@
         <location line="+17"/>
         <location/>
         <source>Main</source>
-        <translation type="unfinished">홈</translation>
+        <translation type="unfinished">기본</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -94,13 +94,13 @@
         <location line="+42"/>
         <location/>
         <source>Capture running</source>
-        <translation type="unfinished">저장중</translation>
+        <translation type="unfinished">이미지를 저장하고 있습니다.</translation>
     </message>
     <message>
         <location line="+0"/>
         <location/>
         <source>Capture not running</source>
-        <translation type="unfinished">저장중지</translation>
+        <translation type="unfinished">이미지 저장이 중지되었습니다.</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -172,7 +172,7 @@
         <location line="+12"/>
         <location/>
         <source>Page width:</source>
-        <translation type="unfinished">이미지 가로크기</translation>
+        <translation type="unfinished">이미지 가로 크기</translation>
     </message>
     <message>
         <location line="+17"/>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="pl_PL" sourcelanguage="en">
+<TS version="2.1" language="pl_PL" sourcelanguage="en_US">
 <context>
     <name>ClipMonitor</name>
     <message>
@@ -31,7 +31,7 @@
         <location filename="Main.qml" line="+15"/>
         <location/>
         <source>Image from Clipboard</source>
-        <translation>Obraz ze schowka</translation>
+        <translation type="unfinished">ImgFromClip</translation>
     </message>
     <message>
         <location line="+17"/>
