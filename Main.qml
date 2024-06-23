@@ -19,6 +19,7 @@ ApplicationWindow {
     property bool askedAboutNotifications: false
     property bool htmlAllowed: false
     property real htmlRenderWidth: 800
+    property int seqIndex: 1
 
     Component {
         id: labsMenuBar
@@ -75,6 +76,7 @@ ApplicationWindow {
         property alias allowHtml: mainWindow.htmlAllowed
         property alias htmlRenderWidth: mainWindow.htmlRenderWidth
         property alias seqIndex: mainWindow.seqIndex
+        property alias lastTabIndex: mainTabBar.currentIndex
 
         Component.onCompleted: {
             if (defaultWritePath === "") {
