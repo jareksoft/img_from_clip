@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.21)
 
 project(
   img_from_clip
-  VERSION 0.1
+  VERSION 0.2
   LANGUAGES CXX)
 
 if(APPLE)
