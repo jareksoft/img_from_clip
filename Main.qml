@@ -360,18 +360,17 @@ ApplicationWindow {
                                 Layout.maximumWidth: parent.width
                                 wrapMode: Text.WordWrap
                                 textFormat: Text.RichText
-                                text: qsTr(`Please specify how the file name is formatted
-                                           Use the following definitions:
-                                           <ul>
-                                           <li>{timestamp} - Current POSIX timestamp</li>
-                                           <li>{date} - Current date</li>
-                                           <li>{time} - Current time</li>
-                                           <li>{cpu} - CPU architecture</li>
-                                           <li>{hostname} - Name of the host</li>
-                                           <li>{rand} - Random number</li>
-                                           <li>{seq} - Sequence index</li>
-                                           </ul>
-                                           `)
+                                text: qsTr("Please specify how the file name is formatted
+Use the following definitions:
+<ul>
+<li>{timestamp} - Current POSIX timestamp</li>
+<li>{date} - Current date</li>
+<li>{time} - Current time</li>
+<li>{cpu} - CPU architecture</li>
+<li>{hostname} - Name of the host</li>
+<li>{rand} - Random number</li>
+<li>{seq} - Sequence index</li>
+</ul>")
                             }
 
                             TextField {
