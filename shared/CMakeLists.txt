@@ -1,4 +1,10 @@
 if(UNIX AND NOT APPLE)
+  if(FLATPAK_DIST)
+    set(ICON_NAME ${APP_ID})
+  else()
+    set(ICON_NAME appimg_from_clip)
+  endif()
+
   configure_file(linux/com.jpelczar.img_from_clip.desktop.in
                  linux/${APP_ID}.desktop @ONLY)
 
@@ -12,7 +18,7 @@ if(UNIX AND NOT APPLE)
     install(
       FILES ${File}
       DESTINATION ${ICON_DEST}
-      RENAME appimg_from_clip.png)
+      RENAME ${ICON_NAME}.png)
   endfunction()
 
   _inst_icon(64x64 ${CMAKE_CURRENT_SOURCE_DIR}/../appicon64.png)

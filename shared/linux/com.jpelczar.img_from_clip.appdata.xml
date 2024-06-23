@@ -43,6 +43,14 @@
     </screenshots>
 
     <releases>
+        <release version="0.2" date="2024-06-23">
+            <description>
+                <ul>
+                    <li>Add support for Flatpak</li>
+                    <li>Support custom patterns for file saving</li>
+                </ul>
+            </description>
+        </release>
         <release version="0.1" date="2024-06-22">
             <description>
                 <ul>

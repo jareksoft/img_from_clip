@@ -1,1 +1,3 @@
 build_dir_*
+.flatpak*
+repo_dir
