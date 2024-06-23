@@ -1,6 +1,6 @@
 name: img-from-clip
 adopt-info: img-from-clip
-grade: devel
+grade: stable
 base: core22
 confinement: strict
 compression: lzo
