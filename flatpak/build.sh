@@ -5,4 +5,4 @@ flatpak-builder --repo=repo_dir --arch=x86_64 --install-deps-from=flathub --ccac
 flatpak-builder --repo=repo_dir_aarch64 --arch=aarch64 --install-deps-from=flathub --ccache --force-clean build_dir_aarch64 com.jpelczar.img_from_clip.json
 
 flatpak build-bundle repo_dir ImgFromClip-x86_64.flatpak com.jpelczar.img_from_clip
-flatpak build-bundle repo_dir_aarch64 ImgFromClip-aarch64.flatpak com.jpelczar.img_from_clip
+flatpak build-bundle --arch=aarch64 repo_dir_aarch64 ImgFromClip-aarch64.flatpak com.jpelczar.img_from_clip
