@@ -17,7 +17,7 @@
     <message>
         <location line="+17"/>
         <source>Save directory does not exist</source>
-        <translation type="unfinished">저장 폴더가 존재하지 않음</translation>
+        <translation>저장 폴더가 존재하지 않음</translation>
     </message>
     <message>
         <location line="+75"/>
@@ -31,27 +31,27 @@
         <location filename="Main.qml" line="+15"/>
         <location/>
         <source>Image from Clipboard</source>
-        <translation type="unfinished">ImgFromClip</translation>
+        <translation>ImgFromClip</translation>
     </message>
     <message>
         <location line="+17"/>
         <location line="+18"/>
         <location/>
         <source>File</source>
-        <translation type="unfinished">파일</translation>
+        <translation>파일</translation>
     </message>
     <message>
         <location line="-15"/>
         <location line="+18"/>
         <location/>
         <source>&amp;About</source>
-        <translation type="unfinished">이 프로그램은...</translation>
+        <translation>이 프로그램은...</translation>
     </message>
     <message>
         <location line="+9"/>
         <location/>
         <source>&amp;Quit</source>
-        <translation type="unfinished">프로그램 종료</translation>
+        <translation>프로그램 종료</translation>
     </message>
     <message>
         <location line="+66"/>
@@ -94,25 +94,25 @@
         <location line="+114"/>
         <location/>
         <source>Capture running</source>
-        <translation type="unfinished">이미지를 저장하고 있습니다.</translation>
+        <translation>이미지를 저장하고 있습니다.</translation>
     </message>
     <message>
         <location line="+0"/>
         <location/>
         <source>Capture not running</source>
-        <translation type="unfinished">이미지 저장이 중지되었습니다.</translation>
+        <translation>이미지 저장이 중지되었습니다.</translation>
     </message>
     <message>
         <location line="-83"/>
         <location/>
         <source>Simple tool which automatically captures contents of clipboard and saves it as image</source>
-        <translation type="unfinished">이 프로그램은 클립보드에 복사된 콘텐츠를 자동으로 이미지로 변환하여 저장해주는 툴입니다.</translation>
+        <translation>이 프로그램은 클립보드에 복사된 콘텐츠를 자동으로 이미지로 변환하여 저장해주는 툴입니다.</translation>
     </message>
     <message>
         <location line="+6"/>
         <location/>
         <source>Save location</source>
-        <translation type="unfinished">저장장소</translation>
+        <translation>저장장소</translation>
     </message>
     <message>
         <location line="+14"/>
@@ -124,7 +124,7 @@
         <location line="+12"/>
         <location/>
         <source>Save mode</source>
-        <translation type="unfinished">저장모드</translation>
+        <translation>저장모드</translation>
     </message>
     <message>
         <location line="+8"/>
@@ -148,13 +148,13 @@
         <location line="+36"/>
         <location/>
         <source>Deactivate</source>
-        <translation type="unfinished">중지</translation>
+        <translation>중지</translation>
     </message>
     <message>
         <location line="+0"/>
         <location/>
         <source>Activate</source>
-        <translation type="unfinished">시작</translation>
+        <translation>시작</translation>
     </message>
     <message>
         <location line="+40"/>
@@ -172,19 +172,19 @@
         <location line="+12"/>
         <location/>
         <source>Page width:</source>
-        <translation type="unfinished">이미지 가로 크기</translation>
+        <translation>이미지 가로 크기</translation>
     </message>
     <message>
         <location line="+17"/>
         <location/>
         <source>Note: This feature uses QTextDocument rendering engine, so results may not be perfect</source>
-        <translation type="unfinished">노트: 이 기능은 QTextDocument 렌더링 엔진을 사용하므로 결과가 완벽하지 않을 수 있습니다.</translation>
+        <translation>노트: 이 기능은 QTextDocument 렌더링 엔진을 사용하므로 결과가 완벽하지 않을 수 있습니다.</translation>
     </message>
     <message>
         <location line="+8"/>
         <location/>
         <source>Name formatting</source>
-        <translation type="unfinished">파일명 양식지정</translation>
+        <translation>파일명 양식지정</translation>
     </message>
     <message>
         <location line="+11"/>
@@ -216,25 +216,25 @@ Use the following definitions:
         <location line="+24"/>
         <location/>
         <source>Current format example:</source>
-        <translation type="unfinished">현재 파일명 양식 예시:</translation>
+        <translation>현재 파일명 양식 예시:</translation>
     </message>
     <message>
         <location line="+44"/>
         <location/>
         <source>Application uses notifications to display information about captured screenshots</source>
-        <translation type="unfinished">이 프로그램은 저장된 이미지 정보를 보여주는 알림을 사용합니다.</translation>
+        <translation>이 프로그램은 저장된 이미지 정보를 보여주는 알림을 사용합니다.</translation>
     </message>
     <message>
         <location line="+7"/>
         <location/>
         <source>Request</source>
-        <translation type="unfinished">알림 허용</translation>
+        <translation>알림 허용</translation>
     </message>
     <message>
         <location line="+8"/>
         <location/>
         <source>Don&apos;t ask</source>
-        <translation type="unfinished">다시 묻지 않음</translation>
+        <translation>다시 묻지 않음</translation>
     </message>
     <message>
         <source>Note: This feature uses Qt rendering engine, so results may not be perfect</source>
@@ -246,27 +246,27 @@ Use the following definitions:
     <message>
         <location filename="systray.cpp" line="+20"/>
         <source>&amp;Quit</source>
-        <translation type="unfinished">프로그램 종료</translation>
+        <translation>프로그램 종료</translation>
     </message>
     <message>
         <location line="+12"/>
         <source>Image capture active</source>
-        <translation type="unfinished"></translation>
+        <translation>이미지를 저장하고 있습니다.</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Image capture not active</source>
-        <translation type="unfinished"></translation>
+        <translation>이미지 저장이 중지되었습니다.</translation>
     </message>
     <message>
         <location line="+18"/>
         <source>ImgFromClip</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>ImgFromClip allows user to capture image or SVG copied into clipboard and capture it into specific location on disk automatically.&lt;br/&gt;Application icon:&lt;br/&gt;&lt;a href=&quot;https://www.flaticon.com/free-icons/screenshot&quot; title=&quot;screenshot icons&quot;&gt;Screenshot icons created by icon_small - Flaticon&lt;/a&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 </TS>

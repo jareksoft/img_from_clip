@@ -31,7 +31,7 @@
         <location filename="Main.qml" line="+15"/>
         <location/>
         <source>Image from Clipboard</source>
-        <translation type="unfinished">ImgFromClip</translation>
+        <translation>ImgFromClip</translation>
     </message>
     <message>
         <location line="+17"/>

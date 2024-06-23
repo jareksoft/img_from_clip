@@ -31,7 +31,7 @@
         <location filename="Main.qml" line="+15"/>
         <location/>
         <source>Image from Clipboard</source>
-        <translation type="unfinished">ImgFromClip</translation>
+        <translation>ImgFromClip</translation>
     </message>
     <message>
         <location line="+17"/>
@@ -112,7 +112,7 @@
         <location line="+6"/>
         <location/>
         <source>Save location</source>
-        <translation>Miejsce zapisu</translation>
+        <translation type="unfinished">Miejsce zapisu</translation>
     </message>
     <message>
         <location line="+14"/>
@@ -166,11 +166,11 @@
         <location line="+17"/>
         <location/>
         <source>Note: This feature uses QTextDocument rendering engine, so results may not be perfect</source>
-        <translation>Uwaga: Do renderowania tekstu używany jest silnik QTextDocument, więc rezultat nie zawsze musi być zgodny z oczekiwanym</translation>
+        <translation type="unfinished">Uwaga: Do renderowania tekstu używany jest silnik QTextDocument, więc rezultat nie zawsze musi być zgodny z oczekiwanym</translation>
     </message>
     <message>
         <source>Note: This feature uses Qt rendering engine, so results may not be perfect</source>
-        <translation>Uwaga: Do renderowania tekstu używany jest silnik Qt, więc rezultat nie zawsze musi być zgodny z oczekiwanym</translation>
+        <translation type="unfinished">Uwaga: Do renderowania tekstu używany jest silnik Qt, więc rezultat nie zawsze musi być zgodny z oczekiwanym</translation>
     </message>
     <message>
         <location line="-75"/>
@@ -238,7 +238,7 @@ Dostępne modyfikatory:
         <location line="+8"/>
         <location/>
         <source>Don&apos;t ask</source>
-        <translation>Nie pytaj</translation>
+        <translation type="unfinished">Nie pytaj</translation>
     </message>
 </context>
 <context>
