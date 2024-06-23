@@ -10,7 +10,7 @@ import Qt.labs.platform as Labs
 ApplicationWindow {
     id: mainWindow
     width: 360
-    height: 500
+    height: 550
     visible: true
     title: qsTr("Image from Clipboard")
     minimumWidth: 180
@@ -138,16 +138,15 @@ ApplicationWindow {
         }
     }
 
-    MessageDialog {
-        id: notificationMessageDialog
-    }
-
     ScrollView {
+        id: mainView
         anchors.fill: parent
         ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
         ScrollBar.vertical.policy: ScrollBar.AlwaysOn
+        implicitHeight: 500
 
         Flickable {
+            id: mainFlickable
             width: parent.width
             leftMargin: 20
             rightMargin: 20
@@ -407,6 +406,10 @@ ApplicationWindow {
             capImage.source = "file://" + path
             captureDrawer.open()
         }
+    }
+
+    MessageDialog {
+        id: notificationMessageDialog
     }
 
     Component.onCompleted: {
