@@ -33,8 +33,10 @@
             ],
             "sources": [
                 {
-                    "type": "dir",
-                    "path": ".."
+                    "type": "git",
+                    "url": "https://github.com/jareksoft/img_from_clip.git",
+                    "tag": "v0.3",
+                    "disable-submodules": true
                 }
             ]
         }
