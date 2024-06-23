@@ -7,7 +7,7 @@
     <summary>Simple tool which captures images from clipboard automatically</summary>
     <summary xml:lang="pl">Proste narzędzie do automatycznego zapisu obrazków ze schowka</summary>
     <summary xml:lang="ko">이 프로그램은 클립보드에 복사된 콘텐츠를 자동으로 이미지로 변환하여 저장해주는 툴입니다</summary>
-    <developer_name></developer_name>
+    <developer id="com.jpelczar"><name>JarekSoft</name></developer>
     <description>
         <p>
 			ImgFromClip allows user to capture image or SVG copied into clipboard
