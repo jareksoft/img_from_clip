@@ -1,0 +1,43 @@
+{
+    "id": "com.jpelczar.img_from_clip",
+    "branch": "master",
+    "runtime": "org.kde.Platform",
+    "runtime-version": "6.7",
+    "sdk": "org.kde.Sdk",
+    "base": "io.qt.qtwebengine.BaseApp",
+    "base-version": "6.7",
+    "command": "appimg_from_clip",
+    "finish-args": [
+        "--share=ipc",
+        "--socket=fallback-x11",
+        "--socket=wayland",
+        "--socket=session-bus",
+        "--filesystem=home"
+    ],
+    "separate-locales": false,
+    "build-options": {
+        "cflags":
+            "-Wno-deprecated-declarations -fstack-protector-strong -D_FORTIFY_SOURCE=2",
+        "cxxflags":
+            "-Wno-deprecated-declarations -fstack-protector-strong -D_FORTIFY_SOURCE=2",
+        "ldflags": "-fstack-protector-strong -Wl,-z,relro,-z,now",
+        "strip": true
+    },
+    "modules": [
+        {
+            "name": "ImgFromClip",
+            "buildsystem": "cmake-ninja",
+            "builddir": true,
+            "config-opts": [
+                "-DCMAKE_BUILD_TYPE=Release",
+                "-DFLATPAK_DIST=ON"
+            ],
+            "sources": [
+                {
+                    "type": "dir",
+                    "path": ".."
+                }
+            ]
+        }
+    ]
+}
