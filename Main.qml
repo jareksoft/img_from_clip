@@ -180,26 +180,6 @@ ApplicationWindow {
                     width: parent.width
                     spacing: 16
 
-                    RowLayout {
-                        Layout.maximumWidth: parent.width
-
-                        Rectangle {
-                            Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
-                            width: 16
-                            height: width
-                            radius: width / 2
-                            color: clipMonitor.active ? "green" : "red"
-                        }
-
-                        Label {
-                            Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
-                            Layout.fillWidth: true
-                            wrapMode: Text.WordWrap
-                            text: clipMonitor.active ? qsTr("Capture running") : qsTr(
-                                                           "Capture not running")
-                        }
-                    }
-
                     Label {
                         Layout.maximumWidth: parent.width
                         Layout.fillWidth: true
@@ -270,17 +250,47 @@ ApplicationWindow {
                         }
                     }
 
-                    Button {
-                        id: activateButton
-                        checkable: true
-                        text: checked ? qsTr("Deactivate") : qsTr("Activate")
+                    RowLayout {
+                        Layout.maximumWidth: parent.width
+                        Layout.alignment: Qt.AlignHCenter
+                        Layout.fillWidth: true
 
-                        Binding {
-                            appSettings.activeOnStart: activateButton.checked
+                        Rectangle {
+                            Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+                            width: 16
+                            height: width
+                            radius: width / 2
+                            color: clipMonitor.active ? "green" : "red"
                         }
 
-                        Component.onCompleted: {
-                            checked = appSettings.activeOnStart
+                        Label {
+                            Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+                            Layout.fillWidth: true
+                            wrapMode: Text.WordWrap
+                            text: clipMonitor.active ? qsTr("Capture running") : qsTr(
+                                                           "Capture not running")
+                        }
+
+                        Item {
+                            Layout.fillWidth: true
+                        }
+
+                        Button {
+                            id: activateButton
+                            checkable: true
+                            text: checked ? qsTr("Deactivate") : qsTr(
+                                                "Activate")
+                            Layout.alignment: Qt.AlignRight
+                            Layout.minimumHeight: 60
+                            Layout.minimumWidth: 100
+
+                            Binding {
+                                appSettings.activeOnStart: activateButton.checked
+                            }
+
+                            Component.onCompleted: {
+                                checked = appSettings.activeOnStart
+                            }
                         }
                     }
                 }
