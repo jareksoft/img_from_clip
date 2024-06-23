@@ -91,7 +91,7 @@
         <translation>Zaawansowane</translation>
     </message>
     <message>
-        <location line="+42"/>
+        <location line="+114"/>
         <location/>
         <source>Capture running</source>
         <translation>Nagrywanie aktywne</translation>
@@ -103,7 +103,7 @@
         <translation>Nagrywanie nieaktywne</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="-83"/>
         <location/>
         <source>Simple tool which automatically captures contents of clipboard and saves it as image</source>
         <translation>Proste narzędzie, które autmatycznie zapisuje zawartość schowka jako obrazek</translation>
@@ -145,7 +145,7 @@
         <translation>JPG</translation>
     </message>
     <message>
-        <location line="+46"/>
+        <location line="+76"/>
         <location/>
         <source>Render HTML</source>
         <translation>Rysuj HTML</translation>
@@ -173,7 +173,7 @@
         <translation>Uwaga: Do renderowania tekstu używany jest silnik Qt, więc rezultat nie zawsze musi być zgodny z oczekiwanym</translation>
     </message>
     <message>
-        <location line="-70"/>
+        <location line="-75"/>
         <location/>
         <source>Deactivate</source>
         <translation>Deaktywuj</translation>
@@ -185,7 +185,7 @@
         <translation>Aktywuj</translation>
     </message>
     <message>
-        <location line="+78"/>
+        <location line="+83"/>
         <location/>
         <source>Name formatting</source>
         <translation>Format nazwy pliku</translation>

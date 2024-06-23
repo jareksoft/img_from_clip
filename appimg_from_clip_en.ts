@@ -91,7 +91,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+42"/>
+        <location line="+114"/>
         <location/>
         <source>Capture running</source>
         <translation type="unfinished"></translation>
@@ -103,7 +103,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="-83"/>
         <location/>
         <source>Simple tool which automatically captures contents of clipboard and saves it as image</source>
         <translation type="unfinished"></translation>
@@ -145,7 +145,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+46"/>
+        <location line="+76"/>
         <location/>
         <source>Render HTML</source>
         <translation type="unfinished"></translation>
@@ -173,7 +173,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-70"/>
+        <location line="-75"/>
         <location/>
         <source>Deactivate</source>
         <translation type="unfinished"></translation>
@@ -185,7 +185,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+78"/>
+        <location line="+83"/>
         <location/>
         <source>Name formatting</source>
         <translation type="unfinished"></translation>

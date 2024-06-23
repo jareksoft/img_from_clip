@@ -91,7 +91,7 @@
         <translation type="unfinished">고급설정</translation>
     </message>
     <message>
-        <location line="+42"/>
+        <location line="+114"/>
         <location/>
         <source>Capture running</source>
         <translation type="unfinished">이미지를 저장하고 있습니다.</translation>
@@ -103,7 +103,7 @@
         <translation type="unfinished">이미지 저장이 중지되었습니다.</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="-83"/>
         <location/>
         <source>Simple tool which automatically captures contents of clipboard and saves it as image</source>
         <translation type="unfinished">이 프로그램은 클립보드에 복사된 콘텐츠를 자동으로 이미지로 변환하여 저장해주는 툴입니다.</translation>
@@ -145,7 +145,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+36"/>
         <location/>
         <source>Deactivate</source>
         <translation type="unfinished">중지</translation>
@@ -157,7 +157,7 @@
         <translation type="unfinished">시작</translation>
     </message>
     <message>
-        <location line="+35"/>
+        <location line="+40"/>
         <location/>
         <source>Render HTML</source>
         <translation type="unfinished">렌더 HTML</translation>
@@ -246,7 +246,7 @@ Use the following definitions:
     <message>
         <location filename="systray.cpp" line="+20"/>
         <source>&amp;Quit</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">프로그램 종료</translation>
     </message>
     <message>
         <location line="+12"/>
