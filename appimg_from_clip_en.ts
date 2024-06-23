@@ -34,7 +34,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+17"/>
         <location line="+18"/>
         <location/>
         <source>File</source>
@@ -49,11 +49,12 @@
     </message>
     <message>
         <location line="+9"/>
+        <location/>
         <source>&amp;Quit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+65"/>
+        <location line="+66"/>
         <location/>
         <source>Capture failed</source>
         <translation type="unfinished"></translation>
@@ -79,21 +80,25 @@
     </message>
     <message>
         <location line="+17"/>
+        <location/>
         <source>Main</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+3"/>
+        <location/>
         <source>Advanced</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+42"/>
+        <location/>
         <source>Capture running</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+0"/>
+        <location/>
         <source>Capture not running</source>
         <translation type="unfinished"></translation>
     </message>
@@ -181,11 +186,13 @@
     </message>
     <message>
         <location line="+78"/>
+        <location/>
         <source>Name formatting</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+11"/>
+        <location/>
         <source>Please specify how the file name is formatted
 Use the following definitions:
 &lt;ul&gt;
@@ -201,6 +208,7 @@ Use the following definitions:
     </message>
     <message>
         <location line="+24"/>
+        <location/>
         <source>Current format example:</source>
         <translation type="unfinished"></translation>
     </message>

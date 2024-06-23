@@ -177,7 +177,8 @@ if(CMAKE_GENERATOR MATCHES "Xcode")
 endif()
 
 qt_add_translations(${APP_NAME} TS_FILES appimg_from_clip_en.ts
-                    appimg_from_clip_pl.ts)
+                    appimg_from_clip_pl.ts
+                    appimg_from_clip_ko.ts)
 
 include(GNUInstallDirs)
 
