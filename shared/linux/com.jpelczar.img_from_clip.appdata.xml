@@ -44,6 +44,14 @@
     </screenshots>
 
     <releases>
+        <release version="0.3" date="2024-06-23">
+            <description>
+                <ul>
+                    <li>Snap stor release</li>
+                    <li>Sync translation strings</li>
+                </ul>
+            </description>
+        </release>
         <release version="0.2" date="2024-06-23">
             <description>
                 <ul>
