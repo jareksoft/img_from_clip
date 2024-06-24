@@ -32,6 +32,15 @@ SysTray::SysTray(QQuickItem *parent) : QQuickItem(parent) {
       return SysTray::tr("Image capture active");
     return SysTray::tr("Image capture not active");
   });
+
+  connect(
+      m_icon, &QSystemTrayIcon::activated, this,
+      [&](QSystemTrayIcon::ActivationReason reason) {
+        if (reason == QSystemTrayIcon::Trigger) {
+          emit iconClicked();
+        }
+      },
+      Qt::QueuedConnection);
 }
 
 void SysTray::notifyInfo(const QString &title, const QString &info) {

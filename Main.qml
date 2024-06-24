@@ -113,6 +113,11 @@ ApplicationWindow {
         isActive: clipMonitor.active
         iconPath: ":/qt/qml/img_from_clip/appicon64.png"
         notificationsAllowed: platformSupport.notificationsAllowed > 0
+        onIconClicked: {
+            console.debug("Raise window")
+            mainWindow.raise()
+            mainWindow.requestActivate()
+        }
     }
 
     ClipMonitor {

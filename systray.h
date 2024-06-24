@@ -33,6 +33,7 @@ public slots:
 
 signals:
   void iconPathChanged(QString iconPath);
+  void iconClicked();
 
 private:
   QSystemTrayIcon *m_icon;
