@@ -67,6 +67,8 @@ void SysTray::aboutApp() {
          "Flaticon</a>"));
 }
 
+void SysTray::aboutQt() { QApplication::aboutQt(); }
+
 QString SysTray::iconPath() const { return m_iconPath; }
 
 void SysTray::setIconPath(const QString &newIconPath) {

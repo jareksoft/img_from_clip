@@ -30,6 +30,7 @@ public slots:
   void notifyInfo(const QString &, const QString &);
   void notifyError(const QString &, const QString &);
   void aboutApp();
+  void aboutQt();
 
 signals:
   void iconPathChanged(QString iconPath);

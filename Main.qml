@@ -39,6 +39,15 @@ ApplicationWindow {
                         })
                     }
                 }
+
+                Labs.MenuItem {
+                    text: qsTr("About &Qt")
+                    onTriggered: {
+                        Qt.callLater(function () {
+                            sysTray.aboutQt()
+                        })
+                    }
+                }
             }
         }
     }
@@ -54,6 +63,15 @@ ApplicationWindow {
                     onTriggered: {
                         Qt.callLater(function () {
                             sysTray.aboutApp()
+                        })
+                    }
+                }
+
+                MenuItem {
+                    text: qsTr("About &Qt")
+                    onTriggered: {
+                        Qt.callLater(function () {
+                            sysTray.aboutQt()
                         })
                     }
                 }
