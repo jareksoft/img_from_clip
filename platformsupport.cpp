@@ -10,3 +10,5 @@ void PlatformSupport::notify(NotifyClass type, const QString &title,
                              const QString &description) {
   notifyWithImage(type, title, description, QString());
 }
+
+QString PlatformSupport::showUrl(const QUrl &url) { return url.toLocalFile(); }

@@ -223,7 +223,8 @@ ApplicationWindow {
                                 id: savePath
                                 Layout.fillWidth: true
                                 Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
-                                text: appSettings.defaultWritePath
+                                text: platformSupport.showUrl(
+                                          appSettings.defaultWritePath)
                             }
 
                             Button {

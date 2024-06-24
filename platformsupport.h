@@ -35,6 +35,8 @@ public:
 
   bool requiresNotificationPermission() const;
 
+  Q_INVOKABLE QString showUrl(const QUrl &url);
+
 signals:
   void permissionStateFetchCompletion();
   void genericNotifyInfo(const QString &, const QString &);
