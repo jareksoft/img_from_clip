@@ -27,9 +27,9 @@ option(FLATPAK_DIST "Enable flatpak specific options" OFF)
 option(SNAP_DIST "Enable snap specific options" OFF)
 option(OSX_BUNDLE "Use app bundle on macOS" ON)
 
-find_package(Qt6 6.5 REQUIRED COMPONENTS Quick Gui Widgets Svg LinguistTools)
+find_package(Qt6 6.4 REQUIRED COMPONENTS Quick Gui Widgets Svg LinguistTools)
 
-qt_standard_project_setup(REQUIRES 6.5)
+qt_standard_project_setup(REQUIRES 6.4)
 qt_add_executable(${APP_NAME} main.cpp)
 
 unset(PLATFORM_SOURCES)
