@@ -1,3 +1,5 @@
+[![img-from-clip](https://snapcraft.io/img-from-clip/badge.svg)](https://snapcraft.io/img-from-clip)
+
 Simple tool which can create images from clipboard contents
 and save it as file to specific directory automatically.
 
