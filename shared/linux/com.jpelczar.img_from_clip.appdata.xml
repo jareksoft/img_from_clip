@@ -44,6 +44,13 @@
     </screenshots>
 
     <releases>
+	<release version="0.5" date="2024-06-26">
+            <description>
+                <ul>
+                    <li>Add librsvg render support</li>
+                </ul>
+            </description>
+	</release>
         <release version="0.4" date="2024-06-24">
             <description>
                 <ul>

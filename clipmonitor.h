@@ -3,6 +3,7 @@
 #ifndef CLIPMONITOR_H
 #define CLIPMONITOR_H
 
+#include "clipboardsource.h"
 #include <QClipboard>
 #include <QDateTime>
 #include <QImage>
@@ -29,15 +30,6 @@ public:
   enum class SaveMode { SVG, PNG, JPG };
   Q_ENUM(SaveMode)
 
-  struct Html {
-    QString html;
-    bool operator==(const Html &other) const { return html == other.html; }
-    bool operator!=(const Html &other) const { return html != other.html; }
-    bool operator<(const Html &other) const { return html < other.html; }
-  };
-
-  using contents_t = std::variant<std::monostate, QImage, QString, Html>;
-
   explicit ClipMonitor(QObject *parent = nullptr);
 
   auto activeBindable() -> QBindable<bool> { return {&m_activeBinding}; }
@@ -62,21 +54,14 @@ private:
   void saveSvg(const QImage &image);
   void saveJpg(const QImage &image);
   void createSave(std::function<void(QIODevice *)> callback);
+  void newCapture(const ClipboardContents &);
 
 private:
-  void clipboardDataChanged();
-  auto getLastClipboard() -> contents_t;
-
-private:
-  QDateTime m_lastCapture;
+  ClipboardSource *m_source;
   QProperty<bool> m_activeBinding;
   QProperty<QUrl> m_savePath;
   QProperty<QString> m_savePattern;
   QProperty<SaveMode> m_saveMode{SaveMode::SVG};
-  QClipboard *m_clipboard;
-  contents_t m_lastClipboard;
-  QTimer *m_pollTimer;
-  QPropertyNotifier m_timerBinding;
   QProperty<bool> m_htmlAllowed{false};
   QProperty<qreal> m_renderWidth{800.0};
   QRandomGenerator m_rng;

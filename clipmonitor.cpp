@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "clipmonitor.h"
+#include "rsvg_helper.h"
 #include <QApplication>
 #include <QBuffer>
 #include <QDateTime>
@@ -16,28 +17,19 @@
 #include <QTextDocument>
 #include <QTextStream>
 
-ClipMonitor::ClipMonitor(QObject *parent)
-    : QObject{parent}, m_clipboard(QApplication::clipboard()) {
-  m_lastCapture = QDateTime::currentDateTimeUtc();
-  connect(m_clipboard, &QClipboard::dataChanged, this,
-          &ClipMonitor::clipboardDataChanged);
-  m_lastClipboard = getLastClipboard();
-
-  m_pollTimer = new QTimer(this);
-  m_pollTimer->setSingleShot(false);
-  m_pollTimer->setInterval(1000);
-
-  connect(m_pollTimer, &QTimer::timeout, this,
-          &ClipMonitor::clipboardDataChanged);
-
-  m_timerBinding = m_activeBinding.addNotifier([&]() {
-    if (m_activeBinding.value())
-      m_pollTimer->start();
-    else
-      m_pollTimer->stop();
-  });
-
+ClipMonitor::ClipMonitor(QObject *parent) : QObject{parent} {
   m_rng.seed(static_cast<uint32_t>(QDateTime::currentMSecsSinceEpoch()));
+
+  m_source = new ClipboardSource(this);
+
+  QBindable<bool> activeBindable(m_source, "monitoringActive");
+  activeBindable.setBinding([&]() { return m_activeBinding.value(); });
+
+  m_source->htmlAllowedBindable().setBinding(
+      [&]() { return m_htmlAllowed.value(); });
+
+  connect(m_source, &ClipboardSource::newCapture, this,
+          &ClipMonitor::newCapture, Qt::QueuedConnection);
 }
 
 auto ClipMonitor::makeNewSavePath(QString pattern) -> QString {
@@ -81,17 +73,31 @@ void ClipMonitor::saveRawSvg(const QString &contents) {
 }
 
 void ClipMonitor::renderSvgToPng(const QString &contents) {
+#ifdef USE_LIBRSVG_RENDERER
+  auto image = RsvgRender::renderSvg(contents);
+  if (!image.isNull()) {
+    savePng(image);
+  }
+#else
   QImage image;
   if (image.loadFromData(contents.toUtf8())) {
     savePng(image);
   }
+#endif
 }
 
 void ClipMonitor::renderSvgToJpg(const QString &contents) {
+#ifdef USE_LIBRSVG_RENDERER
+  auto image = RsvgRender::renderSvg(contents);
+  if (!image.isNull()) {
+    saveJpg(image);
+  }
+#else
   QImage image;
   if (image.loadFromData(contents.toUtf8())) {
     saveJpg(image);
   }
+#endif
 }
 
 void ClipMonitor::savePng(const QImage &image) {
@@ -149,45 +155,30 @@ void ClipMonitor::createSave(std::function<void(QIODevice *)> callback) {
   }
 }
 
-void ClipMonitor::clipboardDataChanged() {
+void ClipMonitor::newCapture(const ClipboardContents &contents) {
   // Ignore if not active
   if (!m_activeBinding.value())
     return;
 
-  auto now = QDateTime::currentDateTimeUtc();
-
-  // Throttle and ignore first signal
-  if (m_lastCapture.secsTo(now) < 1) {
-    return;
-  }
-  m_lastCapture = now;
-
-  auto newClip = getLastClipboard();
-  if (newClip == m_lastClipboard) {
-    return;
-  }
-
-  m_lastClipboard = newClip;
-
-  if (std::holds_alternative<QImage>(m_lastClipboard)) {
+  if (contents.type() == ClipboardContents::Type::Image) {
     qDebug() << "Got image";
     switch (m_saveMode) {
     case SaveMode::SVG:
-      saveSvg(std::get<QImage>(m_lastClipboard));
+      saveSvg(contents.image());
       break;
     case SaveMode::PNG:
-      savePng(std::get<QImage>(m_lastClipboard));
+      savePng(contents.image());
       break;
     case SaveMode::JPG:
-      saveJpg(std::get<QImage>(m_lastClipboard));
+      saveJpg(contents.image());
       break;
     }
-  } else if (std::holds_alternative<Html>(m_lastClipboard)) {
+  } else if (contents.type() == ClipboardContents::Type::Html) {
     qDebug() << "Got HTML";
     if (m_htmlAllowed.value()) {
       QTextDocument doc;
       doc.setTextWidth(m_renderWidth.value());
-      doc.setHtml(std::get<Html>(m_lastClipboard).html);
+      doc.setHtml(contents.html());
 
       if (m_saveMode == SaveMode::SVG) {
         createSave([&](QIODevice *dev) {
@@ -229,32 +220,21 @@ void ClipMonitor::clipboardDataChanged() {
     } else {
       qDebug() << "HTML not allowed";
     }
-  } else if (std::holds_alternative<QString>(m_lastClipboard)) {
+  } else if (contents.type() == ClipboardContents::Type::Text) {
     qDebug() << "Got string";
+    if (!contents.text().contains(QStringLiteral("<svg")))
+      return;
+
     switch (m_saveMode) {
     case SaveMode::SVG:
-      saveRawSvg(std::get<QString>(m_lastClipboard));
+      saveRawSvg(contents.text());
       break;
     case SaveMode::PNG:
-      renderSvgToPng(std::get<QString>(m_lastClipboard));
+      renderSvgToPng(contents.text());
       break;
     case SaveMode::JPG:
-      renderSvgToJpg(std::get<QString>(m_lastClipboard));
+      renderSvgToJpg(contents.text());
       break;
     }
-  }
-}
-
-auto ClipMonitor::getLastClipboard() -> contents_t {
-  const auto mimeData = m_clipboard->mimeData();
-
-  if (mimeData->hasImage()) {
-    return qvariant_cast<QImage>(mimeData->imageData());
-  } else if (mimeData->hasHtml()) {
-    return Html{mimeData->html()};
-  } else if (mimeData->hasText()) {
-    return mimeData->text();
-  } else {
-    return {};
   }
 }
