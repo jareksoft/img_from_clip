@@ -4,7 +4,6 @@ grade: stable
 base: core22
 confinement: strict
 compression: lzo
-base: core22
 architectures:
   - build-on: [amd64]
     build-for: [amd64]
