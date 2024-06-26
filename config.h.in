@@ -6,3 +6,5 @@
 #define APP_VERSION_STRING "@PROJECT_VERSION@"
 
 #cmakedefine USE_DBUS_BACKEND 1
+
+#cmakedefine USE_LIBRSVG_RENDERER 1
