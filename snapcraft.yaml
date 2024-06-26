@@ -31,3 +31,6 @@ parts:
       - librsvg2-dev
     stage-packages:
       - dbus
+      - librsvg2-2
+      - libgdk-pixbuf-2.0-0
+      - libcairo2
