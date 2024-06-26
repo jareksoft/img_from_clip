@@ -97,7 +97,9 @@ qt_add_qml_module(
   SOURCES
   platformsupport.h
   platformsupport.cpp
-  ${PLATFORM_SOURCES})
+  ${PLATFORM_SOURCES}
+  SOURCES clipboardsource.h clipboardsource.cpp
+  SOURCES clipboardcontents.h clipboardcontents.cpp)
 
 if(APPLE)
   target_compile_options(${APP_NAME}
