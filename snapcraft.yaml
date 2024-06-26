@@ -28,5 +28,6 @@ parts:
       - -DSNAP_DIST=ON
     build-packages:
       - g++
+      - librsvg2-dev
     stage-packages:
       - dbus
