@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "clipmonitor.h"
+#include "rsvg_helper.h"
 #include <QApplication>
 #include <QBuffer>
 #include <QDateTime>
@@ -72,17 +73,31 @@ void ClipMonitor::saveRawSvg(const QString &contents) {
 }
 
 void ClipMonitor::renderSvgToPng(const QString &contents) {
+#ifdef USE_LIBRSVG_RENDERER
+  auto image = RsvgRender::renderSvg(contents);
+  if (!image.isNull()) {
+    savePng(image);
+  }
+#else
   QImage image;
   if (image.loadFromData(contents.toUtf8())) {
     savePng(image);
   }
+#endif
 }
 
 void ClipMonitor::renderSvgToJpg(const QString &contents) {
+#ifdef USE_LIBRSVG_RENDERER
+  auto image = RsvgRender::renderSvg(contents);
+  if (!image.isNull()) {
+    saveJpg(image);
+  }
+#else
   QImage image;
   if (image.loadFromData(contents.toUtf8())) {
     saveJpg(image);
   }
+#endif
 }
 
 void ClipMonitor::savePng(const QImage &image) {

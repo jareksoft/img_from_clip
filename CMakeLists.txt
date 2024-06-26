@@ -63,8 +63,6 @@ endmacro()
 
 add_library(compile_options_if INTERFACE)
 
-configure_file(config.h.in config.h)
-
 checkandaddoption(-Wall HAVE_WALL)
 checkandaddoption(-Werror HAVE_WERROR)
 checkandaddoption(-Wextra HAVE_WEXTRA)
@@ -74,6 +72,19 @@ if(WIN32)
   list(APPEND PLATFORM_SOURCES
        ${CMAKE_CURRENT_SOURCE_DIR}/shared/windows/icon.rc)
 endif()
+
+find_package(PkgConfig)
+
+if(PKG_CONFIG_FOUND)
+  pkg_check_modules(RSVG IMPORTED_TARGET librsvg-2.0)
+  pkg_check_modules(CAIRO IMPORTED_TARGET cairo)
+  pkg_check_modules(GDK_PIXBUF IMPORTED_TARGET gdk-pixbuf-2.0)
+  if(RSVG_FOUND AND CAIRO_FOUND AND GDK_PIXBUF_FOUND)
+      set(USE_LIBRSVG_RENDERER ON)
+  endif()
+endif()
+
+configure_file(config.h.in config.h)
 
 qt_add_qml_module(
   ${APP_NAME}
@@ -99,7 +110,9 @@ qt_add_qml_module(
   platformsupport.cpp
   ${PLATFORM_SOURCES}
   SOURCES clipboardsource.h clipboardsource.cpp
-  SOURCES clipboardcontents.h clipboardcontents.cpp)
+  SOURCES clipboardcontents.h clipboardcontents.cpp
+  SOURCES rsvg_helper.h
+  SOURCES rsvg_helper.cpp)
 
 if(APPLE)
   target_compile_options(${APP_NAME}
@@ -170,6 +183,10 @@ target_link_libraries(${APP_NAME} PRIVATE Qt6::Quick Qt6::Gui Qt6::Widgets
 
 if(USE_DBUS_BACKEND)
   target_link_libraries(${APP_NAME} PRIVATE Qt6::DBus)
+endif()
+
+if(USE_LIBRSVG_RENDERER)
+  target_link_libraries(${APP_NAME} PRIVATE PkgConfig::RSVG PkgConfig::CAIRO PkgConfig::GDK_PIXBUF)
 endif()
 
 target_include_directories(${APP_NAME} PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
