@@ -1,0 +1,39 @@
+on:
+  push:
+    branches: [master]
+  pull_request:
+name: CI
+jobs:
+  flatpak:
+    name: "Flatpak"
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/flathub-infra/flatpak-github-actions:kde-6.7
+      options: --privileged
+    strategy:
+      matrix:
+        arch: [x86_64, aarch64]
+      # Don't fail the whole workflow if one architecture fails
+      fail-fast: false
+    steps:
+    - uses: actions/checkout@v4
+    # Docker is required by the docker/setup-qemu-action which enables emulation
+    - name: Install deps
+      if: ${{ matrix.arch != 'x86_64' }}
+      run: |
+        # Use the static binaries because it's unable to use a package manager
+        curl https://download.docker.com/linux/static/stable/x86_64/docker-26.0.0.tgz --output ./docker.tgz
+        tar xzvf docker.tgz
+        mv docker/* /usr/bin
+    - name: Set up QEMU
+      if: ${{ matrix.arch != 'x86_64' }}
+      id: qemu
+      uses: docker/setup-qemu-action@v3
+      with:
+        platforms: arm64
+    - uses: flathub-infra/flatpak-github-actions/flatpak-builder@master
+      with:
+        bundle: palette.flatpak
+        manifest-path: com.jpelczar.img_from_clip.json
+        cache-key: flatpak-builder-${{ github.sha }}
+        arch: ${{ matrix.arch }}
