@@ -24,5 +24,9 @@ auto main(int argc, char *argv[]) -> int {
       []() { QCoreApplication::exit(-1); }, Qt::QueuedConnection);
   engine.loadFromModule("img_from_clip", "Main");
 
-  return app.exec();
+  int ret = app.exec();
+
+  qDebug() << "Exiting";
+
+  return ret;
 }

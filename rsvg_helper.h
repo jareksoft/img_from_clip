@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #ifndef RSVG_HELPER_H
 #define RSVG_HELPER_H
 

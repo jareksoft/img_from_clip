@@ -84,6 +84,10 @@ ApplicationWindow {
         }
     }
 
+    RenderConfiguration {
+        id: renderConfig
+    }
+
     Settings {
         id: appSettings
         property string defaultWritePath
@@ -96,6 +100,15 @@ ApplicationWindow {
         property alias seqIndex: mainWindow.seqIndex
         property alias lastTabIndex: mainTabBar.currentIndex
 
+        property bool pngScale15: renderConfig.scale15
+        property bool pngScale2: renderConfig.scale2
+        property bool pngScale3: renderConfig.scale3
+        property bool pngScale4: renderConfig.scale4
+
+        property bool enableSVG: renderConfig.svg
+        property bool enablePNG: renderConfig.png
+        property bool enableJPG: renderConfig.jpg
+
         Component.onCompleted: {
             if (defaultWritePath === "") {
                 defaultWritePath = StandardPaths.standardLocations(
@@ -105,6 +118,14 @@ ApplicationWindow {
             if (savePattern === "") {
                 savePattern = "{timestamp}"
             }
+
+            renderConfig.scale15 = pngScale15
+            renderConfig.scale2 = pngScale2
+            renderConfig.scale3 = pngScale3
+            renderConfig.scale4 = pngScale4
+            renderConfig.svg = enableSVG
+            renderConfig.png = enablePNG
+            renderConfig.jpg = enableJPG
         }
     }
 
@@ -177,6 +198,9 @@ ApplicationWindow {
         }
         TabButton {
             text: qsTr("Advanced")
+        }
+        TabButton {
+            text: qsTr("Image Settings")
         }
     }
 
@@ -434,6 +458,10 @@ Use the following definitions:
                     }
                 }
             }
+        }
+
+        StorePreferences {
+            renderConfiguration: renderConfig
         }
     }
 

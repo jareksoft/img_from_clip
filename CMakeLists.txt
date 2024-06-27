@@ -112,7 +112,9 @@ qt_add_qml_module(
   SOURCES clipboardsource.h clipboardsource.cpp
   SOURCES clipboardcontents.h clipboardcontents.cpp
   SOURCES rsvg_helper.h
-  SOURCES rsvg_helper.cpp)
+  SOURCES rsvg_helper.cpp
+  QML_FILES StorePreferences.qml
+  SOURCES renderconfiguration.h renderconfiguration.cpp)
 
 if(APPLE)
   target_compile_options(${APP_NAME}
