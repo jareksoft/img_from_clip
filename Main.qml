@@ -553,10 +553,6 @@ Use the following definitions:
         }
     }
 
-    MessageDialog {
-        id: notificationMessageDialog
-    }
-
     Component.onCompleted: {
         if (Qt.platform.os === "osx") {
             labsMenuBar.createObject(mainWindow)
