@@ -174,9 +174,11 @@ ApplicationWindow {
             platformSupport.notifyWithImage(PlatformSupport.Info,
                                             qsTr("Image captured"),
                                             qsTr("Saved file %1").arg(
-                                                lastPath), lastPath)
+                                                platformSupport.showUrl(
+                                                    lastPath)), lastPath)
             captureDrawer.notifyInfoAndImage(qsTr("Saved file %1").arg(
-                                                 lastPath), lastPath)
+                                                 platformSupport.showUrl(
+                                                     lastPath)), lastPath)
         }
         renderConfiguration: renderConfig
     }
@@ -575,7 +577,7 @@ Use the following definitions:
 
         function notifyInfoAndImage(info, path) {
             captureDrawer.lastCaptureName = info
-            capImage.source = "file://" + path
+            capImage.source = path
             captureDrawer.open()
         }
     }

@@ -48,7 +48,7 @@ public:
   void setRenderConfiguration(RenderConfiguration *newRenderConfiguration);
 
 signals:
-  void notifyCapture(QString lastPath);
+  void notifyCapture(QUrl lastPath);
   void saveFailed(QString reason);
 
 private:

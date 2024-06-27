@@ -164,7 +164,7 @@ ClipMonitor::createSave(const QString &fileName,
     file.remove();
     return Error{reason};
   } else {
-    return ClipMonitor::SaveResult{SavePath{fileName}};
+    return ClipMonitor::SaveResult{SavePath{QUrl::fromLocalFile(fileName)}};
   }
 }
 
@@ -237,6 +237,27 @@ void ClipMonitor::newCapture(const ClipboardContents &contents) {
     if (renderConfiguration->jpgBindable().value()) {
       results.append(saveSvgImage(fileName, contents.text()));
     }
+  }
+
+  if (results.isEmpty())
+    return;
+
+  if (std::all_of(std::cbegin(results), std::cend(results),
+                  [](const SaveResult &result) {
+                    return std::holds_alternative<Error>(result);
+                  })) {
+    emit saveFailed(std::get<Error>(results.at(0)));
+  } else {
+    auto it = std::find_if(std::cbegin(results), std::cend(results),
+                           [](const SaveResult &result) {
+                             return std::holds_alternative<SavePath>(result);
+                           });
+    if (it == std::cend(results)) {
+      qCritical() << "Nothing found ???";
+      return;
+    }
+
+    emit notifyCapture(std::get<SavePath>(*it));
   }
 }
 
