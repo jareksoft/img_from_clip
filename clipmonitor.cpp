@@ -70,13 +70,12 @@ ClipMonitor::SaveResult ClipMonitor::renderSvgToPng(const QString &fileName,
 #ifdef USE_LIBRSVG_RENDERER
   auto image = RsvgRender::renderSvg(contents, scale);
   if (!image.isNull()) {
-    return savePng(fileName + QStringLiteral(".png"), 1.0, scaleSuffix, image);
+    return savePng(fileName, 1.0, scaleSuffix, image);
   }
 #else
   QImage image;
   if (image.loadFromData(contents.toUtf8())) {
-    return savePng(fileName + QStringLiteral(".png"), scale, scaleSuffix,
-                   image);
+    return savePng(fileName, scale, scaleSuffix, image);
   }
 #endif
   return Error{tr("Could not load source contents")};
@@ -87,12 +86,12 @@ ClipMonitor::SaveResult ClipMonitor::renderSvgToJpg(const QString &fileName,
 #ifdef USE_LIBRSVG_RENDERER
   auto image = RsvgRender::renderSvg(contents, 1.0);
   if (!image.isNull()) {
-    return saveJpg(fileName + QStringLiteral(".jpg"), image);
+    return saveJpg(fileName, image);
   }
 #else
   QImage image;
   if (image.loadFromData(contents.toUtf8())) {
-    return saveJpg(fileName + QStringLiteral(".jpg"), image);
+    return saveJpg(fileName, image);
   }
 #endif
   return Error{tr("Could not load image")};
@@ -102,7 +101,7 @@ ClipMonitor::SaveResult ClipMonitor::savePng(const QString &fileName,
                                              double scale,
                                              const QString &scaleSuffix,
                                              const QImage &image) {
-  if (qFuzzyCompare(scale, 1.0)) {
+  if (qFuzzyCompare(scale, 1.0) && scaleSuffix.isEmpty()) {
     return createSave(fileName + QStringLiteral(".png"),
                       [&](QIODevice *dev) { image.save(dev, "PNG"); });
   } else {
