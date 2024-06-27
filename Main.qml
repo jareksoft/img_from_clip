@@ -93,7 +93,6 @@ ApplicationWindow {
         property string defaultWritePath
         property bool activeOnStart: false
         property alias savePattern: formatLabel.text
-        property int saveMode
         property alias askedAboutNotifications: mainWindow.askedAboutNotifications
         property alias allowHtml: mainWindow.htmlAllowed
         property alias htmlRenderWidth: mainWindow.htmlRenderWidth
@@ -164,7 +163,6 @@ ApplicationWindow {
         savePath: appSettings.defaultWritePath
         active: appSettings.activeOnStart
         savePattern: appSettings.savePattern
-        saveMode: appSettings.saveMode
         htmlAllowed: appSettings.allowHtml
         renderWidth: appSettings.htmlRenderWidth
         onSaveFailed: function (reason) {
@@ -180,6 +178,7 @@ ApplicationWindow {
             captureDrawer.notifyInfoAndImage(qsTr("Saved file %1").arg(
                                                  lastPath), lastPath)
         }
+        renderConfiguration: renderConfig
     }
 
     FolderDialog {
@@ -269,30 +268,30 @@ ApplicationWindow {
                         ColumnLayout {
                             width: parent.width
 
-                            RadioButton {
+                            CheckBox {
                                 Layout.maximumWidth: parent.width
-                                checked: clipMonitor.saveMode == ClipMonitor.SVG
+                                checked: renderConfig.svg
                                 text: qsTr("SVG")
-                                onClicked: {
-                                    appSettings.saveMode = ClipMonitor.SVG
+                                onCheckedChanged: {
+                                    renderConfig.svg = checked
                                 }
                             }
 
-                            RadioButton {
+                            CheckBox {
                                 Layout.maximumWidth: parent.width
-                                checked: clipMonitor.saveMode == ClipMonitor.PNG
+                                checked: renderConfig.png
                                 text: qsTr("PNG")
                                 onClicked: {
-                                    appSettings.saveMode = ClipMonitor.PNG
+                                    renderConfig.png = checked
                                 }
                             }
 
-                            RadioButton {
+                            CheckBox {
                                 Layout.maximumWidth: parent.width
-                                checked: clipMonitor.saveMode == ClipMonitor.JPG
+                                checked: renderConfig.jpg
                                 text: qsTr("JPG")
                                 onClicked: {
-                                    appSettings.saveMode = ClipMonitor.JPG
+                                    renderConfig.jpg = checked
                                 }
                             }
                         }

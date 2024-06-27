@@ -27,7 +27,7 @@ struct CairoCleanup {
 
 } // namespace
 
-QImage RsvgRender::renderSvg(const QString &svg) {
+QImage RsvgRender::renderSvg(const QString &svg, double scale) {
   QByteArray utf = svg.toUtf8();
   gdouble width = 0;
   gdouble height = 0;
@@ -38,17 +38,17 @@ QImage RsvgRender::renderSvg(const QString &svg) {
     return {};
 
   std::unique_ptr<RsvgHandle, GObjectCleanup> handleCleanup(handle);
-  rsvg_handle_set_dpi(handle, 96);
+  rsvg_handle_set_dpi(handle, 96 * scale);
   rsvg_handle_get_intrinsic_size_in_pixels(handle, &width, &height);
 
-  auto surface =
-      cairo_image_surface_create(CAIRO_FORMAT_ARGB32, (int)width, (int)height);
+  auto surface = cairo_image_surface_create(
+      CAIRO_FORMAT_ARGB32, (int)(width * scale), (int)(height * scale));
   std::unique_ptr<cairo_surface_t, CairoSurfaceCleanup> surfaceCleanup(surface);
 
   auto cairo = cairo_create(surface);
   std::unique_ptr<cairo_t, CairoCleanup> cairoCleanup(cairo);
 
-  cairo_scale(cairo, 1.0, 1.0);
+  cairo_scale(cairo, scale, scale);
 
   RsvgRectangle rect;
   rect.x = 0;

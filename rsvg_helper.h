@@ -8,7 +8,7 @@
 
 #ifdef USE_LIBRSVG_RENDERER
 struct RsvgRender {
-  static QImage renderSvg(const QString &svg);
+  static QImage renderSvg(const QString &svg, double scale);
 };
 #endif
 
