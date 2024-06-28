@@ -3,6 +3,8 @@
 #include "config.h"
 #include <QApplication>
 #include <QQmlApplicationEngine>
+#include <QStandardPaths>
+#include <QStorageInfo>
 #include <QTranslator>
 
 auto main(int argc, char *argv[]) -> int {
@@ -12,6 +14,9 @@ auto main(int argc, char *argv[]) -> int {
   QApplication::setApplicationVersion(APP_VERSION_STRING);
 
   QApplication app(argc, argv);
+
+  QDir().mkpath(
+      QStandardPaths::writableLocation(QStandardPaths::CacheLocation));
 
   QTranslator translator;
   if (translator.load(QLocale(), QStringLiteral("appimg_from_clip"),

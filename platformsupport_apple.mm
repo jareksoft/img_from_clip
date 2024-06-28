@@ -6,7 +6,10 @@
 #import <AppKit/AppKit.h>
 #import <CoreFoundation/CoreFoundation.h>
 #endif
+#include <QDir>
+#include <QImage>
 #include <QPointer>
+#include <QStandardPaths>
 #include <UserNotifications/UserNotifications.h>
 
 #if !__has_feature(objc_arc)
@@ -14,6 +17,8 @@
 #endif
 
 #include "platformsupport.h"
+
+static QString kCachePath{QStringLiteral("noti-cache")};
 
 PlatformSupport::PlatformSupport(QObject *parent)
     : QObject{parent}
@@ -52,6 +57,13 @@ void PlatformSupport::platformInit()
                 }
             }];
     });
+
+    auto location = QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
+    QDir cacheDir(location);
+    cacheDir.cd(kCachePath);
+    cacheDir.removeRecursively();
+
+    QDir(location).mkpath(kCachePath);
 }
 
 void PlatformSupport::requestNotifications()
@@ -75,13 +87,44 @@ bool PlatformSupport::requiresNotificationPermission() const
 void PlatformSupport::notifyWithImage(NotifyClass,
                                       const QString &title,
                                       const QString &description,
-                                      const QUrl &)
+                                      const QUrl &url)
 {
     UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
     content.title = title.toNSString();
     content.body = description.toNSString();
     content.sound = [UNNotificationSound defaultSound];
     content.relevanceScore = 0.75;
+
+    if (!url.isEmpty()) {
+        QImage image(url.toLocalFile());
+
+        auto location = QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
+        QDir cacheDir(location);
+        cacheDir.cd(kCachePath);
+
+        QString randomName = QString::number(QDateTime::currentMSecsSinceEpoch());
+        randomName.append(QStringLiteral(".png"));
+
+        QString fullSaveLocation = cacheDir.absoluteFilePath(randomName);
+
+        qDebug() << "Saving name" << fullSaveLocation;
+
+        if (!image.isNull() && image.save(fullSaveLocation, "PNG")) {
+            UNNotificationAttachment *attachment = [UNNotificationAttachment
+                attachmentWithIdentifier:@""
+                                     URL:QUrl::fromLocalFile(fullSaveLocation).toNSURL()
+                                 options:@{}
+                                   error:nil];
+
+            if (attachment) {
+                qDebug() << "Attached URL" << url;
+                content.attachments = @[attachment];
+            } else {
+                qDebug() << "Could not attach" << url;
+            }
+        }
+    }
+
     UNTimeIntervalNotificationTrigger *trigger = [UNTimeIntervalNotificationTrigger
         triggerWithTimeInterval:1
                         repeats:NO];
