@@ -12,7 +12,7 @@ ScrollView {
 
     Flickable {
         id: flickable
-        width: parent.width
+        anchors.fill: parent
         leftMargin: 20
         rightMargin: 20
         bottomMargin: 32

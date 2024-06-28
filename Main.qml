@@ -217,7 +217,7 @@ ApplicationWindow {
 
             Flickable {
                 id: mainFlickable
-                width: parent.width
+                anchors.fill: parent
                 leftMargin: 20
                 rightMargin: 20
                 bottomMargin: 32
@@ -353,7 +353,7 @@ ApplicationWindow {
 
             Flickable {
                 id: advancedFlickable
-                width: parent.width
+                anchors.fill: parent
                 leftMargin: 20
                 rightMargin: 20
                 bottomMargin: 32
