@@ -61,6 +61,9 @@ ClipboardContents ClipboardSource::captureOnce() {
   ClipboardContents result;
   const auto mimeData = qApp->clipboard()->mimeData();
 
+  if (!mimeData)
+    return result;
+
   if (mimeData->hasImage()) {
     result.setImage(qvariant_cast<QImage>(mimeData->imageData()));
   } else if (mimeData->hasHtml()) {
@@ -79,7 +82,6 @@ void ClipboardSource::clipboardChanged() {
     return;
   if (!m_htmlAllowed && capture.type() == ClipboardContents::Type::Html)
     return;
-  qDebug() << "Got new capture";
   emit newCapture(capture);
 }
 

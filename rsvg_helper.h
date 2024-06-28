@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #ifndef RSVG_HELPER_H
 #define RSVG_HELPER_H
 
@@ -6,7 +8,7 @@
 
 #ifdef USE_LIBRSVG_RENDERER
 struct RsvgRender {
-  static QImage renderSvg(const QString &svg);
+  static QImage renderSvg(const QString &svg, double scale);
 };
 #endif
 

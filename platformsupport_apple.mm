@@ -75,7 +75,7 @@ bool PlatformSupport::requiresNotificationPermission() const
 void PlatformSupport::notifyWithImage(NotifyClass,
                                       const QString &title,
                                       const QString &description,
-                                      const QString &)
+                                      const QUrl &)
 {
     UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
     content.title = title.toNSString();

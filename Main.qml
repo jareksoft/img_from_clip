@@ -84,17 +84,29 @@ ApplicationWindow {
         }
     }
 
+    RenderConfiguration {
+        id: renderConfig
+    }
+
     Settings {
         id: appSettings
         property string defaultWritePath
         property bool activeOnStart: false
         property alias savePattern: formatLabel.text
-        property int saveMode
         property alias askedAboutNotifications: mainWindow.askedAboutNotifications
         property alias allowHtml: mainWindow.htmlAllowed
         property alias htmlRenderWidth: mainWindow.htmlRenderWidth
         property alias seqIndex: mainWindow.seqIndex
         property alias lastTabIndex: mainTabBar.currentIndex
+
+        property bool pngScale15: renderConfig.scale15
+        property bool pngScale2: renderConfig.scale2
+        property bool pngScale3: renderConfig.scale3
+        property bool pngScale4: renderConfig.scale4
+
+        property bool enableSVG: renderConfig.svg
+        property bool enablePNG: renderConfig.png
+        property bool enableJPG: renderConfig.jpg
 
         Component.onCompleted: {
             if (defaultWritePath === "") {
@@ -105,6 +117,14 @@ ApplicationWindow {
             if (savePattern === "") {
                 savePattern = "{timestamp}"
             }
+
+            renderConfig.scale15 = pngScale15
+            renderConfig.scale2 = pngScale2
+            renderConfig.scale3 = pngScale3
+            renderConfig.scale4 = pngScale4
+            renderConfig.svg = enableSVG
+            renderConfig.png = enablePNG
+            renderConfig.jpg = enableJPG
         }
     }
 
@@ -143,7 +163,6 @@ ApplicationWindow {
         savePath: appSettings.defaultWritePath
         active: appSettings.activeOnStart
         savePattern: appSettings.savePattern
-        saveMode: appSettings.saveMode
         htmlAllowed: appSettings.allowHtml
         renderWidth: appSettings.htmlRenderWidth
         onSaveFailed: function (reason) {
@@ -155,10 +174,13 @@ ApplicationWindow {
             platformSupport.notifyWithImage(PlatformSupport.Info,
                                             qsTr("Image captured"),
                                             qsTr("Saved file %1").arg(
-                                                lastPath), lastPath)
+                                                platformSupport.showUrl(
+                                                    lastPath)), lastPath)
             captureDrawer.notifyInfoAndImage(qsTr("Saved file %1").arg(
-                                                 lastPath), lastPath)
+                                                 platformSupport.showUrl(
+                                                     lastPath)), lastPath)
         }
+        renderConfiguration: renderConfig
     }
 
     FolderDialog {
@@ -178,6 +200,9 @@ ApplicationWindow {
         TabButton {
             text: qsTr("Advanced")
         }
+        TabButton {
+            text: qsTr("Image Settings")
+        }
     }
 
     StackLayout {
@@ -192,7 +217,7 @@ ApplicationWindow {
 
             Flickable {
                 id: mainFlickable
-                width: parent.width
+                anchors.fill: parent
                 leftMargin: 20
                 rightMargin: 20
                 bottomMargin: 32
@@ -245,30 +270,30 @@ ApplicationWindow {
                         ColumnLayout {
                             width: parent.width
 
-                            RadioButton {
+                            CheckBox {
                                 Layout.maximumWidth: parent.width
-                                checked: clipMonitor.saveMode == ClipMonitor.SVG
+                                checked: renderConfig.svg
                                 text: qsTr("SVG")
-                                onClicked: {
-                                    appSettings.saveMode = ClipMonitor.SVG
+                                onCheckedChanged: {
+                                    renderConfig.svg = checked
                                 }
                             }
 
-                            RadioButton {
+                            CheckBox {
                                 Layout.maximumWidth: parent.width
-                                checked: clipMonitor.saveMode == ClipMonitor.PNG
+                                checked: renderConfig.png
                                 text: qsTr("PNG")
                                 onClicked: {
-                                    appSettings.saveMode = ClipMonitor.PNG
+                                    renderConfig.png = checked
                                 }
                             }
 
-                            RadioButton {
+                            CheckBox {
                                 Layout.maximumWidth: parent.width
-                                checked: clipMonitor.saveMode == ClipMonitor.JPG
+                                checked: renderConfig.jpg
                                 text: qsTr("JPG")
                                 onClicked: {
-                                    appSettings.saveMode = ClipMonitor.JPG
+                                    renderConfig.jpg = checked
                                 }
                             }
                         }
@@ -328,7 +353,7 @@ ApplicationWindow {
 
             Flickable {
                 id: advancedFlickable
-                width: parent.width
+                anchors.fill: parent
                 leftMargin: 20
                 rightMargin: 20
                 bottomMargin: 32
@@ -434,6 +459,10 @@ Use the following definitions:
                     }
                 }
             }
+        }
+
+        StorePreferences {
+            renderConfiguration: renderConfig
         }
     }
 
@@ -548,13 +577,9 @@ Use the following definitions:
 
         function notifyInfoAndImage(info, path) {
             captureDrawer.lastCaptureName = info
-            capImage.source = "file://" + path
+            capImage.source = path
             captureDrawer.open()
         }
-    }
-
-    MessageDialog {
-        id: notificationMessageDialog
     }
 
     Component.onCompleted: {

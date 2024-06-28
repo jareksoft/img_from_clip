@@ -27,7 +27,7 @@ option(FLATPAK_DIST "Enable flatpak specific options" OFF)
 option(SNAP_DIST "Enable snap specific options" OFF)
 option(OSX_BUNDLE "Use app bundle on macOS" ON)
 
-find_package(Qt6 6.5 REQUIRED COMPONENTS Quick Gui Widgets Svg LinguistTools)
+find_package(Qt6 6.5 REQUIRED COMPONENTS Quick Gui Widgets Svg LinguistTools Concurrent)
 
 qt_standard_project_setup(REQUIRES 6.5)
 qt_add_executable(${APP_NAME} main.cpp)
@@ -112,7 +112,9 @@ qt_add_qml_module(
   SOURCES clipboardsource.h clipboardsource.cpp
   SOURCES clipboardcontents.h clipboardcontents.cpp
   SOURCES rsvg_helper.h
-  SOURCES rsvg_helper.cpp)
+  SOURCES rsvg_helper.cpp
+  QML_FILES StorePreferences.qml
+  SOURCES renderconfiguration.h renderconfiguration.cpp)
 
 if(APPLE)
   target_compile_options(${APP_NAME}
@@ -179,7 +181,7 @@ set_target_properties(
              WIN32_EXECUTABLE TRUE)
 
 target_link_libraries(${APP_NAME} PRIVATE Qt6::Quick Qt6::Gui Qt6::Widgets
-                                          Qt6::Svg compile_options_if)
+                                          Qt6::Svg Qt6::Concurrent compile_options_if)
 
 if(USE_DBUS_BACKEND)
   target_link_libraries(${APP_NAME} PRIVATE Qt6::DBus)

@@ -34,7 +34,7 @@ bool PlatformSupport::requiresNotificationPermission() const { return false; }
 
 void PlatformSupport::notifyWithImage(NotifyClass type, const QString &title,
                                       const QString &description,
-                                      const QString &imagePath) {
+                                      const QUrl &imagePath) {
   QVariantMap hints;
   QString iconName = QStringLiteral("dialog-information");
   QVector<QString> actionMap;
@@ -55,7 +55,7 @@ void PlatformSupport::notifyWithImage(NotifyClass type, const QString &title,
   }
   hints.insert(QStringLiteral("resident"), QVariant(false));
   if (!imagePath.isEmpty()) {
-    QImage pixmap(imagePath);
+    QImage pixmap(imagePath.toLocalFile());
     if (!pixmap.isNull()) {
       qDebug() << "Loaded image";
 
