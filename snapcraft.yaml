@@ -35,4 +35,4 @@ parts:
       - librsvg2-2
       - libgdk-pixbuf-2.0-0
       - libcairo2
-      - liblua5.4
+      - liblua5.4-0
