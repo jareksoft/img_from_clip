@@ -16,7 +16,6 @@ be perfect.
 
 ### Languages: ENG, KOR, POL
 
-
 ![Screenshot](shared/linux/screenshot.png)
 
 ### Lua script
@@ -38,6 +37,10 @@ Script must expose single global function:
     function process_capture(image)
     end
 ```
+
+### License
+
+This code can be licensed either as GPL 3.0+ or BSD 2 license.
 
 ### Attributions
 
