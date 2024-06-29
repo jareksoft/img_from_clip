@@ -59,6 +59,9 @@ void PlatformSupport::notifyWithImage(NotifyClass type, const QString &title,
     if (!pixmap.isNull()) {
       qDebug() << "Loaded image";
 
+      pixmap = pixmap.scaled(128, 128, Qt::KeepAspectRatio,
+                             Qt::SmoothTransformation);
+
       QDBusArgument arg;
       arg.beginStructure();
       arg << pixmap.width();
