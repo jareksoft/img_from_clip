@@ -75,8 +75,26 @@ if(WIN32)
        ${CMAKE_CURRENT_SOURCE_DIR}/shared/windows/icon.rc)
 endif()
 
-find_package(PkgConfig)
-find_package(Lua)
+find_package(PkgConfig QUIET)
+find_package(Lua QUIET)
+
+if (NOT LUA_FOUND)
+    CPMAddPackage(
+      NAME lua
+      GIT_REPOSITORY https://github.com/lua/lua.git
+      VERSION 5.4
+      DOWNLOAD_ONLY YES
+    )
+
+    file(GLOB lua_sources ${lua_SOURCE_DIR}/*.c)
+    list(REMOVE_ITEM lua_sources "${lua_SOURCE_DIR}/lua.c" "${lua_SOURCE_DIR}/luac.c")
+    add_library(lua_import STATIC ${lua_sources})
+    target_include_directories(lua_import SYSTEM PUBLIC $<BUILD_INTERFACE:${lua_SOURCE_DIR}>)
+else()
+    add_library(lua_import INTERFACE)
+    target_link_libraries(lua_import INTERFACE ${LUA_LIBRARIES})
+    target_include_directories(lua_import INTERFACE ${LUA_INCLUDE_DIR})
+endif()
 
 if(PKG_CONFIG_FOUND)
   pkg_check_modules(RSVG IMPORTED_TARGET librsvg-2.0)
@@ -202,9 +220,6 @@ if(LUA_FOUND)
                   "SOL2_BUILD_LUA=OFF")
   endif()
 
-  add_library(lua_import INTERFACE)
-  target_link_libraries(lua_import INTERFACE ${LUA_LIBRARIES})
-  target_include_directories(lua_import INTERFACE ${LUA_INCLUDE_DIR})
   add_library(lua_capture STATIC luacapturescript.h luacapturescript.cpp
       lua_pixmap.h lua_pixmap.cpp
       lua_qtclasses.h)
