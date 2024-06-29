@@ -11,6 +11,7 @@
 #include <sol/sol.hpp>
 
 class Pixmap {
+  Q_GADGET
 public:
   Pixmap(int width, int height);
   ~Pixmap();

@@ -45,3 +45,9 @@ QString CaptureObject::contents() const { return m_contents; }
 void CaptureObject::setContents(const QString &newContents) {
   m_contents = newContents;
 }
+
+std::optional<Pixmap> CaptureObject::image() const { return m_image; }
+
+void CaptureObject::setImage(const std::optional<Pixmap> &image) {
+  m_image = image;
+}

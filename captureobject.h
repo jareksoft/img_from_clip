@@ -5,6 +5,7 @@
 #ifndef CAPTUREOBJECT_H
 #define CAPTUREOBJECT_H
 
+#include "lua_pixmap.h"
 #include "lua_qtclasses.h"
 #include <QObject>
 #include <QProperty>
@@ -48,12 +49,16 @@ public:
   QString contents() const;
   void setContents(const QString &newContents);
 
+  std::optional<Pixmap> image() const;
+  void setImage(const std::optional<Pixmap> &image);
+
 private:
   QProperty<QString> m_path;
   QProperty<QString> m_saveMode;
   QProperty<int> m_width{0};
   QProperty<int> m_height;
   QProperty<QString> m_contents;
+  std::optional<Pixmap> m_image;
 };
 
 #endif // CAPTUREOBJECT_H
