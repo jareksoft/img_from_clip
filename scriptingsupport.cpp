@@ -28,3 +28,12 @@ QString ScriptingSupport::tryCompile(const QString &script) {
   return QStringLiteral("Not available");
 #endif
 }
+
+QString ScriptingSupport::tryRun(const QString &script) {
+#ifdef LUA_FOUND
+  return m_engine.tryRun(script);
+#else
+  Q_UNUSED(script);
+  return QStringLiteral("Not available");
+#endif
+}

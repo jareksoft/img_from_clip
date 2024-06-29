@@ -24,6 +24,7 @@ public:
   void setScriptText(const QString &newScriptText);
 
   Q_INVOKABLE QString tryCompile(const QString &script);
+  Q_INVOKABLE QString tryRun(const QString &script);
 
 signals:
   void scriptTextChanged();

@@ -130,6 +130,28 @@ Item {
                                 compileResultDrawer.open()
                             }
                         }
+
+                        Button {
+                            text: qsTr("Try run")
+                            icon.source: Qt.resolvedUrl("compiler.png")
+                            icon.width: 32
+                            icon.height: 32
+                            onClicked: {
+                                var result = scriptingSupport.tryRun(
+                                            editor.text)
+
+                                if (result.length > 0) {
+                                    compilationResult = qsTr(
+                                                "Error:\n%1").arg(result)
+                                    compileSuccess = false
+                                } else {
+                                    compilationResult = qsTr("Success")
+                                    compileSuccess = true
+                                }
+
+                                compileResultDrawer.open()
+                            }
+                        }
                     }
                 }
             }
