@@ -175,6 +175,7 @@ Item {
                     Label {
                         Layout.preferredWidth: parent.width
                         Layout.maximumWidth: parent.width
+                        text: qsTr("Lua output:")
                     }
 
                     ScrollView {
