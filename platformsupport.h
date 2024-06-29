@@ -47,7 +47,7 @@ public slots:
   void notify(NotifyClass type, const QString &title,
               const QString &description);
   void notifyWithImage(NotifyClass type, const QString &title,
-                       const QString &description, const QString &imagePath);
+                       const QString &description, const QUrl &imagePath);
 
 private:
   void platformInit();

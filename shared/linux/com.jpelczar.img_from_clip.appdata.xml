@@ -38,12 +38,22 @@
     <url type="contribute">https://github.com/jareksoft/img_from_clip</url>
     <screenshots>
         <screenshot type="default">
-            <image>https://raw.githubusercontent.com/jareksoft/img_from_clip/master/shared/linux/screenshot.png</image>
+            <image>https://raw.githubusercontent.com/jareksoft/img_from_clip/master/shared/linux/store_image_linux.png</image>
             <caption>Main application window</caption>
         </screenshot>
     </screenshots>
 
     <releases>
+        <release version="0.6" date="2024-06-29">
+            <description>
+                <ul>
+                    <li>Fix crash on Linux when copying huge images</li>
+                    <li>Add missing sequence counting for images</li>
+                    <li>Allow multi-scale PNG file save at once</li>
+                    <li>Allow multi-format save at once</li>
+                </ul>
+            </description>
+        </release>
 	<release version="0.5" date="2024-06-26">
             <description>
                 <ul>

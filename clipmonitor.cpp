@@ -16,6 +16,7 @@
 #include <QSysInfo>
 #include <QTextDocument>
 #include <QTextStream>
+#include <QtConcurrent>
 
 ClipMonitor::ClipMonitor(QObject *parent) : QObject{parent} {
   m_rng.seed(static_cast<uint32_t>(QDateTime::currentMSecsSinceEpoch()));
@@ -46,6 +47,8 @@ auto ClipMonitor::makeNewSavePath(QString pattern) -> QString {
   pattern.replace(QStringLiteral("{cpu}"), QSysInfo::currentCpuArchitecture());
   pattern.replace(QStringLiteral("{hostname}"), QSysInfo::machineHostName());
   pattern.replace(QStringLiteral("{rand}"), QString::number(m_rng()));
+  pattern.replace(QStringLiteral("{seq}"),
+                  QString::number(m_captureSeq.value()));
 
   pattern.replace(QChar('/'), QChar('_'));
   pattern.replace(QChar('\\'), QChar('_'));
@@ -53,59 +56,76 @@ auto ClipMonitor::makeNewSavePath(QString pattern) -> QString {
   pattern.replace(QChar(';'), QChar('_'));
   pattern.replace(QStringLiteral(".."), QStringLiteral("_"));
 
-  switch (m_saveMode.value()) {
-  case SaveMode::SVG:
-    pattern.append(QStringLiteral(".svg"));
-    break;
-  case SaveMode::PNG:
-    pattern.append(QStringLiteral(".png"));
-    break;
-  case SaveMode::JPG:
-    pattern.append(QStringLiteral(".jpg"));
-    break;
-  }
-
   return pattern;
 }
 
-void ClipMonitor::saveRawSvg(const QString &contents) {
-  createSave([&](QIODevice *dev) { dev->write(contents.toUtf8()); });
+ClipMonitor::SaveResult ClipMonitor::saveRawSvg(const QString &fileName,
+                                                const QString &contents) {
+  return createSave(fileName + QStringLiteral(".svg"),
+                    [&](QIODevice *dev) { dev->write(contents.toUtf8()); });
 }
 
-void ClipMonitor::renderSvgToPng(const QString &contents) {
+ClipMonitor::SaveResult ClipMonitor::renderSvgToPng(const QString &fileName,
+                                                    double scale,
+                                                    const QString &scaleSuffix,
+                                                    const QString &contents) {
 #ifdef USE_LIBRSVG_RENDERER
-  auto image = RsvgRender::renderSvg(contents);
+  auto image = RsvgRender::renderSvg(contents, scale);
   if (!image.isNull()) {
-    savePng(image);
+    return savePng(fileName, 1.0, scaleSuffix, image);
   }
 #else
   QImage image;
   if (image.loadFromData(contents.toUtf8())) {
-    savePng(image);
+    return savePng(fileName, scale, scaleSuffix, image);
   }
 #endif
+  return Error{tr("Could not load source contents")};
 }
 
-void ClipMonitor::renderSvgToJpg(const QString &contents) {
+ClipMonitor::SaveResult ClipMonitor::renderSvgToJpg(const QString &fileName,
+                                                    const QString &contents) {
 #ifdef USE_LIBRSVG_RENDERER
-  auto image = RsvgRender::renderSvg(contents);
+  auto image = RsvgRender::renderSvg(contents, 1.0);
   if (!image.isNull()) {
-    saveJpg(image);
+    return saveJpg(fileName, image);
   }
 #else
   QImage image;
   if (image.loadFromData(contents.toUtf8())) {
-    saveJpg(image);
+    return saveJpg(fileName, image);
   }
 #endif
+  return Error{tr("Could not load image")};
 }
 
-void ClipMonitor::savePng(const QImage &image) {
-  createSave([&](QIODevice *dev) { image.save(dev, "PNG"); });
+ClipMonitor::SaveResult ClipMonitor::savePng(const QString &fileName,
+                                             double scale,
+                                             const QString &scaleSuffix,
+                                             const QImage &image) {
+  if (qFuzzyCompare(scale, 1.0) && scaleSuffix.isEmpty()) {
+    return createSave(fileName + QStringLiteral(".png"),
+                      [&](QIODevice *dev) { image.save(dev, "PNG"); });
+  } else {
+    return createSave(
+        fileName + scaleSuffix + QStringLiteral(".png"), [&](QIODevice *dev) {
+          QSizeF newSize(image.size());
+          QSize scaledSize =
+              newSize
+                  .scaled((double)image.width() * scale,
+                          (double)image.height() * scale, Qt::IgnoreAspectRatio)
+                  .toSize();
+
+          auto scaledImage = image.scaled(scaledSize, Qt::IgnoreAspectRatio,
+                                          Qt::SmoothTransformation);
+          scaledImage.save(dev, "PNG");
+        });
+  }
 }
 
-void ClipMonitor::saveSvg(const QImage &image) {
-  createSave([&](QIODevice *dev) {
+ClipMonitor::SaveResult ClipMonitor::saveSvg(const QString &fileName,
+                                             const QImage &image) {
+  return createSave(fileName + QStringLiteral(".svg"), [&](QIODevice *dev) {
     QSvgGenerator generator;
     QRect viewBox;
     viewBox.setSize(image.size());
@@ -123,65 +143,56 @@ void ClipMonitor::saveSvg(const QImage &image) {
   });
 }
 
-void ClipMonitor::saveJpg(const QImage &image) {
-  createSave([&](QIODevice *dev) { image.save(dev, "JPG"); });
+ClipMonitor::SaveResult ClipMonitor::saveJpg(const QString &fileName,
+                                             const QImage &image) {
+  return createSave(fileName + QStringLiteral(".jpg"),
+                    [&](QIODevice *dev) { image.save(dev, "JPG"); });
 }
 
-void ClipMonitor::createSave(std::function<void(QIODevice *)> callback) {
-  QDir dir(m_savePath.value().toLocalFile());
-
-  if (!dir.exists()) {
-    emit saveFailed(tr("Save directory does not exist"));
-    return;
-  }
-
-  auto path = dir.absoluteFilePath(makeNewSavePath(m_savePattern.value()));
-
-  QFile file(path);
+ClipMonitor::SaveResult
+ClipMonitor::createSave(const QString &fileName,
+                        std::function<void(QIODevice *)> callback) {
+  QFile file(fileName);
   if (!file.open(QIODevice::WriteOnly | QIODevice::NewOnly)) {
-    emit saveFailed(file.errorString());
-    return;
+    return Error{file.errorString()};
   }
 
-  qDebug() << "Saving " << file.fileName();
+  qDebug() << "Saving file" << fileName;
 
   callback(&file);
 
   if (file.error()) {
-    emit saveFailed(file.errorString());
+    QString reason = file.errorString();
     file.remove();
+    return Error{reason};
   } else {
-    emit notifyCapture(path);
+    return ClipMonitor::SaveResult{SavePath{QUrl::fromLocalFile(fileName)}};
   }
 }
 
 void ClipMonitor::newCapture(const ClipboardContents &contents) {
+  RenderConfiguration *renderConfiguration = m_renderConfiguration.value();
+
   // Ignore if not active
-  if (!m_activeBinding.value())
+  if (!m_activeBinding.value() || !renderConfiguration)
     return;
 
-  if (contents.type() == ClipboardContents::Type::Image) {
-    qDebug() << "Got image";
-    switch (m_saveMode) {
-    case SaveMode::SVG:
-      saveSvg(contents.image());
-      break;
-    case SaveMode::PNG:
-      savePng(contents.image());
-      break;
-    case SaveMode::JPG:
-      saveJpg(contents.image());
-      break;
-    }
-  } else if (contents.type() == ClipboardContents::Type::Html) {
-    qDebug() << "Got HTML";
-    if (m_htmlAllowed.value()) {
-      QTextDocument doc;
-      doc.setTextWidth(m_renderWidth.value());
-      doc.setHtml(contents.html());
+  QList<ClipMonitor::SaveResult> results;
 
-      if (m_saveMode == SaveMode::SVG) {
-        createSave([&](QIODevice *dev) {
+  auto fileName = QDir(m_savePath.value().toLocalFile())
+                      .filePath(makeNewSavePath(m_savePattern.value()));
+
+  if (contents.type() == ClipboardContents::Type::Image) {
+    results = savePlainImage(fileName, contents.image());
+  } else if (contents.type() == ClipboardContents::Type::Html) {
+    if (m_htmlAllowed.value()) {
+      if (renderConfiguration->svgBindable().value()) {
+        QTextDocument doc;
+        doc.setTextWidth(m_renderWidth.value());
+        doc.setHtml(contents.html());
+
+        // Prefer rendering vectors instead of bitmap inside SVG
+        results.push_back(createSave(fileName, [&](QIODevice *dev) {
           QSvgGenerator generator;
 
           QRect viewBox;
@@ -197,44 +208,154 @@ void ClipMonitor::newCapture(const ClipboardContents &contents) {
           painter.begin(&generator);
           doc.drawContents(&painter);
           painter.end();
-        });
-      } else {
+        }));
+      }
+
+      if (renderConfiguration->jpgBindable().value() ||
+          renderConfiguration->pngBindable().value()) {
+        QTextDocument doc;
+        doc.setTextWidth(m_renderWidth.value());
+        doc.setHtml(contents.html());
         QImage image(doc.size().toSize(), QImage::Format_ARGB32_Premultiplied);
         QPainter painter(&image);
         painter.setRenderHints(QPainter::Antialiasing |
                                QPainter::SmoothPixmapTransform);
         doc.drawContents(&painter);
 
-        switch (m_saveMode) {
-        case SaveMode::SVG:
-          saveSvg(image);
-          break;
-        case SaveMode::PNG:
-          savePng(image);
-          break;
-        case SaveMode::JPG:
-          saveJpg(image);
-          break;
-        }
+        // Use SVG renderer to avoid saving bitmap inside SVG if possible
+        results.append(savePlainImage(fileName, image, false));
       }
     } else {
-      qDebug() << "HTML not allowed";
+      qWarning() << "HTML not allowed";
     }
   } else if (contents.type() == ClipboardContents::Type::Text) {
-    qDebug() << "Got string";
     if (!contents.text().contains(QStringLiteral("<svg")))
       return;
 
-    switch (m_saveMode) {
-    case SaveMode::SVG:
-      saveRawSvg(contents.text());
-      break;
-    case SaveMode::PNG:
-      renderSvgToPng(contents.text());
-      break;
-    case SaveMode::JPG:
-      renderSvgToJpg(contents.text());
-      break;
+    if (renderConfiguration->svgBindable().value()) {
+      results.push_back(saveRawSvg(fileName, contents.text()));
+    }
+
+    if (renderConfiguration->jpgBindable().value()) {
+      results.append(saveSvgImage(fileName, contents.text()));
     }
   }
+
+  if (results.isEmpty())
+    return;
+
+  if (std::all_of(std::cbegin(results), std::cend(results),
+                  [](const SaveResult &result) {
+                    return std::holds_alternative<Error>(result);
+                  })) {
+    emit saveFailed(std::get<Error>(results.at(0)));
+  } else {
+    auto it = std::find_if(std::cbegin(results), std::cend(results),
+                           [](const SaveResult &result) {
+                             return std::holds_alternative<SavePath>(result);
+                           });
+    if (it == std::cend(results)) {
+      qCritical() << "Nothing found ???";
+      return;
+    }
+
+    m_captureSeq.setValue(m_captureSeq.value() + 1);
+
+    emit notifyCapture(std::get<SavePath>(*it));
+  }
 }
+
+QList<ClipMonitor::SaveResult>
+ClipMonitor::savePlainImage(const QString &fileName, const QImage &image,
+                            bool includeSvg) {
+  QList<ClipMonitor::SaveResult> result;
+  RenderConfiguration *config = m_renderConfiguration.value();
+  if (!config)
+    return result;
+
+  if (includeSvg && config->svgBindable().value()) {
+    result.push_back(saveSvg(fileName, image));
+  }
+
+  if (config->jpgBindable().value()) {
+    result.push_back(saveJpg(fileName, image));
+  }
+  if (config->pngBindable().value()) {
+    result.push_back(savePng(fileName, 1.0, QString(), image));
+
+    if (config->scale15Bindable().value()) {
+      result.push_back(savePng(fileName, 1.5, QStringLiteral("@1.5x"), image));
+    }
+
+    if (config->scale2Bindable().value()) {
+      result.push_back(savePng(fileName, 2.0, QStringLiteral("@2x"), image));
+    }
+
+    if (config->scale3Bindable().value()) {
+      result.push_back(savePng(fileName, 3.0, QStringLiteral("@3x"), image));
+    }
+
+    if (config->scale4Bindable().value()) {
+      result.push_back(savePng(fileName, 4.0, QStringLiteral("@4x"), image));
+    }
+  }
+
+  return result;
+}
+
+QList<ClipMonitor::SaveResult>
+ClipMonitor::saveSvgImage(const QString &fileName, const QString &svgContents) {
+  QList<ClipMonitor::SaveResult> result;
+  RenderConfiguration *config = m_renderConfiguration.value();
+  if (!config)
+    return result;
+
+  if (config->svgBindable().value()) {
+    result.push_back(saveRawSvg(fileName, svgContents));
+  }
+
+  if (config->jpgBindable().value()) {
+    result.push_back(renderSvgToJpg(fileName, svgContents));
+  }
+
+  if (config->pngBindable().value()) {
+    result.push_back(renderSvgToPng(fileName, 1.0, QString(), svgContents));
+
+    if (config->scale15Bindable().value()) {
+      result.push_back(
+          renderSvgToPng(fileName, 1.5, QStringLiteral("@1.5x"), svgContents));
+    }
+
+    if (config->scale2Bindable().value()) {
+      result.push_back(
+          renderSvgToPng(fileName, 2.0, QStringLiteral("@2x"), svgContents));
+    }
+
+    if (config->scale3Bindable().value()) {
+      result.push_back(
+          renderSvgToPng(fileName, 3.0, QStringLiteral("@3x"), svgContents));
+    }
+
+    if (config->scale4Bindable().value()) {
+      result.push_back(
+          renderSvgToPng(fileName, 4.0, QStringLiteral("@4x"), svgContents));
+    }
+  }
+
+  return result;
+}
+
+RenderConfiguration *ClipMonitor::renderConfiguration() const {
+  return m_renderConfiguration;
+}
+
+void ClipMonitor::setRenderConfiguration(
+    RenderConfiguration *newRenderConfiguration) {
+  m_renderConfiguration = newRenderConfiguration;
+}
+
+void ClipMonitor::setCaptureSeq(qint64 newCaptureSeq) {
+  m_captureSeq = newCaptureSeq;
+}
+
+qint64 ClipMonitor::captureSeq() const { return m_captureSeq; }

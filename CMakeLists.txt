@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.21)
 
 project(
   img_from_clip
-  VERSION 0.4
+  VERSION 0.6
   LANGUAGES CXX)
 
 if(APPLE)
@@ -27,7 +27,8 @@ option(FLATPAK_DIST "Enable flatpak specific options" OFF)
 option(SNAP_DIST "Enable snap specific options" OFF)
 option(OSX_BUNDLE "Use app bundle on macOS" ON)
 
-find_package(Qt6 6.5 REQUIRED COMPONENTS Quick Gui Widgets Svg LinguistTools)
+find_package(Qt6 6.5 REQUIRED COMPONENTS Quick Gui Widgets Svg LinguistTools
+                                         Concurrent)
 
 qt_standard_project_setup(REQUIRES 6.5)
 qt_add_executable(${APP_NAME} main.cpp)
@@ -79,8 +80,10 @@ if(PKG_CONFIG_FOUND)
   pkg_check_modules(RSVG IMPORTED_TARGET librsvg-2.0)
   pkg_check_modules(CAIRO IMPORTED_TARGET cairo)
   pkg_check_modules(GDK_PIXBUF IMPORTED_TARGET gdk-pixbuf-2.0)
-  if(RSVG_FOUND AND CAIRO_FOUND AND GDK_PIXBUF_FOUND)
-      set(USE_LIBRSVG_RENDERER ON)
+  if(RSVG_FOUND
+     AND CAIRO_FOUND
+     AND GDK_PIXBUF_FOUND)
+    set(USE_LIBRSVG_RENDERER ON)
   endif()
 endif()
 
@@ -109,10 +112,21 @@ qt_add_qml_module(
   platformsupport.h
   platformsupport.cpp
   ${PLATFORM_SOURCES}
-  SOURCES clipboardsource.h clipboardsource.cpp
-  SOURCES clipboardcontents.h clipboardcontents.cpp
-  SOURCES rsvg_helper.h
-  SOURCES rsvg_helper.cpp)
+  SOURCES
+  clipboardsource.h
+  clipboardsource.cpp
+  SOURCES
+  clipboardcontents.h
+  clipboardcontents.cpp
+  SOURCES
+  rsvg_helper.h
+  SOURCES
+  rsvg_helper.cpp
+  QML_FILES
+  StorePreferences.qml
+  SOURCES
+  renderconfiguration.h
+  renderconfiguration.cpp)
 
 if(APPLE)
   target_compile_options(${APP_NAME}
@@ -178,15 +192,17 @@ set_target_properties(
              MACOSX_BUNDLE TRUE
              WIN32_EXECUTABLE TRUE)
 
-target_link_libraries(${APP_NAME} PRIVATE Qt6::Quick Qt6::Gui Qt6::Widgets
-                                          Qt6::Svg compile_options_if)
+target_link_libraries(
+  ${APP_NAME} PRIVATE Qt6::Quick Qt6::Gui Qt6::Widgets Qt6::Svg Qt6::Concurrent
+                      compile_options_if)
 
 if(USE_DBUS_BACKEND)
   target_link_libraries(${APP_NAME} PRIVATE Qt6::DBus)
 endif()
 
 if(USE_LIBRSVG_RENDERER)
-  target_link_libraries(${APP_NAME} PRIVATE PkgConfig::RSVG PkgConfig::CAIRO PkgConfig::GDK_PIXBUF)
+  target_link_libraries(${APP_NAME} PRIVATE PkgConfig::RSVG PkgConfig::CAIRO
+                                            PkgConfig::GDK_PIXBUF)
 endif()
 
 target_include_directories(${APP_NAME} PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
@@ -196,8 +212,7 @@ if(CMAKE_GENERATOR MATCHES "Xcode")
 endif()
 
 qt_add_translations(${APP_NAME} TS_FILES appimg_from_clip_en.ts
-                    appimg_from_clip_pl.ts
-                    appimg_from_clip_ko.ts)
+                    appimg_from_clip_pl.ts appimg_from_clip_ko.ts)
 
 include(GNUInstallDirs)
 
