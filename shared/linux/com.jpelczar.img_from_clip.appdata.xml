@@ -44,6 +44,16 @@
     </screenshots>
 
     <releases>
+        <release version="0.6" date="2024-06-29">
+            <description>
+                <ul>
+                    <li>Fix crash on Linux when copying huge images</li>
+                    <li>Add missing sequence counting for images</li>
+                    <li>Allow multi-scale PNG file save at once</li>
+                    <li>Allow multi-format save at once</li>
+                </ul>
+            </description>
+        </release>
 	<release version="0.5" date="2024-06-26">
             <description>
                 <ul>
