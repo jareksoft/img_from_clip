@@ -28,8 +28,15 @@ option(FLATPAK_DIST "Enable flatpak specific options" OFF)
 option(SNAP_DIST "Enable snap specific options" OFF)
 option(OSX_BUNDLE "Use app bundle on macOS" ON)
 
-find_package(Qt6 6.5 REQUIRED COMPONENTS Quick Gui Widgets Svg LinguistTools
-                                         Concurrent QuickControls2)
+find_package(
+  Qt6 6.5 REQUIRED
+  COMPONENTS Quick
+             Gui
+             Widgets
+             Svg
+             LinguistTools
+             Concurrent
+             QuickControls2)
 
 qt_standard_project_setup(REQUIRES 6.5)
 qt_add_executable(${APP_NAME} main.cpp)
@@ -76,25 +83,29 @@ if(WIN32)
 endif()
 
 find_package(PkgConfig QUIET)
-find_package(Lua QUIET)
+# find_package(Lua QUIET)
 
-if (NOT LUA_FOUND)
-    CPMAddPackage(
-      NAME lua
-      GIT_REPOSITORY https://github.com/lua/lua.git
-      VERSION 5.4
-      DOWNLOAD_ONLY YES
-    )
+if(NOT LUA_FOUND)
+  cpmaddpackage(
+    NAME
+    lua
+    GIT_REPOSITORY
+    https://github.com/lua/lua.git
+    VERSION
+    5.4
+    DOWNLOAD_ONLY
+    YES)
 
-    file(GLOB lua_sources ${lua_SOURCE_DIR}/*.c)
-    list(REMOVE_ITEM lua_sources "${lua_SOURCE_DIR}/lua.c" "${lua_SOURCE_DIR}/luac.c")
-    add_library(lua_import STATIC ${lua_sources})
-    target_include_directories(lua_import SYSTEM PUBLIC $<BUILD_INTERFACE:${lua_SOURCE_DIR}>)
-    set(LUA_FOUND ON)
+  file(GLOB lua_sources ${lua_SOURCE_DIR}/onelua.c)
+  add_library(lua_import STATIC ${lua_sources})
+  target_include_directories(lua_import SYSTEM
+                             PUBLIC $<BUILD_INTERFACE:${lua_SOURCE_DIR}>)
+  target_compile_definitions(lua_import PRIVATE MAKE_LIB=1)
+  set(LUA_FOUND ON)
 else()
-    add_library(lua_import INTERFACE)
-    target_link_libraries(lua_import INTERFACE ${LUA_LIBRARIES})
-    target_include_directories(lua_import INTERFACE ${LUA_INCLUDE_DIR})
+  add_library(lua_import INTERFACE)
+  target_link_libraries(lua_import INTERFACE ${LUA_LIBRARIES})
+  target_include_directories(lua_import INTERFACE ${LUA_INCLUDE_DIR})
 endif()
 
 if(PKG_CONFIG_FOUND)
@@ -221,9 +232,15 @@ if(LUA_FOUND)
                   "SOL2_BUILD_LUA=OFF")
   endif()
 
-  add_library(lua_capture STATIC luacapturescript.h luacapturescript.cpp
-      lua_pixmap.h lua_pixmap.cpp
-      lua_qtclasses.h)
+  add_library(
+    lua_capture STATIC
+    luacapturescript.h
+    luacapturescript.cpp
+    lua_pixmap.h
+    lua_pixmap.cpp
+    lua_qtclasses.h
+    captureobject.h
+    captureobject.cpp)
   target_link_libraries(lua_capture PUBLIC lua_import)
   target_link_libraries(lua_capture PUBLIC Qt6::Core)
   target_link_libraries(lua_capture PUBLIC Qt6::Gui)
@@ -242,8 +259,14 @@ set_target_properties(
              WIN32_EXECUTABLE TRUE)
 
 target_link_libraries(
-  ${APP_NAME} PRIVATE Qt6::Quick Qt6::Gui Qt6::Widgets Qt6::Svg Qt6::Concurrent
-                      compile_options_if Qt6::QuickControls2)
+  ${APP_NAME}
+  PRIVATE Qt6::Quick
+          Qt6::Gui
+          Qt6::Widgets
+          Qt6::Svg
+          Qt6::Concurrent
+          compile_options_if
+          Qt6::QuickControls2)
 
 if(USE_DBUS_BACKEND)
   target_link_libraries(${APP_NAME} PRIVATE Qt6::DBus)
