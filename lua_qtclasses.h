@@ -65,11 +65,17 @@ struct LuaQtClasses {
         "QPoint", sol::constructors<QPoint(), QPoint(int, int)>());
     point_type["x"] = sol::property(&QPoint::x, &QPoint::setX);
     point_type["y"] = sol::property(&QPoint::y, &QPoint::setY);
+    point_type["manhattanLength"] =
+        sol::readonly_property(&QPoint::manhattanLength);
 
     auto size_type = lua.new_usertype<QSize>(
         "QSize", sol::constructors<QSize(), QSize(int, int)>());
     size_type["width"] = sol::property(&QSize::width, &QSize::setWidth);
     size_type["height"] = sol::property(&QSize::height, &QSize::setHeight);
+    size_type["transpose"] = &QSize::transpose;
+    size_type["transposed"] = &QSize::transposed;
+    size_type["expandedTo"] = &QSize::expandedTo;
+    size_type["boundedTo"] = &QSize::boundedTo;
 
     auto rect_type = lua.new_usertype<QRect>(
         "QRect", sol::constructors<QRect(), QRect(int, int, int, int),
@@ -86,6 +92,9 @@ struct LuaQtClasses {
     rect_type["bottom"] = sol::property(&QRect::bottom, &QRect::setBottom);
     rect_type["size"] = sol::property(&QRect::size, &QRect::setSize);
     rect_type["center"] = sol::readonly_property(&QRect::center);
+    rect_type["translated"] = sol::overload(
+        sol::resolve<QRect(int, int) const>(&QRect::translated),
+        sol::resolve<QRect(const QPoint &) const>(&QRect::translated));
 
     auto color_type = lua.new_usertype<QColor>(
         "QColor", sol::constructors<QColor(), QColor(int, int, int),
@@ -111,6 +120,11 @@ struct LuaQtClasses {
                    Qt::SolidLine, "DashLine"sv, Qt::DashLine, "DotLine"sv,
                    Qt::DotLine, "DashDotLine"sv, Qt::DashDotLine,
                    "DashDotDotLine"sv, Qt::DashDotDotLine);
+
+    qt_ns.new_enum("AspectRatioMode"sv, "KeepAspectRatio"sv,
+                   Qt::KeepAspectRatio, "IgnoreAspectRatio"sv,
+                   Qt::IgnoreAspectRatio, "KeepAspectRatioByExpanding"sv,
+                   Qt::KeepAspectRatioByExpanding);
   }
 };
 
