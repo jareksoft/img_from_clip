@@ -18,10 +18,13 @@ public:
   QString tryCompile(const QString &script);
   QString tryRun(const QString &script);
 
-  static void registerSol(sol::state &lua);
+  void registerSol(sol::state &lua);
 
 public slots:
   void loadScript(const QString &script, const QString &scriptName);
+
+signals:
+  void outputPrint(const QString& string);
 
 private:
   sol::state L;

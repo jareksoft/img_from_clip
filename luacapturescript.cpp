@@ -45,6 +45,19 @@ QString LuaCaptureScript::tryRun(const QString &script) {
 void LuaCaptureScript::registerSol(sol::state &lua) {
   LuaQtClasses::registerLua(lua);
   Pixmap::registerSol(lua);
+
+  lua.set_function("print", [&](const sol::variadic_args& va) {
+    QString result;
+    int n = 0;
+    for(auto a : va) {
+      ++n;
+      sol::state_view ref(a.lua_state());
+      if (n > 1)
+        result.append("\t");
+      result += ref["tostring"](a).get<std::string>();
+    }
+    emit outputPrint(result);
+  });
 }
 
 LuaCaptureScript::~LuaCaptureScript() = default;

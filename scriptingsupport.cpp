@@ -5,7 +5,12 @@
 #include "scriptingsupport.h"
 #include "config.h"
 
-ScriptingSupport::ScriptingSupport(QObject *parent) : QObject{parent} {}
+ScriptingSupport::ScriptingSupport(QObject *parent) : QObject{parent} {
+#ifdef LUA_FOUND
+  connect(&m_engine, &LuaCaptureScript::outputPrint, this,
+          &ScriptingSupport::outputPrint);
+#endif
+}
 
 bool ScriptingSupport::scriptingSupported() {
 #ifdef LUA_FOUND

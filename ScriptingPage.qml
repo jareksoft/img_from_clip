@@ -127,6 +127,7 @@ Item {
                             icon.color: "transparent"
                             spacing: 8
                             onClicked: {
+                                console.clear()
                                 var result = scriptingSupport.tryCompile(
                                             editor.text)
 
@@ -152,6 +153,7 @@ Item {
                             icon.height: 32
                             icon.color: "transparent"
                             onClicked: {
+                                console.clear()
                                 var result = scriptingSupport.tryRun(
                                             editor.text)
 
@@ -167,6 +169,34 @@ Item {
                                 compileResultDrawer.open()
                             }
                             Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+                        }
+                    }
+
+                    Label {
+                        Layout.preferredWidth: parent.width
+                        Layout.maximumWidth: parent.width
+                    }
+
+                    ScrollView {
+                        Layout.preferredWidth: parent.width
+                        Layout.maximumWidth: parent.width
+                        Layout.minimumHeight: 100
+                        Layout.fillHeight: false
+                        ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+                        ScrollBar.vertical.policy: ScrollBar.AlwaysOn
+
+                        TextArea {
+                            id: console
+                            wrapMode: Text.WordWrap
+                            textFormat: Text.PlainText
+                            readOnly: true
+
+                            Connections {
+                                target: scriptingSupport
+                                function onOutputPrint(line) {
+                                    console.append(line)
+                                }
+                            }
                         }
                     }
                 }

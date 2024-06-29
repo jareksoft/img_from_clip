@@ -32,6 +32,7 @@ public:
 
 signals:
   void scriptTextChanged();
+  void outputPrint(const QString& string);
 
 private:
   QString m_scriptText;
