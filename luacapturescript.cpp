@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: BSD-2-Clause
 
 #include "luacapturescript.h"
+#include "lua_qtclasses.h"
 
 LuaCaptureScript::LuaCaptureScript(QObject *parent) : QObject{parent} {
   L.open_libraries();
@@ -42,6 +43,7 @@ QString LuaCaptureScript::tryRun(const QString &script) {
 }
 
 void LuaCaptureScript::registerSol(sol::state &lua) {
+  LuaQtClasses::registerLua(lua);
   Pixmap::registerSol(lua);
 }
 

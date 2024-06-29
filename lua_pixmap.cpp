@@ -24,6 +24,10 @@ int Pixmap::width() const { return m_data->m_pixmap.width(); }
 
 int Pixmap::height() const { return m_data->m_pixmap.height(); }
 
+void Pixmap::beginPaint() { m_data->m_painter.emplace(&m_data->m_pixmap); }
+
+void Pixmap::endPaint() { m_data->m_painter.reset(); }
+
 void Pixmap::registerSol(sol::state &lua) {
   auto pixmap_type =
       lua.new_usertype<Pixmap>("Pixmap", sol::constructors<Pixmap(int, int)>());
@@ -32,4 +36,6 @@ void Pixmap::registerSol(sol::state &lua) {
   pixmap_type["copyPart"] = &Pixmap::copyPart;
   pixmap_type["width"] = sol::readonly_property(&Pixmap::width);
   pixmap_type["height"] = sol::readonly_property(&Pixmap::height);
+  pixmap_type["beginPaint"] = &Pixmap::beginPaint;
+  pixmap_type["endPaint"] = &Pixmap::endPaint;
 }

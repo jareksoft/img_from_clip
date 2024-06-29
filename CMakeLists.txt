@@ -206,7 +206,8 @@ if(LUA_FOUND)
   target_link_libraries(lua_import INTERFACE ${LUA_LIBRARIES})
   target_include_directories(lua_import INTERFACE ${LUA_INCLUDE_DIR})
   add_library(lua_capture STATIC luacapturescript.h luacapturescript.cpp
-      lua_pixmap.h lua_pixmap.cpp)
+      lua_pixmap.h lua_pixmap.cpp
+      lua_qtclasses.h)
   target_link_libraries(lua_capture PUBLIC lua_import)
   target_link_libraries(lua_capture PUBLIC Qt6::Core)
   target_link_libraries(lua_capture PUBLIC Qt6::Gui)

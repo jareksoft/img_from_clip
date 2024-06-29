@@ -7,6 +7,7 @@
 
 #include <QExplicitlySharedDataPointer>
 #include <QImage>
+#include <QPainter>
 #include <sol/sol.hpp>
 
 class Pixmap {
@@ -25,12 +26,16 @@ public:
 
   static void registerSol(sol::state &lua);
 
+  void beginPaint();
+  void endPaint();
+
 private:
   struct NoInit {};
   Pixmap(NoInit) {}
 
   struct Data : QSharedData {
     QImage m_pixmap;
+    std::optional<QPainter> m_painter;
 
     Data(int w, int h) : m_pixmap(w, h, QImage::Format_ARGB32_Premultiplied) {}
     Data(QImage &&image) : m_pixmap(std::forward<QImage>(image)) {}
