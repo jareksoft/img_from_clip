@@ -103,13 +103,19 @@ Item {
                         }
                     }
 
-                    RowLayout {
+                    Flow {
+                        Layout.maximumWidth: parent.width
+                        Layout.preferredWidth: parent.width
+                        spacing: 16
+
                         Button {
                             text: qsTr("Clear")
+                            spacing: 8
                             onClicked: editor.clear()
                             icon.source: Qt.resolvedUrl("dust.png")
                             icon.width: 32
                             icon.height: 32
+                            Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
                         }
 
                         Button {
@@ -117,6 +123,7 @@ Item {
                             icon.source: Qt.resolvedUrl("compiler.png")
                             icon.width: 32
                             icon.height: 32
+                            spacing: 8
                             onClicked: {
                                 var result = scriptingSupport.tryCompile(
                                             editor.text)
@@ -132,10 +139,12 @@ Item {
 
                                 compileResultDrawer.open()
                             }
+                            Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
                         }
 
                         Button {
                             text: qsTr("Try run")
+                            spacing: 8
                             icon.source: Qt.resolvedUrl("compiler.png")
                             icon.width: 32
                             icon.height: 32
@@ -154,6 +163,7 @@ Item {
 
                                 compileResultDrawer.open()
                             }
+                            Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
                         }
                     }
                 }

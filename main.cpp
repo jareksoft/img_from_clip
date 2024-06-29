@@ -5,6 +5,8 @@
 #include "config.h"
 #include <QApplication>
 #include <QQmlApplicationEngine>
+#include <QQuickStyle>
+#include <QSettings>
 #include <QStandardPaths>
 #include <QStorageInfo>
 #include <QTranslator>
@@ -17,6 +19,36 @@ auto main(int argc, char *argv[]) -> int {
 
   QApplication app(argc, argv);
 
+  QSettings settings;
+  if (qEnvironmentVariableIsEmpty("QT_QUICK_CONTROLS_STYLE") &&
+      settings.value("style").toString().isEmpty()) {
+#if defined(Q_OS_MACOS)
+    QQuickStyle::setStyle(QString("iOS"));
+#elif defined(Q_OS_IOS)
+    QQuickStyle::setStyle(QString("iOS"));
+#elif defined(Q_OS_WINDOWS)
+    QQuickStyle::setStyle(QString("Windows"));
+#elif defined(Q_OS_ANDROID)
+    QQuickStyle::setStyle(QString("Material"));
+#endif
+  } else {
+    QQuickStyle::setStyle(settings.value("style").toString());
+  }
+
+  const QString styleInSettings = settings.value("style").toString();
+  if (styleInSettings.isEmpty())
+    settings.setValue(QString("style"), QQuickStyle::name());
+
+  QStringList builtInStyles = {QString("CustomStyle"), QString("Basic"),
+                               QString("Material"), QString("Universal")};
+#if defined(Q_OS_MACOS)
+  builtInStyles << QString("iOS");
+#elif defined(Q_OS_IOS)
+  builtInStyles << QString("iOS");
+#elif defined(Q_OS_WINDOWS)
+  builtInStyles << QString("Windows");
+#endif
+
   QDir().mkpath(
       QStandardPaths::writableLocation(QStandardPaths::CacheLocation));
 
@@ -26,6 +58,7 @@ auto main(int argc, char *argv[]) -> int {
     QCoreApplication::installTranslator(&translator);
 
   QQmlApplicationEngine engine;
+  engine.setInitialProperties({{"builtInStyles", builtInStyles}});
 
   QObject::connect(
       &engine, &QQmlApplicationEngine::objectCreationFailed, &app,
