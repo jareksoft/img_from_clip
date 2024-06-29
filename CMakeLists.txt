@@ -128,7 +128,8 @@ qt_add_qml_module(
   StorePreferences.qml
   SOURCES
   renderconfiguration.h
-  renderconfiguration.cpp)
+  renderconfiguration.cpp
+  SOURCES scriptingsupport.h scriptingsupport.cpp)
 
 if(APPLE)
   target_compile_options(${APP_NAME}

@@ -1,9 +1,7 @@
 #include "luacapturescript.h"
 
 LuaCaptureScript::LuaCaptureScript(QObject *parent) : QObject{parent} {
-  L = luaL_newstate();
-  Q_ASSERT(L != nullptr);
-  luaL_openlibs(L);
+  L.open_libraries();
 }
 
-LuaCaptureScript::~LuaCaptureScript() { lua_close(L); }
+LuaCaptureScript::~LuaCaptureScript() = default;

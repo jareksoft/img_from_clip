@@ -1,8 +1,8 @@
 #ifndef LUACAPTURESCRIPT_H
 #define LUACAPTURESCRIPT_H
 
-#include "lua.hpp"
 #include <QObject>
+#include <sol/sol.hpp>
 
 class LuaCaptureScript : public QObject {
   Q_OBJECT
@@ -11,7 +11,7 @@ public:
   ~LuaCaptureScript() override;
 
 private:
-  lua_State *L = nullptr;
+  sol::state L;
 };
 
 #endif // LUACAPTURESCRIPT_H
