@@ -29,8 +29,10 @@ parts:
     build-packages:
       - g++
       - librsvg2-dev
+      - liblua5.4-dev
     stage-packages:
       - dbus
       - librsvg2-2
       - libgdk-pixbuf-2.0-0
       - libcairo2
+      - liblua5.4
