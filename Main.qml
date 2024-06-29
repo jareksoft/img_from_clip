@@ -98,6 +98,7 @@ ApplicationWindow {
         property alias htmlRenderWidth: mainWindow.htmlRenderWidth
         property alias seqIndex: mainWindow.seqIndex
         property alias lastTabIndex: mainTabBar.currentIndex
+        property int captureSeq: clipMonitor.captureSeq
 
         property bool pngScale15: renderConfig.scale15
         property bool pngScale2: renderConfig.scale2
@@ -125,6 +126,7 @@ ApplicationWindow {
             renderConfig.svg = enableSVG
             renderConfig.png = enablePNG
             renderConfig.jpg = enableJPG
+            clipMonitor.captureSeq = captureSeq
         }
     }
 
