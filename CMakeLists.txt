@@ -186,6 +186,13 @@ if(APPLE)
 endif()
 
 if(LUA_FOUND)
+  find_package(sol2 QUIET)
+
+  if(NOT sol2_FOUND)
+    cpmaddpackage(GITHUB_REPOSITORY ThePhD/sol2 VERSION 3.3.0 OPTIONS
+                  "SOL2_BUILD_LUA=OFF")
+  endif()
+
   add_library(lua_import INTERFACE)
   target_link_libraries(lua_import INTERFACE ${LUA_LIBRARIES})
   target_include_directories(lua_import INTERFACE ${LUA_INCLUDE_DIR})
@@ -193,7 +200,9 @@ if(LUA_FOUND)
   target_link_libraries(lua_capture PUBLIC lua_import)
   target_link_libraries(lua_capture PUBLIC Qt6::Core)
   target_link_libraries(lua_capture PUBLIC Qt6::Gui)
+  target_link_libraries(lua_capture PUBLIC sol2::sol2)
   set_property(TARGET lua_capture PROPERTY POSITION_INDEPENDENT_CODE ON)
+  target_link_libraries(${APP_NAME} PUBLIC lua_capture)
 endif()
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1. If

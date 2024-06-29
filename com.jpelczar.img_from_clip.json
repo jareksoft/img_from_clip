@@ -41,6 +41,22 @@
              ]
         },
         {
+            "name":"sol2",
+            "buildsystem": "cmake-ninja",
+            "builddir": true,
+            "config-opts": [
+                "-DCMAKE_BUILD_TYPE=Release",
+                "-DSOL2_BUILD_LUA=OFF"
+            ],
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://github.com/ThePhD/sol2.git",
+                    "branch": "v3.3.0"
+                }
+             ]
+        },
+        {
             "name": "ImgFromClip",
             "buildsystem": "cmake-ninja",
             "builddir": true,
