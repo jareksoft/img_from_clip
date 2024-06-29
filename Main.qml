@@ -150,6 +150,7 @@ ApplicationWindow {
         property bool enablePNG: renderConfig.png
         property bool enableJPG: renderConfig.jpg
         property bool enableScript: renderConfig.callScript
+        property string userScript: scriptingSupportImpl.scriptText
 
         Component.onCompleted: {
             if (defaultWritePath === "") {
@@ -170,6 +171,7 @@ ApplicationWindow {
             renderConfig.jpg = enableJPG
             renderConfig.callScript = enableScript
             clipMonitor.captureSeq = captureSeq
+            scriptingSupportImpl.scriptText = userScript
         }
     }
 
