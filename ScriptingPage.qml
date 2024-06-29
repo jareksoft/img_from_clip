@@ -115,6 +115,7 @@ Item {
                             icon.source: Qt.resolvedUrl("dust.png")
                             icon.width: 32
                             icon.height: 32
+                            icon.color: "transparent"
                             Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
                         }
 
@@ -123,6 +124,7 @@ Item {
                             icon.source: Qt.resolvedUrl("compiler.png")
                             icon.width: 32
                             icon.height: 32
+                            icon.color: "transparent"
                             spacing: 8
                             onClicked: {
                                 var result = scriptingSupport.tryCompile(
@@ -148,6 +150,7 @@ Item {
                             icon.source: Qt.resolvedUrl("compiler.png")
                             icon.width: 32
                             icon.height: 32
+                            icon.color: "transparent"
                             onClicked: {
                                 var result = scriptingSupport.tryRun(
                                             editor.text)
