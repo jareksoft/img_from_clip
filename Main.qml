@@ -21,6 +21,39 @@ ApplicationWindow {
     property real htmlRenderWidth: 800
     property int seqIndex: 1
 
+    footer: ToolBar {
+        RowLayout {
+            anchors.fill: parent
+            spacing: 8
+
+            Label {
+                text: qsTr("Capture sequence: %1").arg(clipMonitor.captureSeq)
+                elide: Text.ElideLeft
+                Layout.fillWidth: true
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+            }
+
+            ToolSeparator {
+                orientation: Qt.Vertical
+            }
+
+            ToolButton {
+                text: qsTr("Reset")
+                onClicked: clipMonitor.captureSeq = 1
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+            }
+
+            ToolSeparator {
+                orientation: Qt.Vertical
+            }
+
+            Item {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+            }
+        }
+    }
+
     Component {
         id: labsMenuBar
 
