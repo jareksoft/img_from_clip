@@ -10,6 +10,7 @@ if(APPLE)
 endif()
 
 include(CheckCXXCompilerFlag)
+include(cmake/CPM.cmake)
 
 set(APP_ID com.jpelczar.img_from_clip)
 
@@ -75,6 +76,7 @@ if(WIN32)
 endif()
 
 find_package(PkgConfig)
+find_package(Lua)
 
 if(PKG_CONFIG_FOUND)
   pkg_check_modules(RSVG IMPORTED_TARGET librsvg-2.0)
@@ -181,6 +183,17 @@ if(APPLE)
 
     set(CMAKE_MACOSX_RPATH TRUE)
   endif()
+endif()
+
+if(LUA_FOUND)
+  add_library(lua_import INTERFACE)
+  target_link_libraries(lua_import INTERFACE ${LUA_LIBRARIES})
+  target_include_directories(lua_import INTERFACE ${LUA_INCLUDE_DIR})
+  add_library(lua_capture STATIC luacapturescript.h luacapturescript.cpp)
+  target_link_libraries(lua_capture PUBLIC lua_import)
+  target_link_libraries(lua_capture PUBLIC Qt6::Core)
+  target_link_libraries(lua_capture PUBLIC Qt6::Gui)
+  set_property(TARGET lua_capture PROPERTY POSITION_INDEPENDENT_CODE ON)
 endif()
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1. If

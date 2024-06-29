@@ -8,3 +8,5 @@
 #cmakedefine USE_DBUS_BACKEND 1
 
 #cmakedefine USE_LIBRSVG_RENDERER 1
+
+#cmakedefine LUA_FOUND 1
