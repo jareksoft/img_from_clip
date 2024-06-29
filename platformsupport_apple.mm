@@ -109,6 +109,9 @@ void PlatformSupport::notifyWithImage(NotifyClass,
 
         qDebug() << "Saving name" << fullSaveLocation;
 
+        if (!image.isNull())
+            image = image.scaled(256, 256, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+
         if (!image.isNull() && image.save(fullSaveLocation, "PNG")) {
             UNNotificationAttachment *attachment = [UNNotificationAttachment
                 attachmentWithIdentifier:@""

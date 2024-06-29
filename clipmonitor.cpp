@@ -47,6 +47,8 @@ auto ClipMonitor::makeNewSavePath(QString pattern) -> QString {
   pattern.replace(QStringLiteral("{cpu}"), QSysInfo::currentCpuArchitecture());
   pattern.replace(QStringLiteral("{hostname}"), QSysInfo::machineHostName());
   pattern.replace(QStringLiteral("{rand}"), QString::number(m_rng()));
+  pattern.replace(QStringLiteral("{seq}"),
+                  QString::number(m_captureSeq.value()));
 
   pattern.replace(QChar('/'), QChar('_'));
   pattern.replace(QChar('\\'), QChar('_'));
@@ -257,6 +259,8 @@ void ClipMonitor::newCapture(const ClipboardContents &contents) {
       return;
     }
 
+    m_captureSeq.setValue(m_captureSeq.value() + 1);
+
     emit notifyCapture(std::get<SavePath>(*it));
   }
 }
@@ -349,3 +353,9 @@ void ClipMonitor::setRenderConfiguration(
     RenderConfiguration *newRenderConfiguration) {
   m_renderConfiguration = newRenderConfiguration;
 }
+
+void ClipMonitor::setCaptureSeq(qint64 newCaptureSeq) {
+  m_captureSeq = newCaptureSeq;
+}
+
+qint64 ClipMonitor::captureSeq() const { return m_captureSeq; }

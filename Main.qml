@@ -21,6 +21,39 @@ ApplicationWindow {
     property real htmlRenderWidth: 800
     property int seqIndex: 1
 
+    footer: ToolBar {
+        RowLayout {
+            anchors.fill: parent
+            spacing: 8
+
+            Label {
+                text: qsTr("Capture sequence: %1").arg(clipMonitor.captureSeq)
+                elide: Text.ElideLeft
+                Layout.fillWidth: true
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+            }
+
+            ToolSeparator {
+                orientation: Qt.Vertical
+            }
+
+            ToolButton {
+                text: qsTr("Reset")
+                onClicked: clipMonitor.captureSeq = 1
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+            }
+
+            ToolSeparator {
+                orientation: Qt.Vertical
+            }
+
+            Item {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+            }
+        }
+    }
+
     Component {
         id: labsMenuBar
 
@@ -98,6 +131,7 @@ ApplicationWindow {
         property alias htmlRenderWidth: mainWindow.htmlRenderWidth
         property alias seqIndex: mainWindow.seqIndex
         property alias lastTabIndex: mainTabBar.currentIndex
+        property int captureSeq: clipMonitor.captureSeq
 
         property bool pngScale15: renderConfig.scale15
         property bool pngScale2: renderConfig.scale2
@@ -125,6 +159,7 @@ ApplicationWindow {
             renderConfig.svg = enableSVG
             renderConfig.png = enablePNG
             renderConfig.jpg = enableJPG
+            clipMonitor.captureSeq = captureSeq
         }
     }
 

@@ -29,6 +29,8 @@ class ClipMonitor : public QObject {
   Q_PROPERTY(
       RenderConfiguration *renderConfiguration READ renderConfiguration WRITE
           setRenderConfiguration BINDABLE renderConfigurationBindable)
+  Q_PROPERTY(qint64 captureSeq READ captureSeq WRITE setCaptureSeq BINDABLE
+                 captureSeqBindable)
 public:
   explicit ClipMonitor(QObject *parent = nullptr);
 
@@ -40,12 +42,16 @@ public:
   auto renderConfigurationBindable() -> QBindable<RenderConfiguration *> {
     return {&m_renderConfiguration};
   }
+  auto captureSeqBindable() -> QBindable<qint64> { return {&m_captureSeq}; }
 
   // Can't use trailing return type because of MOC
   Q_INVOKABLE QString makeNewSavePath(QString pattern);
 
   [[nodiscard]] RenderConfiguration *renderConfiguration() const;
   void setRenderConfiguration(RenderConfiguration *newRenderConfiguration);
+
+  void setCaptureSeq(qint64 newCaptureSeq);
+  qint64 captureSeq() const;
 
 signals:
   void notifyCapture(QUrl lastPath);
@@ -83,6 +89,7 @@ private:
   QProperty<qreal> m_renderWidth{800.0};
   QRandomGenerator m_rng;
   QProperty<RenderConfiguration *> m_renderConfiguration{nullptr};
+  QProperty<qint64> m_captureSeq{1};
 };
 
 #endif // CLIPMONITOR_H

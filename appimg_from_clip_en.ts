@@ -4,7 +4,7 @@
 <context>
     <name>ClipMonitor</name>
     <message>
-        <location filename="clipmonitor.cpp" line="+81"/>
+        <location filename="clipmonitor.cpp" line="+83"/>
         <source>Could not load source contents</source>
         <translation type="unfinished"></translation>
     </message>
@@ -25,10 +25,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Save directory does not exist</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location line="+68"/>
         <source>HTML imported from clipboard</source>
         <translation type="unfinished"></translation>
@@ -38,21 +34,28 @@
     <name>Main</name>
     <message>
         <location filename="Main.qml" line="+15"/>
-        <location/>
         <source>Image from Clipboard</source>
         <translation>ImgFromClip</translation>
     </message>
     <message>
-        <location line="+17"/>
+        <location line="+15"/>
+        <source>Capture sequence: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Reset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+24"/>
         <location line="+27"/>
-        <location/>
         <source>File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="-24"/>
         <location line="+27"/>
-        <location/>
         <source>&amp;About</source>
         <translation type="unfinished"></translation>
     </message>
@@ -64,44 +67,37 @@
     </message>
     <message>
         <location line="+9"/>
-        <location/>
         <source>&amp;Quit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+90"/>
-        <location/>
+        <location line="+92"/>
         <source>Capture failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+1"/>
-        <location/>
         <source>Could not capture image</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+4"/>
-        <location/>
         <source>Image captured</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+1"/>
         <location line="+3"/>
-        <location/>
         <source>Saved file %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+19"/>
-        <location/>
         <source>Main</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+3"/>
-        <location/>
         <source>Advanced</source>
         <translation type="unfinished"></translation>
     </message>
@@ -112,107 +108,86 @@
     </message>
     <message>
         <location line="+115"/>
-        <location/>
         <source>Capture running</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+0"/>
-        <location/>
         <source>Capture not running</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="-84"/>
-        <location/>
         <source>Simple tool which automatically captures contents of clipboard and saves it as image</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+6"/>
-        <location/>
         <source>Save location</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+15"/>
-        <location/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
         <location line="+12"/>
-        <location/>
         <source>Save mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+8"/>
-        <location/>
         <source>SVG</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+9"/>
-        <location/>
         <source>PNG</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+9"/>
-        <location/>
         <source>JPG</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+76"/>
-        <location/>
         <source>Render HTML</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+6"/>
-        <location/>
         <source>Enable HTML rendering</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+12"/>
-        <location/>
         <source>Page width:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+17"/>
-        <location/>
         <source>Note: This feature uses QTextDocument rendering engine, so results may not be perfect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Note: This feature uses Qt rendering engine, so results may not be perfect</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location line="-75"/>
-        <location/>
         <source>Deactivate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+0"/>
-        <location/>
         <source>Activate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+83"/>
-        <location/>
         <source>Name formatting</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+11"/>
-        <location/>
         <source>Please specify how the file name is formatted
 Use the following definitions:
 &lt;ul&gt;
@@ -228,25 +203,21 @@ Use the following definitions:
     </message>
     <message>
         <location line="+24"/>
-        <location/>
         <source>Current format example:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+48"/>
-        <location/>
         <source>Application uses notifications to display information about captured screenshots</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+7"/>
-        <location/>
         <source>Request</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+8"/>
-        <location/>
         <source>Don&apos;t ask</source>
         <translation type="unfinished"></translation>
     </message>
@@ -309,7 +280,7 @@ Use the following definitions:
     <message>
         <location line="+1"/>
         <source>ImgFromClip allows user to capture image or SVG copied into clipboard and capture it into specific location on disk automatically.&lt;br/&gt;Application icon:&lt;br/&gt;&lt;a href=&quot;https://www.flaticon.com/free-icons/screenshot&quot; title=&quot;screenshot icons&quot;&gt;Screenshot icons created by icon_small - Flaticon&lt;/a&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ImgFromClip allows user to capture image or SVG copied into clipboard and capture it into specific location on disk automatically.&lt;br/&gt;Application icon:&lt;br/&gt;&lt;a href=&quot;https://www.flaticon.com/free-icons/screenshot&quot; title=&quot;screenshot icons&quot;&gt;Screenshot icons created by icon_small - Flaticon&lt;/a&gt;&lt;br/&gt;Website: &lt;a href=&quot;https://github.com/jareksoft/img_from_clip&quot;&gt;https://github.com/jareksoft/img_from_clip&lt;/a&gt;</translation>
     </message>
 </context>
 </TS>
