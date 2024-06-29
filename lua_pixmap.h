@@ -26,8 +26,9 @@ public:
 
   static void registerSol(sol::state &lua);
 
-  void beginPaint();
-  void endPaint();
+  std::shared_ptr<QPainter> makePainter();
+
+  QImage *imagePtr() const { return &m_data->m_pixmap; }
 
 private:
   struct NoInit {};
@@ -35,7 +36,6 @@ private:
 
   struct Data : QSharedData {
     QImage m_pixmap;
-    std::optional<QPainter> m_painter;
 
     Data(int w, int h) : m_pixmap(w, h, QImage::Format_ARGB32_Premultiplied) {}
     Data(QImage &&image) : m_pixmap(std::forward<QImage>(image)) {}

@@ -7,6 +7,8 @@
 
 #include <QColor>
 #include <QDebug>
+#include <QMetaEnum>
+#include <QPainter>
 #include <QPoint>
 #include <QRect>
 #include <QSize>
@@ -58,6 +60,19 @@ LUA_QT_PRINTER(QPoint)
 LUA_QT_PRINTER(QRect)
 
 struct LuaQtClasses {
+  template <typename U>
+  static inline void registerMetaEnum(sol::table &qt_ns,
+                                      const std::string_view &name) {
+    QMetaEnum me = QMetaEnum::fromType<U>();
+    Q_ASSERT(me.isValid());
+    std::vector<std::pair<std::string_view, U>> vec;
+    const int keyCount = me.keyCount();
+    sol::table target = qt_ns.create(name, keyCount, static_cast<int>(0));
+    for (int i = 0; i < keyCount; ++i) {
+      target.set(me.key(i), me.value(i));
+    }
+  }
+
   static void registerLua(sol::state &lua) {
     using namespace std::string_view_literals;
 
@@ -92,14 +107,16 @@ struct LuaQtClasses {
     rect_type["bottom"] = sol::property(&QRect::bottom, &QRect::setBottom);
     rect_type["size"] = sol::property(&QRect::size, &QRect::setSize);
     rect_type["center"] = sol::readonly_property(&QRect::center);
-    rect_type["translated"] = sol::overload(
-        sol::resolve<QRect(int, int) const>(&QRect::translated),
-        sol::resolve<QRect(const QPoint &) const>(&QRect::translated));
+    rect_type.set_function(
+        "translated",
+        sol::overload(
+            sol::resolve<QRect(int, int) const>(&QRect::translated),
+            sol::resolve<QRect(const QPoint &) const>(&QRect::translated)));
 
     auto color_type = lua.new_usertype<QColor>(
-        "QColor", sol::constructors<QColor(), QColor(int, int, int),
-                                    QColor(int, int, int, int),
-                                    QColor(const QString &)>());
+        "QColor",
+        sol::constructors<QColor(), QColor(int, int, int),
+                          QColor(int, int, int, int), QColor(const char *)>());
 
     color_type["red"] = sol::property(&QColor::red, &QColor::setRed);
     color_type["green"] = sol::property(&QColor::green, &QColor::setGreen);
@@ -113,18 +130,61 @@ struct LuaQtClasses {
 
     auto qt_ns = lua.create_table("Qt");
 
-    qt_ns.new_enum("Orientation"sv, "Horizontal"sv, Qt::Horizontal,
-                   "Vertical"sv, Qt::Vertical);
+    registerMetaEnum<Qt::Orientation>(qt_ns, "Orientation");
+    registerMetaEnum<Qt::AspectRatioMode>(qt_ns, "AspectRatioMode");
+    registerMetaEnum<Qt::BrushStyle>(qt_ns, "BrushStyle");
+    registerMetaEnum<Qt::PenStyle>(qt_ns, "PenStyle");
+    registerMetaEnum<Qt::ArrowType>(qt_ns, "ArrowType");
+    registerMetaEnum<Qt::PenCapStyle>(qt_ns, "PenCapStyle");
+    registerMetaEnum<Qt::PenJoinStyle>(qt_ns, "PenJoinStyle");
+    registerMetaEnum<Qt::SizeMode>(qt_ns, "SizeMode");
+    registerMetaEnum<Qt::TextFormat>(qt_ns, "TextFormat");
+    registerMetaEnum<Qt::Key>(qt_ns, "Key");
 
-    qt_ns.new_enum("PenStyle"sv, "NoPen"sv, Qt::NoPen, "SolidLine"sv,
-                   Qt::SolidLine, "DashLine"sv, Qt::DashLine, "DotLine"sv,
-                   Qt::DotLine, "DashDotLine"sv, Qt::DashDotLine,
-                   "DashDotDotLine"sv, Qt::DashDotDotLine);
+    auto brush_type = lua.new_usertype<QBrush>(
+        "QBrush", sol::constructors<QBrush(), QBrush(const QColor &),
+                                    QBrush(const QBrush &)>());
 
-    qt_ns.new_enum("AspectRatioMode"sv, "KeepAspectRatio"sv,
-                   Qt::KeepAspectRatio, "IgnoreAspectRatio"sv,
-                   Qt::IgnoreAspectRatio, "KeepAspectRatioByExpanding"sv,
-                   Qt::KeepAspectRatioByExpanding);
+    brush_type["style"] = sol::property(&QBrush::style, &QBrush::setStyle);
+    brush_type["color"] = sol::property(
+        &QBrush::color,
+        sol::resolve<void(const QColor &color)>(&QBrush::setColor));
+    brush_type["isOpaque"] = sol::readonly_property(&QBrush::isOpaque);
+
+    auto pen_type = lua.new_usertype<QPen>(
+        "QPen",
+        sol::constructors<QPen(), QPen(Qt::PenStyle), QPen(const QPen &),
+                          QPen(const QBrush &, qreal)>());
+
+    pen_type["style"] = sol::property(&QPen::style, &QPen::setStyle);
+    pen_type["width"] = sol::property(&QPen::width, &QPen::setWidth);
+    pen_type["widthF"] = sol::property(&QPen::widthF, &QPen::setWidthF);
+    pen_type["color"] = sol::property(&QPen::color, &QPen::setColor);
+    pen_type["brush"] = sol::readonly_property(&QPen::brush);
+    pen_type["setBrush"] = &QPen::setBrush;
+    pen_type["cosmetic"] = sol::property(&QPen::isCosmetic, &QPen::setCosmetic);
+
+    auto painter_type =
+        lua.new_usertype<QPainter>("QPainter", "new", sol::no_constructor);
+
+    painter_type["setPen"] =
+        sol::overload(sol::resolve<void(const QColor &)>(&QPainter::setPen),
+                      sol::resolve<void(const QPen &)>(&QPainter::setPen),
+                      sol::resolve<void(Qt::PenStyle)>(&QPainter::setPen));
+
+    painter_type["pen"] = sol::readonly_property(&QPainter::pen);
+
+    painter_type["setBrush"] =
+        sol::overload(sol::resolve<void(const QBrush &)>(&QPainter::setBrush),
+                      sol::resolve<void(Qt::BrushStyle)>(&QPainter::setBrush));
+
+    painter_type["brush"] = sol::readonly_property(&QPainter::brush);
+
+    painter_type["opacity"] =
+        sol::property(&QPainter::opacity, &QPainter::setOpacity);
+
+    painter_type["isActive"] = sol::readonly_property(&QPainter::isActive);
+    painter_type["finish"] = &QPainter::end;
   }
 };
 

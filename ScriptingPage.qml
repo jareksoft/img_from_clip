@@ -89,9 +89,6 @@ Item {
                             font.pixelSize: 18
                             placeholderText: qsTr("Insert your Lua script")
                             text: scriptingSupport.scriptText
-                            onTextChanged: {
-                                scriptingSupport.scriptText = text
-                            }
                             background: Rectangle {
                                 color: "white"
                                 border.width: 1
@@ -169,6 +166,13 @@ Item {
                                 compileResultDrawer.open()
                             }
                             Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+                        }
+
+                        Button {
+                            text: qsTr("Save")
+                            onClicked: {
+                                scriptingSupport.scriptText = editor.text
+                            }
                         }
                     }
 
