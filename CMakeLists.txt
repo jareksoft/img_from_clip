@@ -129,8 +129,11 @@ qt_add_qml_module(
   SOURCES
   renderconfiguration.h
   renderconfiguration.cpp
-  SOURCES scriptingsupport.h scriptingsupport.cpp
-  QML_FILES ScriptingPage.qml)
+  SOURCES
+  scriptingsupport.h
+  scriptingsupport.cpp
+  QML_FILES
+  ScriptingPage.qml)
 
 if(APPLE)
   target_compile_options(${APP_NAME}
@@ -202,7 +205,7 @@ if(LUA_FOUND)
   target_link_libraries(lua_capture PUBLIC lua_import)
   target_link_libraries(lua_capture PUBLIC Qt6::Core)
   target_link_libraries(lua_capture PUBLIC Qt6::Gui)
-  target_link_libraries(lua_capture PUBLIC sol2::sol2)
+  target_link_libraries(lua_capture PUBLIC sol2)
   set_property(TARGET lua_capture PROPERTY POSITION_INDEPENDENT_CODE ON)
   target_link_libraries(${APP_NAME} PUBLIC lua_capture)
 endif()
