@@ -129,7 +129,8 @@ qt_add_qml_module(
   SOURCES
   renderconfiguration.h
   renderconfiguration.cpp
-  SOURCES scriptingsupport.h scriptingsupport.cpp)
+  SOURCES scriptingsupport.h scriptingsupport.cpp
+  QML_FILES ScriptingPage.qml)
 
 if(APPLE)
   target_compile_options(${APP_NAME}
