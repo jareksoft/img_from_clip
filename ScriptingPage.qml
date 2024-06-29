@@ -124,7 +124,7 @@ Item {
                             icon.color: "transparent"
                             spacing: 8
                             onClicked: {
-                                console.clear()
+                                luaConsole.clear()
                                 var result = scriptingSupport.tryCompile(
                                             editor.text)
 
@@ -150,7 +150,7 @@ Item {
                             icon.height: 32
                             icon.color: "transparent"
                             onClicked: {
-                                console.clear()
+                                luaConsole.clear()
                                 var result = scriptingSupport.tryRun(
                                             editor.text)
 
@@ -191,7 +191,7 @@ Item {
                         ScrollBar.vertical.policy: ScrollBar.AlwaysOn
 
                         TextArea {
-                            id: console
+                            id: luaConsole
                             wrapMode: Text.WordWrap
                             textFormat: Text.PlainText
                             readOnly: true
@@ -199,7 +199,7 @@ Item {
                             Connections {
                                 target: scriptingSupport
                                 function onOutputPrint(line) {
-                                    console.append(line)
+                                    luaConsole.append(line)
                                 }
                             }
                         }
