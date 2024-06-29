@@ -14,8 +14,6 @@
 #include <QSize>
 #include <sol/sol.hpp>
 
-namespace sol {
-
 template <typename Handler>
 inline bool sol_lua_check(sol::types<QString>, lua_State *L, int index,
                           Handler &&handler, sol::stack::record &tracking) {
@@ -36,17 +34,31 @@ inline QString sol_lua_get(sol::types<QString>, lua_State *L, int index,
   return QString::fromStdString(string);
 }
 
-inline int sol_lua_push(sol::types<QString>, lua_State *L, QString &string) {
-  std::string str(string.toStdString());
-  lua_pushlstring(L, str.c_str(), str.size());
-  return 1;
+template <typename Handler>
+inline sol::optional<QString>
+sol_lua_check_get(sol::types<QString> type_tag, lua_State *L, int index,
+                  Handler &&handler, sol::stack::record &tracking) {
+  if (sol_lua_check(type_tag, L, index, std::forward<Handler>(handler),
+                    tracking)) {
+    return sol_lua_get(type_tag, L, index, tracking);
+  }
+  return sol::nullopt;
 }
 
 template <>
-struct lua_type_of<QString>
-    : std::integral_constant<sol::type, sol::type::string> {};
+struct sol::lua_type_of<::QString>
+    : std::integral_constant<type, type::string> {};
 
-} // namespace sol
+inline int sol_lua_push(lua_State *L, QString &string) {
+  std::string str(string.toStdString());
+  return sol::stack::push(L, str);
+}
+
+inline int sol_lua_push(sol::types<QString>, lua_State *L,
+                        const QString &string) {
+  std::string str(string.toStdString());
+  return sol::stack::push(L, str);
+}
 
 #define LUA_QT_PRINTER(X)                                                      \
   inline std::string to_string(const X &value) {                               \
