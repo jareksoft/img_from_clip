@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.21)
 project(
   img_from_clip
   VERSION 0.6
-  LANGUAGES CXX)
+  LANGUAGES CXX C)
 
 if(APPLE)
   enable_language(OBJCXX)
@@ -90,6 +90,7 @@ if (NOT LUA_FOUND)
     list(REMOVE_ITEM lua_sources "${lua_SOURCE_DIR}/lua.c" "${lua_SOURCE_DIR}/luac.c")
     add_library(lua_import STATIC ${lua_sources})
     target_include_directories(lua_import SYSTEM PUBLIC $<BUILD_INTERFACE:${lua_SOURCE_DIR}>)
+    set(LUA_FOUND ON)
 else()
     add_library(lua_import INTERFACE)
     target_link_libraries(lua_import INTERFACE ${LUA_LIBRARIES})
