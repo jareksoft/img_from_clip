@@ -19,3 +19,12 @@ void ScriptingSupport::setScriptText(const QString &newScriptText) {
   m_scriptText = newScriptText;
   emit scriptTextChanged();
 }
+
+QString ScriptingSupport::tryCompile(const QString &script) {
+#ifdef LUA_FOUND
+  return m_engine.tryCompile(script);
+#else
+  Q_UNUSED(script);
+  return QStringLiteral("Not available");
+#endif
+}

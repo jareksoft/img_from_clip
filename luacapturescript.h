@@ -10,6 +10,8 @@ public:
   explicit LuaCaptureScript(QObject *parent = nullptr);
   ~LuaCaptureScript() override;
 
+  QString tryCompile(const QString &script);
+
 public slots:
   void loadScript(const QString &script, const QString &scriptName);
 

@@ -23,11 +23,16 @@ public:
   QString scriptText() const;
   void setScriptText(const QString &newScriptText);
 
+  Q_INVOKABLE QString tryCompile(const QString &script);
+
 signals:
   void scriptTextChanged();
 
 private:
   QString m_scriptText;
+#if defined(LUA_FOUND)
+  LuaCaptureScript m_engine;
+#endif
 };
 
 #endif // SCRIPTINGSUPPORT_H

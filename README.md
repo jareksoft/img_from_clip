@@ -44,3 +44,7 @@ Script must expose single global function:
 App icon:
 
 <a href="https://www.flaticon.com/free-icons/screenshot" title="screenshot icons">Screenshot icons created by icon_small - Flaticon</a>
+<a href="https://www.flaticon.com/free-icons/compiler" title="compiler icons">Compiler icons created by Karyative - Flaticon</a>
+<a href="https://www.flaticon.com/free-icons/error" title="error icons">Error icons created by Freepik - Flaticon</a>
+<a href="https://www.flaticon.com/free-icons/success" title="success icons">Success icons created by Picons - Flaticon</a>
+<a href="https://www.flaticon.com/free-icons/clean" title="clean icons">Clean icons created by Freepik - Flaticon</a>

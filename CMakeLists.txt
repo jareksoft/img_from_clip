@@ -110,6 +110,10 @@ qt_add_qml_module(
   appicon128.png
   appicon64.png
   appicon24.png
+  compiler.png
+  error-icon.png
+  success.png
+  dust.png
   SOURCES
   platformsupport.h
   platformsupport.cpp
