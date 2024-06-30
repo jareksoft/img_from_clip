@@ -183,8 +183,7 @@ qt_add_qml_module(
 if(APPLE)
   target_compile_options(${APP_NAME}
                          PRIVATE $<$<COMPILE_LANGUAGE:OBJCXX>:-fobjc-arc>)
-  target_link_libraries(${APP_NAME} PRIVATE "-framework
-  UserNotifications")
+  target_link_libraries(${APP_NAME} PRIVATE "-framework UserNotifications")
   set_target_properties(
     ${APP_NAME}
     PROPERTIES XCODE_ATTRIBUTE_CLANG_ENABLE_OBJC_ARC YES
