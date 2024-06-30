@@ -3,7 +3,7 @@
     <id>com.jpelczar.img_from_clip.desktop</id>
     <name>ImgFromClip</name>
     <metadata_license>CC-BY-3.0</metadata_license>
-    <project_license>GPL-3.0-or-later</project_license>
+    <project_license>GPL-3.0-or-later or BSD-2</project_license>
     <summary>Simple tool which captures images from clipboard automatically</summary>
     <summary xml:lang="pl">Proste narzędzie do automatycznego zapisu obrazków ze schowka</summary>
     <summary xml:lang="ko">이 프로그램은 클립보드에 복사된 콘텐츠를 자동으로 이미지로 변환하여 저장해주는 툴입니다</summary>
