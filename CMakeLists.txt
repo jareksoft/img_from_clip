@@ -86,17 +86,22 @@ find_package(PkgConfig)
 find_package(Lua)
 
 if(NOT LUA_FOUND)
-  cpmaddpackage(
-    NAME
-    lua
-    GIT_REPOSITORY
-    https://github.com/lua/lua.git
-    VERSION
-    5.4
-    DOWNLOAD_ONLY
-    YES)
+  if(EXISTS external/lua/onelua.c)
+    set(lua_sources external/lua/onelua.c)
+  else()
+    cpmaddpackage(
+      NAME
+      lua
+      GIT_REPOSITORY
+      https://github.com/lua/lua.git
+      VERSION
+      5.4
+      DOWNLOAD_ONLY
+      YES)
 
-  file(GLOB lua_sources ${lua_SOURCE_DIR}/onelua.c)
+    file(GLOB lua_sources ${lua_SOURCE_DIR}/onelua.c)
+  endif()
+
   add_library(lua_import STATIC ${lua_sources})
   target_include_directories(lua_import SYSTEM
                              PUBLIC $<BUILD_INTERFACE:${lua_SOURCE_DIR}>)
