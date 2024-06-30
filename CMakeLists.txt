@@ -86,7 +86,7 @@ if(WIN32)
 endif()
 
 find_package(PkgConfig)
-find_package(Lua)
+find_package(Lua 5.4)
 
 if(NOT LUA_FOUND)
   if(EXISTS external/lua/onelua.c)
