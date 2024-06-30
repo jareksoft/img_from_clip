@@ -4,7 +4,7 @@
 <context>
     <name>ClipMonitor</name>
     <message>
-        <location filename="clipmonitor.cpp" line="+83"/>
+        <location filename="clipmonitor.cpp" line="+85"/>
         <source>Could not load source contents</source>
         <translation type="unfinished"></translation>
     </message>
@@ -37,12 +37,15 @@
 <context>
     <name>Main</name>
     <message>
-        <location filename="Main.qml" line="+15"/>
+        <location filename="Main.qml" line="+17"/>
+        <location filename="../img_from_clip_build/img_from_clip/Main.qml" line="+17"/>
         <source>Image from Clipboard</source>
         <translation>ImgFromClip</translation>
     </message>
     <message>
         <location line="+50"/>
+        <location line="+27"/>
+        <location filename="../img_from_clip_build/img_from_clip/Main.qml" line="+50"/>
         <location line="+27"/>
         <source>File</source>
         <translation>파일</translation>
@@ -50,148 +53,180 @@
     <message>
         <location line="-24"/>
         <location line="+27"/>
+        <location filename="../img_from_clip_build/img_from_clip/Main.qml" line="-24"/>
+        <location line="+27"/>
         <source>&amp;About</source>
         <translation>이 프로그램은...</translation>
     </message>
     <message>
         <location line="+18"/>
+        <location filename="../img_from_clip_build/img_from_clip/Main.qml" line="+18"/>
         <source>&amp;Quit</source>
         <translation>프로그램 종료</translation>
     </message>
     <message>
         <location line="+92"/>
+        <location filename="../img_from_clip_build/img_from_clip/Main.qml" line="+92"/>
         <source>Capture failed</source>
         <translation type="unfinished">저장 실패</translation>
     </message>
     <message>
         <location line="+1"/>
+        <location filename="../img_from_clip_build/img_from_clip/Main.qml" line="+1"/>
         <source>Could not capture image</source>
         <translation type="unfinished">이미지 저장불가</translation>
     </message>
     <message>
         <location line="+4"/>
+        <location filename="../img_from_clip_build/img_from_clip/Main.qml" line="+4"/>
         <source>Image captured</source>
         <translation type="unfinished">이미지 저장완료</translation>
     </message>
     <message>
         <location line="+1"/>
         <location line="+3"/>
+        <location filename="../img_from_clip_build/img_from_clip/Main.qml" line="+1"/>
+        <location line="+3"/>
         <source>Saved file %1</source>
         <translation type="unfinished">저장파일: %1</translation>
     </message>
     <message>
         <location line="+19"/>
+        <location filename="../img_from_clip_build/img_from_clip/Main.qml" line="+19"/>
         <source>Main</source>
         <translation type="unfinished">기본</translation>
     </message>
     <message>
         <location line="+3"/>
+        <location filename="../img_from_clip_build/img_from_clip/Main.qml" line="+3"/>
         <source>Advanced</source>
         <translation type="unfinished">고급설정</translation>
     </message>
     <message>
         <location line="+118"/>
+        <location filename="../img_from_clip_build/img_from_clip/Main.qml" line="+118"/>
         <source>Capture running</source>
         <translation>이미지를 저장하고 있습니다.</translation>
     </message>
     <message>
         <location line="+0"/>
+        <location filename="../img_from_clip_build/img_from_clip/Main.qml" line="+0"/>
         <source>Capture not running</source>
         <translation>이미지 저장이 중지되었습니다.</translation>
     </message>
     <message>
         <location line="-84"/>
+        <location filename="../img_from_clip_build/img_from_clip/Main.qml" line="-84"/>
         <source>Simple tool which automatically captures contents of clipboard and saves it as image</source>
         <translation>이 프로그램은 클립보드에 복사된 콘텐츠를 자동으로 이미지로 변환하여 저장해주는 툴입니다.</translation>
     </message>
     <message>
         <location line="-240"/>
+        <location filename="../img_from_clip_build/img_from_clip/Main.qml" line="-240"/>
         <source>Capture sequence: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+11"/>
+        <location filename="../img_from_clip_build/img_from_clip/Main.qml" line="+11"/>
         <source>Reset</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+36"/>
         <location line="+27"/>
+        <location filename="../img_from_clip_build/img_from_clip/Main.qml" line="+36"/>
+        <location line="+27"/>
         <source>About &amp;Qt</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+135"/>
+        <location filename="../img_from_clip_build/img_from_clip/Main.qml" line="+135"/>
         <source>Image Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+37"/>
+        <location filename="../img_from_clip_build/img_from_clip/Main.qml" line="+37"/>
         <source>Save location</source>
         <translation>저장장소</translation>
     </message>
     <message>
         <location line="+15"/>
+        <location filename="../img_from_clip_build/img_from_clip/Main.qml" line="+15"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
         <location line="+12"/>
+        <location filename="../img_from_clip_build/img_from_clip/Main.qml" line="+12"/>
         <source>Save mode</source>
         <translation>저장모드</translation>
     </message>
     <message>
         <location line="+8"/>
+        <location filename="../img_from_clip_build/img_from_clip/Main.qml" line="+8"/>
         <source>SVG</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+9"/>
+        <location filename="../img_from_clip_build/img_from_clip/Main.qml" line="+9"/>
         <source>PNG</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+9"/>
+        <location filename="../img_from_clip_build/img_from_clip/Main.qml" line="+9"/>
         <source>JPG</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+36"/>
+        <location filename="../img_from_clip_build/img_from_clip/Main.qml" line="+36"/>
         <source>Deactivate</source>
         <translation>중지</translation>
     </message>
     <message>
         <location line="+0"/>
+        <location filename="../img_from_clip_build/img_from_clip/Main.qml" line="+0"/>
         <source>Activate</source>
         <translation>시작</translation>
     </message>
     <message>
         <location line="+40"/>
+        <location filename="../img_from_clip_build/img_from_clip/Main.qml" line="+40"/>
         <source>Render HTML</source>
         <translation type="unfinished">렌더 HTML</translation>
     </message>
     <message>
         <location line="+6"/>
+        <location filename="../img_from_clip_build/img_from_clip/Main.qml" line="+6"/>
         <source>Enable HTML rendering</source>
         <translation type="unfinished">HTML 렌더링 활성화</translation>
     </message>
     <message>
         <location line="+12"/>
+        <location filename="../img_from_clip_build/img_from_clip/Main.qml" line="+12"/>
         <source>Page width:</source>
         <translation>이미지 가로 크기</translation>
     </message>
     <message>
         <location line="+17"/>
+        <location filename="../img_from_clip_build/img_from_clip/Main.qml" line="+17"/>
         <source>Note: This feature uses QTextDocument rendering engine, so results may not be perfect</source>
         <translation>노트: 이 기능은 QTextDocument 렌더링 엔진을 사용하므로 결과가 완벽하지 않을 수 있습니다.</translation>
     </message>
     <message>
         <location line="+8"/>
+        <location filename="../img_from_clip_build/img_from_clip/Main.qml" line="+8"/>
         <source>Name formatting</source>
         <translation>파일명 양식지정</translation>
     </message>
     <message>
         <location line="+11"/>
+        <location filename="../img_from_clip_build/img_from_clip/Main.qml" line="+11"/>
         <source>Please specify how the file name is formatted
 Use the following definitions:
 &lt;ul&gt;
@@ -217,21 +252,25 @@ Use the following definitions:
     </message>
     <message>
         <location line="+24"/>
+        <location filename="../img_from_clip_build/img_from_clip/Main.qml" line="+24"/>
         <source>Current format example:</source>
         <translation>현재 파일명 양식 예시:</translation>
     </message>
     <message>
         <location line="+48"/>
+        <location filename="../img_from_clip_build/img_from_clip/Main.qml" line="+48"/>
         <source>Application uses notifications to display information about captured screenshots</source>
         <translation>이 프로그램은 저장된 이미지 정보를 보여주는 알림을 사용합니다.</translation>
     </message>
     <message>
         <location line="+7"/>
+        <location filename="../img_from_clip_build/img_from_clip/Main.qml" line="+7"/>
         <source>Request</source>
         <translation>알림 허용</translation>
     </message>
     <message>
         <location line="+8"/>
+        <location filename="../img_from_clip_build/img_from_clip/Main.qml" line="+8"/>
         <source>Don&apos;t ask</source>
         <translation>다시 묻지 않음</translation>
     </message>
@@ -239,32 +278,38 @@ Use the following definitions:
 <context>
     <name>StorePreferences</name>
     <message>
-        <location filename="StorePreferences.qml" line="+27"/>
+        <location filename="StorePreferences.qml" line="+30"/>
+        <location filename="../img_from_clip_build/img_from_clip/StorePreferences.qml" line="+30"/>
         <source>PNG scale</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+10"/>
+        <location filename="../img_from_clip_build/img_from_clip/StorePreferences.qml" line="+10"/>
         <source>Select at which scales PNG files should be saved. This is useful e.g. when exporting images for iOS</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+6"/>
+        <location filename="../img_from_clip_build/img_from_clip/StorePreferences.qml" line="+6"/>
         <source>1.5x</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+7"/>
+        <location filename="../img_from_clip_build/img_from_clip/StorePreferences.qml" line="+7"/>
         <source>2x</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+7"/>
+        <location filename="../img_from_clip_build/img_from_clip/StorePreferences.qml" line="+7"/>
         <source>3x</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+7"/>
+        <location filename="../img_from_clip_build/img_from_clip/StorePreferences.qml" line="+7"/>
         <source>4x</source>
         <translation type="unfinished"></translation>
     </message>
@@ -272,7 +317,7 @@ Use the following definitions:
 <context>
     <name>SysTray</name>
     <message>
-        <location filename="systray.cpp" line="+20"/>
+        <location filename="systray.cpp" line="+22"/>
         <source>&amp;Quit</source>
         <translation>프로그램 종료</translation>
     </message>
