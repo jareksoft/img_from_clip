@@ -27,6 +27,7 @@ set(CMAKE_OSX_DEPLOYMENT_TARGET 12)
 option(FLATPAK_DIST "Enable flatpak specific options" OFF)
 option(SNAP_DIST "Enable snap specific options" OFF)
 option(OSX_BUNDLE "Use app bundle on macOS" ON)
+option(ENABLE_LUA "Enable Lua based scripting of the app" ON)
 
 find_package(
   Qt6 6.5 REQUIRED
@@ -117,8 +118,13 @@ if(LUA_FOUND)
   find_package(sol2)
 
   if(NOT sol2_FOUND)
-    cpmaddpackage(GITHUB_REPOSITORY ThePhD/sol2 VERSION 3.3.0 OPTIONS
-                  "SOL2_BUILD_LUA=OFF")
+    if(EXISTS external/sol2/CMakeLists.txt)
+      cpmaddpackage(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external/sol2
+                    VERSION 3.3.1 OPTIONS "SOL2_BUILD_LUA=OFF")
+    else()
+      cpmaddpackage(GITHUB_REPOSITORY ThePhD/sol2 VERSION 3.3.1 OPTIONS
+                    "SOL2_BUILD_LUA=OFF")
+    endif()
   endif()
 endif()
 
@@ -177,7 +183,8 @@ qt_add_qml_module(
 if(APPLE)
   target_compile_options(${APP_NAME}
                          PRIVATE $<$<COMPILE_LANGUAGE:OBJCXX>:-fobjc-arc>)
-  target_link_libraries(${APP_NAME} PRIVATE "-framework UserNotifications")
+  target_link_libraries(${APP_NAME} PRIVATE "-framework
+  UserNotifications")
   set_target_properties(
     ${APP_NAME}
     PROPERTIES XCODE_ATTRIBUTE_CLANG_ENABLE_OBJC_ARC YES
@@ -285,6 +292,7 @@ if(APPLE
   set(CPACK_SYSTEM_NAME "OSX")
   set(CPACK_STRIP_FILES ON)
   set(CPACK_PACKAGE_FILE_NAME
-      "${APP_NAME}-${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}")
+      "${APP_NAME}-${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
+  ")
   include(CPack)
 endif()

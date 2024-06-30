@@ -22,7 +22,7 @@ parts:
     plugin: cmake
     source-type: git
     source: https://github.com/ThePhD/sol2.git
-    source-branch: v3.3.0
+    source-branch: v3.3.1
     build-packages:
       - g++
       - liblua5.4-dev
