@@ -117,16 +117,12 @@ else()
 endif()
 
 if(LUA_FOUND)
-  find_package(sol2 3.3.0)
-
-  if(NOT sol2_FOUND)
-    if(EXISTS external/sol2/CMakeLists.txt)
-      cpmaddpackage(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external/sol2
-                    VERSION 3.3.1 OPTIONS "SOL2_BUILD_LUA=OFF")
-    else()
-      cpmaddpackage(GITHUB_REPOSITORY ThePhD/sol2 VERSION 3.3.1 OPTIONS
-                    "SOL2_BUILD_LUA=OFF")
-    endif()
+  if(EXISTS external/sol2/CMakeLists.txt)
+    cpmaddpackage(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external/sol2 VERSION
+                  3.3.1 OPTIONS "SOL2_BUILD_LUA=OFF")
+  else()
+    cpmaddpackage(GITHUB_REPOSITORY ThePhD/sol2 VERSION 3.3.1 OPTIONS
+                  "SOL2_BUILD_LUA=OFF")
   endif()
 endif()
 
