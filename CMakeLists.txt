@@ -72,6 +72,8 @@ macro(CheckAndAddOption Flag Var)
 endmacro()
 
 add_library(compile_options_if INTERFACE)
+target_include_directories(compile_options_if
+                           INTERFACE ${CMAKE_CURRENT_BINARY_DIR})
 
 checkandaddoption(-Wall HAVE_WALL)
 checkandaddoption(-Werror HAVE_WERROR)
@@ -258,8 +260,6 @@ if(USE_LIBRSVG_RENDERER)
   target_link_libraries(${APP_NAME} PRIVATE PkgConfig::RSVG PkgConfig::CAIRO
                                             PkgConfig::GDK_PIXBUF)
 endif()
-
-target_include_directories(${APP_NAME} PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
 
 if(CMAKE_GENERATOR MATCHES "Xcode")
   target_link_options(${APP_NAME} PRIVATE -s)
