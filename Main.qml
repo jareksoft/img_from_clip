@@ -26,6 +26,8 @@ ApplicationWindow {
     footer: ToolBar {
         RowLayout {
             anchors.fill: parent
+            anchors.leftMargin: 20
+            anchors.rightMargin: 20
             spacing: 8
 
             Label {
@@ -123,6 +125,10 @@ ApplicationWindow {
         id: renderConfig
     }
 
+    ScriptingSupport {
+        id: scriptingSupportImpl
+    }
+
     Settings {
         id: appSettings
         property string defaultWritePath
@@ -143,6 +149,8 @@ ApplicationWindow {
         property bool enableSVG: renderConfig.svg
         property bool enablePNG: renderConfig.png
         property bool enableJPG: renderConfig.jpg
+        property bool enableScript: renderConfig.callScript
+        property string userScript: scriptingSupportImpl.scriptText
 
         Component.onCompleted: {
             if (defaultWritePath === "") {
@@ -161,7 +169,9 @@ ApplicationWindow {
             renderConfig.svg = enableSVG
             renderConfig.png = enablePNG
             renderConfig.jpg = enableJPG
+            renderConfig.callScript = enableScript
             clipMonitor.captureSeq = captureSeq
+            scriptingSupportImpl.scriptText = userScript
         }
     }
 
@@ -228,6 +238,13 @@ ApplicationWindow {
         }
     }
 
+    Component {
+        id: scriptingSupportPage
+        ScriptingPage {
+            scriptingSupport: scriptingSupportImpl
+        }
+    }
+
     header: TabBar {
         id: mainTabBar
         width: parent.width
@@ -239,6 +256,10 @@ ApplicationWindow {
         }
         TabButton {
             text: qsTr("Image Settings")
+        }
+        TabButton {
+            text: qsTr("Scripting")
+            enabled: scriptingSupportImpl.scriptingSupported
         }
     }
 
@@ -332,6 +353,16 @@ ApplicationWindow {
                                 onClicked: {
                                     renderConfig.jpg = checked
                                 }
+                            }
+
+                            CheckBox {
+                                Layout.maximumWidth: parent.width
+                                checked: renderConfig.callScript
+                                text: qsTr("Invoke script")
+                                onClicked: {
+                                    renderConfig.callScript = checked
+                                }
+                                enabled: scriptingSupportImpl.scriptingSupported
                             }
                         }
                     }
@@ -500,6 +531,10 @@ Use the following definitions:
 
         StorePreferences {
             renderConfiguration: renderConfig
+        }
+
+        Loader {
+            sourceComponent: scriptingSupportImpl.scriptingSupported ? scriptingSupportPage : null
         }
     }
 

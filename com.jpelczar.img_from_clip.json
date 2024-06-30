@@ -17,12 +17,45 @@
     "separate-locales": false,
     "build-options": {
         "cflags":
-            "-Wno-deprecated-declarations -fstack-protector-strong -D_FORTIFY_SOURCE=2",
+        "-Wno-deprecated-declarations -fstack-protector-strong -D_FORTIFY_SOURCE=2",
         "cxxflags":
-            "-Wno-deprecated-declarations -fstack-protector-strong -D_FORTIFY_SOURCE=2",
+        "-Wno-deprecated-declarations -fstack-protector-strong -D_FORTIFY_SOURCE=2",
         "ldflags": "-fstack-protector-strong -Wl,-z,relro,-z,now"
     },
     "modules": [
+        {
+            "name":"lua5.4",
+            "no-autogen": true,
+            "cleanup": [ "/lib/*.a", "/include", "/bin/lua*" ],
+            "buildsystem": "simple",
+            "build-commands": [
+                "make linux",
+                "make install INSTALL_TOP=${FLATPAK_DEST}"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://www.lua.org/ftp/lua-5.4.7.tar.gz",
+                    "sha256": "9fbf5e28ef86c69858f6d3d34eccc32e911c1a28b4120ff3e84aaa70cfbf1e30"
+                }
+             ]
+        },
+        {
+            "name":"sol2",
+            "buildsystem": "cmake-ninja",
+            "builddir": true,
+            "config-opts": [
+                "-DCMAKE_BUILD_TYPE=Release",
+                "-DSOL2_BUILD_LUA=OFF"
+            ],
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://github.com/ThePhD/sol2.git",
+                    "branch": "v3.3.0"
+                }
+             ]
+        },
         {
             "name": "ImgFromClip",
             "buildsystem": "cmake-ninja",

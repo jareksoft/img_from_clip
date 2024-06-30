@@ -3,13 +3,14 @@ cmake_minimum_required(VERSION 3.21)
 project(
   img_from_clip
   VERSION 0.6
-  LANGUAGES CXX)
+  LANGUAGES CXX C)
 
 if(APPLE)
   enable_language(OBJCXX)
 endif()
 
 include(CheckCXXCompilerFlag)
+include(cmake/CPM.cmake)
 
 set(APP_ID com.jpelczar.img_from_clip)
 
@@ -27,8 +28,15 @@ option(FLATPAK_DIST "Enable flatpak specific options" OFF)
 option(SNAP_DIST "Enable snap specific options" OFF)
 option(OSX_BUNDLE "Use app bundle on macOS" ON)
 
-find_package(Qt6 6.5 REQUIRED COMPONENTS Quick Gui Widgets Svg LinguistTools
-                                         Concurrent)
+find_package(
+  Qt6 6.5 REQUIRED
+  COMPONENTS Quick
+             Gui
+             Widgets
+             Svg
+             LinguistTools
+             Concurrent
+             QuickControls2)
 
 qt_standard_project_setup(REQUIRES 6.5)
 qt_add_executable(${APP_NAME} main.cpp)
@@ -74,7 +82,31 @@ if(WIN32)
        ${CMAKE_CURRENT_SOURCE_DIR}/shared/windows/icon.rc)
 endif()
 
-find_package(PkgConfig)
+find_package(PkgConfig QUIET)
+# find_package(Lua QUIET)
+
+if(NOT LUA_FOUND)
+  cpmaddpackage(
+    NAME
+    lua
+    GIT_REPOSITORY
+    https://github.com/lua/lua.git
+    VERSION
+    5.4
+    DOWNLOAD_ONLY
+    YES)
+
+  file(GLOB lua_sources ${lua_SOURCE_DIR}/onelua.c)
+  add_library(lua_import STATIC ${lua_sources})
+  target_include_directories(lua_import SYSTEM
+                             PUBLIC $<BUILD_INTERFACE:${lua_SOURCE_DIR}>)
+  target_compile_definitions(lua_import PRIVATE MAKE_LIB=1)
+  set(LUA_FOUND ON)
+else()
+  add_library(lua_import INTERFACE)
+  target_link_libraries(lua_import INTERFACE ${LUA_LIBRARIES})
+  target_include_directories(lua_import INTERFACE ${LUA_INCLUDE_DIR})
+endif()
 
 if(PKG_CONFIG_FOUND)
   pkg_check_modules(RSVG IMPORTED_TARGET librsvg-2.0)
@@ -108,6 +140,10 @@ qt_add_qml_module(
   appicon128.png
   appicon64.png
   appicon24.png
+  compiler.png
+  error-icon.png
+  success.png
+  dust.png
   SOURCES
   platformsupport.h
   platformsupport.cpp
@@ -126,7 +162,12 @@ qt_add_qml_module(
   StorePreferences.qml
   SOURCES
   renderconfiguration.h
-  renderconfiguration.cpp)
+  renderconfiguration.cpp
+  SOURCES
+  scriptingsupport.h
+  scriptingsupport.cpp
+  QML_FILES
+  ScriptingPage.qml)
 
 if(APPLE)
   target_compile_options(${APP_NAME}
@@ -183,6 +224,31 @@ if(APPLE)
   endif()
 endif()
 
+if(LUA_FOUND)
+  find_package(sol2 QUIET)
+
+  if(NOT sol2_FOUND)
+    cpmaddpackage(GITHUB_REPOSITORY ThePhD/sol2 VERSION 3.3.0 OPTIONS
+                  "SOL2_BUILD_LUA=OFF")
+  endif()
+
+  add_library(
+    lua_capture STATIC
+    luacapturescript.h
+    luacapturescript.cpp
+    lua_pixmap.h
+    lua_pixmap.cpp
+    lua_qtclasses.h
+    captureobject.h
+    captureobject.cpp)
+  target_link_libraries(lua_capture PUBLIC lua_import)
+  target_link_libraries(lua_capture PUBLIC Qt6::Core)
+  target_link_libraries(lua_capture PUBLIC Qt6::Gui)
+  target_link_libraries(lua_capture PUBLIC sol2)
+  set_property(TARGET lua_capture PROPERTY POSITION_INDEPENDENT_CODE ON)
+  target_link_libraries(${APP_NAME} PUBLIC lua_capture)
+endif()
+
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1. If
 # you are developing for iOS or macOS you should consider setting an explicit,
 # fixed bundle identifier manually though.
@@ -193,8 +259,14 @@ set_target_properties(
              WIN32_EXECUTABLE TRUE)
 
 target_link_libraries(
-  ${APP_NAME} PRIVATE Qt6::Quick Qt6::Gui Qt6::Widgets Qt6::Svg Qt6::Concurrent
-                      compile_options_if)
+  ${APP_NAME}
+  PRIVATE Qt6::Quick
+          Qt6::Gui
+          Qt6::Widgets
+          Qt6::Svg
+          Qt6::Concurrent
+          compile_options_if
+          Qt6::QuickControls2)
 
 if(USE_DBUS_BACKEND)
   target_link_libraries(${APP_NAME} PRIVATE Qt6::DBus)

@@ -16,11 +16,38 @@ be perfect.
 
 ### Languages: ENG, KOR, POL
 
-
 ![Screenshot](shared/linux/screenshot.png)
+
+### Lua script
+
+ImgFromClip can make use of Lua scripting language in order to process
+the images during capture.
+
+Image metadata is exposed as a following object:
+* path - file name of target image
+* save_mode - name of the save type (PNG, SVG or JPG)
+* width - width of image in pixels
+* height - height of image in pixels
+* contents - if SVG mode is used, this is raw SVG text
+* image - image object
+
+Script must expose single global function:
+
+```lua
+    function process_capture(image)
+    end
+```
+
+### License
+
+This code can be licensed either as GPL 3.0+ or BSD 2 license.
 
 ### Attributions
 
 App icon:
 
 <a href="https://www.flaticon.com/free-icons/screenshot" title="screenshot icons">Screenshot icons created by icon_small - Flaticon</a>
+<a href="https://www.flaticon.com/free-icons/compiler" title="compiler icons">Compiler icons created by Karyative - Flaticon</a>
+<a href="https://www.flaticon.com/free-icons/error" title="error icons">Error icons created by Freepik - Flaticon</a>
+<a href="https://www.flaticon.com/free-icons/success" title="success icons">Success icons created by Picons - Flaticon</a>
+<a href="https://www.flaticon.com/free-icons/clean" title="clean icons">Clean icons created by Freepik - Flaticon</a>

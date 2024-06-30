@@ -15,6 +15,8 @@ class RenderConfiguration : public QObject {
   Q_PROPERTY(bool svg READ default WRITE default BINDABLE svgBindable)
   Q_PROPERTY(bool png READ default WRITE default BINDABLE pngBindable)
   Q_PROPERTY(bool jpg READ default WRITE default BINDABLE jpgBindable)
+  Q_PROPERTY(
+      bool callScript READ default WRITE default BINDABLE callScriptBindable)
   Q_PROPERTY(bool scale15 READ default WRITE default BINDABLE scale15Bindable)
   Q_PROPERTY(bool scale2 READ default WRITE default BINDABLE scale2Bindable)
   Q_PROPERTY(bool scale3 READ default WRITE default BINDABLE scale3Bindable)
@@ -30,6 +32,7 @@ public:
   QBindable<bool> scale2Bindable() { return {&m_scale2}; }
   QBindable<bool> scale3Bindable() { return {&m_scale3}; }
   QBindable<bool> scale4Bindable() { return {&m_scale4}; }
+  QBindable<bool> callScriptBindable() { return {&m_callScript}; }
 
 private:
   QProperty<bool> m_svg{true};
@@ -39,6 +42,7 @@ private:
   QProperty<bool> m_scale2{false};
   QProperty<bool> m_scale3{false};
   QProperty<bool> m_scale4{false};
+  QProperty<bool> m_callScript{false};
 };
 
 #endif // RENDERCONFIGURATION_H
