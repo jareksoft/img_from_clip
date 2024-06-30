@@ -160,14 +160,13 @@ qt_add_qml_module(
   appicon24.png
   # Sources
   SOURCES
+  ${PLATFORM_SOURCES}
   clipmonitor.h
   clipmonitor.cpp
   systray.h
   systray.cpp
-  SOURCES
   platformsupport.h
   platformsupport.cpp
-  ${PLATFORM_SOURCES}
   clipboardsource.h
   clipboardsource.cpp
   clipboardcontents.h
