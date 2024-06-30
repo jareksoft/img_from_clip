@@ -147,36 +147,33 @@ qt_add_qml_module(
   img_from_clip
   VERSION
   1.0
+  # QML
   QML_FILES
   Main.qml
-  SOURCES
-  clipmonitor.h
-  clipmonitor.cpp
-  systray.h
-  systray.cpp
+  StorePreferences.qml
+  # Resources
   RESOURCES
   appicon512.png
   appicon256.png
   appicon128.png
   appicon64.png
   appicon24.png
+  # Sources
+  SOURCES
+  clipmonitor.h
+  clipmonitor.cpp
+  systray.h
+  systray.cpp
   SOURCES
   platformsupport.h
   platformsupport.cpp
   ${PLATFORM_SOURCES}
-  SOURCES
   clipboardsource.h
   clipboardsource.cpp
-  SOURCES
   clipboardcontents.h
   clipboardcontents.cpp
-  SOURCES
   rsvg_helper.h
-  SOURCES
   rsvg_helper.cpp
-  QML_FILES
-  StorePreferences.qml
-  SOURCES
   renderconfiguration.h
   renderconfiguration.cpp)
 
