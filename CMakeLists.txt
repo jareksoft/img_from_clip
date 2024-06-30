@@ -86,43 +86,46 @@ if(WIN32)
 endif()
 
 find_package(PkgConfig)
-find_package(Lua 5.4)
 
-if(NOT LUA_FOUND)
-  if(EXISTS external/lua/onelua.c)
-    set(lua_sources external/lua/onelua.c)
+if(ENABLE_LUA)
+  find_package(Lua 5.4)
+
+  if(NOT LUA_FOUND)
+    if(EXISTS external/lua/onelua.c)
+      set(lua_sources external/lua/onelua.c)
+    else()
+      cpmaddpackage(
+        NAME
+        lua
+        GIT_REPOSITORY
+        https://github.com/lua/lua.git
+        VERSION
+        5.4
+        DOWNLOAD_ONLY
+        YES)
+
+      file(GLOB lua_sources ${lua_SOURCE_DIR}/onelua.c)
+    endif()
+
+    add_library(lua_import STATIC ${lua_sources})
+    target_include_directories(lua_import SYSTEM
+                               PUBLIC $<BUILD_INTERFACE:${lua_SOURCE_DIR}>)
+    target_compile_definitions(lua_import PRIVATE MAKE_LIB=1)
+    set(LUA_FOUND ON)
   else()
-    cpmaddpackage(
-      NAME
-      lua
-      GIT_REPOSITORY
-      https://github.com/lua/lua.git
-      VERSION
-      5.4
-      DOWNLOAD_ONLY
-      YES)
-
-    file(GLOB lua_sources ${lua_SOURCE_DIR}/onelua.c)
+    add_library(lua_import INTERFACE)
+    target_link_libraries(lua_import INTERFACE ${LUA_LIBRARIES})
+    target_include_directories(lua_import INTERFACE ${LUA_INCLUDE_DIR})
   endif()
 
-  add_library(lua_import STATIC ${lua_sources})
-  target_include_directories(lua_import SYSTEM
-                             PUBLIC $<BUILD_INTERFACE:${lua_SOURCE_DIR}>)
-  target_compile_definitions(lua_import PRIVATE MAKE_LIB=1)
-  set(LUA_FOUND ON)
-else()
-  add_library(lua_import INTERFACE)
-  target_link_libraries(lua_import INTERFACE ${LUA_LIBRARIES})
-  target_include_directories(lua_import INTERFACE ${LUA_INCLUDE_DIR})
-endif()
-
-if(LUA_FOUND)
-  if(EXISTS external/sol2/CMakeLists.txt)
-    cpmaddpackage(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external/sol2 VERSION
-                  3.3.1 OPTIONS "SOL2_BUILD_LUA=OFF")
-  else()
-    cpmaddpackage(GITHUB_REPOSITORY ThePhD/sol2 VERSION 3.3.1 OPTIONS
-                  "SOL2_BUILD_LUA=OFF")
+  if(LUA_FOUND)
+    if(EXISTS external/sol2/CMakeLists.txt)
+      cpmaddpackage(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external/sol2
+                    VERSION 3.3.1 OPTIONS "SOL2_BUILD_LUA=OFF")
+    else()
+      cpmaddpackage(GITHUB_REPOSITORY ThePhD/sol2 VERSION 3.3.1 OPTIONS
+                    "SOL2_BUILD_LUA=OFF")
+    endif()
   endif()
 endif()
 
