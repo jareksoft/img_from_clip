@@ -117,7 +117,7 @@ else()
 endif()
 
 if(LUA_FOUND)
-  find_package(sol2)
+  find_package(sol2 3.3.0)
 
   if(NOT sol2_FOUND)
     if(EXISTS external/sol2/CMakeLists.txt)
