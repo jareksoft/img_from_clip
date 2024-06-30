@@ -18,7 +18,22 @@ apps:
     plugs: [home, unity7]
 
 parts:
+  sol2:
+    plugin: cmake
+    source-type: git
+    source: https://github.com/ThePhD/sol2.git
+    source-branch: v3.3.0
+    build-packages:
+      - g++
+      - liblua5.4-dev
+    stage-packages:
+      - liblua5.4-0
+    cmake-parameters:
+      - -DSOL2_BUILD_LUA=OFF
+      - -DCMAKE_BUILD_TYPE=Release
   img-from-clip:
+    after:
+      - sol2
     source: .
     plugin: cmake
     parse-info: [usr/share/metainfo/com.jpelczar.img_from_clip.appdata.xml]
@@ -29,8 +44,10 @@ parts:
     build-packages:
       - g++
       - librsvg2-dev
+      - liblua5.4-dev
     stage-packages:
       - dbus
       - librsvg2-2
       - libgdk-pixbuf-2.0-0
       - libcairo2
+      - liblua5.4-0
